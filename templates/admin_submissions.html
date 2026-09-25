@@ -11,39 +11,34 @@ body{background:#020617;color:#fff;min-height:100vh;padding-bottom:40px}
 header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
 header h1{margin:0;font-size:15px;font-weight:900}
 header .info{font-size:11px;color:#ffd200;margin-top:3px;font-weight:600}
-.logout{color:#ef9a9a;text-decoration:none;font-size:12px;background:rgba(229,57,53,0.15);padding:8px 14px;border-radius:12px;border:1px solid rgba(229,57,53,0.3);font-weight:700}
-.tabs{display:flex;gap:6px;padding:12px;overflow-x:auto;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05)}
-.tab{padding:10px 14px;background:rgba(255,255,255,0.05);border-radius:12px;font-size:12px;font-weight:800;white-space:nowrap;color:#94a3b8;border:1px solid transparent;text-decoration:none;display:inline-block}
-.tab.active{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e}
+.logout{color:#ef9a9a;text-decoration:none;font-size:12px;background:rgba(229,57,53,0.15);padding:9px 14px;border-radius:12px;border:1.5px solid rgba(229,57,53,0.3);font-weight:800}
+.tabs{display:flex;gap:6px;padding:12px;overflow-x:auto;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:11px 16px;background:rgba(255,255,255,0.05);border-radius:14px;font-size:12px;font-weight:800;white-space:nowrap;color:#94a3b8;text-decoration:none;border:1.5px solid transparent;display:inline-block}
+.tab.active{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;box-shadow:0 8px 20px rgba(255,210,0,0.3)}
 .container{padding:16px;max-width:820px;margin:0 auto}
-.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:18px;margin-bottom:12px;border-right:4px solid #25D366}
-.student-name{font-size:16px;font-weight:900;color:#a5d6a7;margin-bottom:6px}
-.hw-title{font-size:13px;color:#ffd200;font-weight:700;margin-bottom:8px}
-.label{font-size:11px;color:#94a3b8;margin-bottom:4px}
-.text-answer{background:rgba(0,0,0,0.3);padding:12px;border-radius:12px;font-size:14px;line-height:1.8;margin:10px 0;white-space:pre-wrap}
-.imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.imgs img{width:100%;border-radius:12px;cursor:pointer;border:1.5px solid rgba(255,255,255,0.1)}
-.img-label{font-size:11px;color:#94a3b8;margin-top:6px;text-align:center}
-.date{font-size:11px;color:#475569;margin-top:10px}
-.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.btn{display:inline-flex;padding:10px 16px;border-radius:12px;font-size:13px;font-weight:800;text-decoration:none;align-items:center;gap:6px;border:none;cursor:pointer;font-family:inherit}
+.card{background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.06);border-right:4px solid #25D366;border-radius:22px;padding:20px;margin-bottom:14px}
+.student-name{font-size:17px;font-weight:900;color:#a5d6a7;margin-bottom:8px}
+.hw-title{font-size:13px;color:#ffd200;font-weight:800;margin-bottom:10px}
+.label{font-size:11px;color:#94a3b8;margin-bottom:6px;font-weight:700}
+.text-answer{background:rgba(0,0,0,0.3);padding:14px;border-radius:14px;font-size:14px;line-height:1.8;margin:10px 0;white-space:pre-wrap;color:#cbd5e1}
+.imgs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.imgs img{width:100%;border-radius:14px;cursor:pointer;border:2px solid rgba(255,255,255,0.1)}
+.img-label{font-size:11px;color:#94a3b8;margin-top:6px;text-align:center;font-weight:700}
+.date{font-size:11px;color:#475569;margin-top:12px}
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{display:inline-flex;padding:11px 18px;border-radius:12px;font-size:13px;font-weight:800;text-decoration:none;align-items:center;gap:6px;border:none;cursor:pointer;font-family:inherit}
 .btn:active{transform:scale(0.97)}
-.btn-no{background:#e53935;color:#fff}
-.btn-blue{background:rgba(99,102,241,0.2);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3)}
-.empty{text-align:center;color:#475569;padding:60px 20px;font-size:14px;font-weight:600}
-.empty .ic{font-size:60px;display:block;margin-bottom:14px;opacity:0.5}
+.btn-no{background:rgba(229,57,53,0.15);color:#ef9a9a;border:1.5px solid rgba(229,57,53,0.3)}
+.empty{text-align:center;color:#475569;padding:70px 20px;font-size:14px;font-weight:700}
+.empty .ic{font-size:64px;display:block;margin-bottom:16px;opacity:0.4}
 </style>
 </head>
 <body>
-
 <header>
-<div>
-<h1>📥 التسليمات</h1>
-<div class="info">{{ teacher }} — {{ subject }}</div>
-</div>
+<div><h1>📥 التسليمات</h1><div class="info">{{ teacher }} — {{ subject }}</div></div>
 <a href="/admin/logout" class="logout">خروج</a>
 </header>
-
 <div class="tabs">
 <a href="/admin" class="tab">📊 الرئيسية</a>
 <a href="/admin/pending" class="tab">🔔 الطلبات</a>
@@ -54,19 +49,16 @@ header .info{font-size:11px;color:#ffd200;margin-top:3px;font-weight:600}
 <a href="/admin/exams" class="tab">📊 الامتحانات</a>
 <a href="/admin/results" class="tab">🏆 النتائج</a>
 </div>
-
 <div class="container">
 {% if submissions %}
 {% for s in submissions %}
 <div class="card">
 <div class="student-name">👤 {{ s.student_name }}</div>
 <div class="hw-title">📝 {{ hws.get(s.homework_id, 'واجب محذوف') }}</div>
-
 {% if s.text_answer %}
 <div class="label">✍️ الإجابة الكتابية:</div>
 <div class="text-answer">{{ s.text_answer }}</div>
 {% endif %}
-
 {% if s.image_file or s.draw_file %}
 <div class="imgs">
 {% if s.image_file %}
@@ -83,9 +75,7 @@ header .info{font-size:11px;color:#ffd200;margin-top:3px;font-weight:600}
 {% endif %}
 </div>
 {% endif %}
-
 <div class="date">📅 {{ s.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
-
 <div class="actions">
 <a href="/admin/submission/del/{{ s.id }}" class="btn btn-no" onclick="return confirm('حذف التسليم؟')">🗑️ حذف</a>
 </div>
@@ -95,6 +85,5 @@ header .info{font-size:11px;color:#ffd200;margin-top:3px;font-weight:600}
 <div class="empty"><span class="ic">📥</span>مفيش تسليمات لسه</div>
 {% endif %}
 </div>
-
 </body>
 </html>
