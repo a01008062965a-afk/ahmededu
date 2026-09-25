@@ -6,43 +6,34 @@
 <title>دخول الأستاذ</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Cairo','Segoe UI',Tahoma,sans-serif;margin:0;padding:0}
-body{background:#020617;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;color:#fff;overflow-x:hidden}
-.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 60%)}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.4}
-.orb1{width:350px;height:350px;background:linear-gradient(135deg,#f7971e,#ffd200);top:-100px;right:-100px;animation:float1 15s infinite}
-.orb2{width:300px;height:300px;background:linear-gradient(135deg,#6366f1,#8b5cf6);bottom:-80px;left:-80px;animation:float2 18s infinite}
-@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,60px)}}
-@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,-40px)}}
-.card{position:relative;z-index:2;background:rgba(255,255,255,0.03);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:32px 26px;max-width:400px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,0.5);overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,210,0,0.6),transparent)}
-.logo{width:80px;height:80px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 16px;box-shadow:0 20px 50px rgba(247,151,30,0.4);animation:logoFloat 3s infinite}
-@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0}
+body{background:#020617;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff}
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:32px 26px;max-width:400px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.logo{width:80px;height:80px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 16px;box-shadow:0 20px 50px rgba(247,151,30,0.4)}
 h2{text-align:center;color:#fff;margin:0 0 6px;font-size:24px;font-weight:900}
-.sub{text-align:center;color:#94a3b8;font-size:13px;margin-bottom:24px;font-weight:600}
+.sub{text-align:center;color:#94a3b8;font-size:13px;margin-bottom:24px}
+.err{background:rgba(229,57,53,0.15);border:1px solid rgba(229,57,53,0.3);color:#ef9a9a;padding:14px;border-radius:14px;font-size:13px;font-weight:600;margin-bottom:16px;text-align:center}
 .field{margin-bottom:16px;text-align:right}
 .field label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:8px;font-weight:600}
 .field input{width:100%;padding:16px 18px;font-size:15px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.08);border-radius:16px;color:#fff;font-family:inherit;text-align:right;font-weight:600}
-.field input:focus{outline:none;border-color:#ffd200;background:rgba(255,255,255,0.08);box-shadow:0 0 0 4px rgba(255,210,0,0.1)}
+.field input:focus{outline:none;border-color:#ffd200;background:rgba(255,255,255,0.08)}
 button{width:100%;padding:18px;background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;border:none;border-radius:18px;font-size:16px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:8px;box-shadow:0 15px 40px rgba(247,151,30,0.35)}
 button:active{transform:scale(0.97)}
-.error{color:#ef9a9a;text-align:center;font-size:13px;margin-bottom:16px;background:rgba(229,57,53,0.15);padding:12px;border-radius:12px;border:1px solid rgba(229,57,53,0.3);font-weight:600}
 </style>
 </head>
 <body>
-<div class="bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
 <form class="card" method="POST">
 <div class="logo">👑</div>
 <h2>لوحة الأستاذ</h2>
 <div class="sub">دخول خاص للأستاذ فقط</div>
-{% if error %}<div class="error">{{ error }}</div>{% endif %}
+{% if error %}<div class="err">❌ {{ error }}</div>{% endif %}
 <div class="field">
 <label>👤 اسم المستخدم</label>
-<input name="username" placeholder="اسم المستخدم" required autocomplete="username">
+<input name="username" placeholder="اسم المستخدم" required>
 </div>
 <div class="field">
 <label>🔐 كلمة المرور</label>
-<input name="password" type="password" placeholder="كلمة المرور" required autocomplete="current-password">
+<input name="password" type="password" placeholder="كلمة المرور" required>
 </div>
 <button>🔓 دخول</button>
 </form>
