@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صفحة الطالب - {{ subject }}</title>
+<style>
+*{box-sizing:border-box;font-family:Tahoma;margin:0;padding:0}
+body{background:#0a1929;color:#fff;min-height:100vh;padding-bottom:30px}
+header{background:linear-gradient(90deg,#0f2027,#2c5364);padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:16px}
+header .info{font-size:11px;color:#ffd200;margin-top:3px}
+header a{color:#fff;text-decoration:none;font-size:12px;background:rgba(255,255,255,0.15);padding:6px 12px;border-radius:20px}
+.tabs{display:flex;gap:4px;padding:10px;overflow-x:auto;background:#0f2027;position:sticky;top:0;z-index:10}
+.tab{padding:8px 14px;background:rgba(255,255,255,0.06);border-radius:8px;cursor:pointer;font-size:12px;font-weight:bold;white-space:nowrap;color:#a0b8c4}
+.tab.active{background:linear-gradient(90deg,#f7971e,#ffd200);color:#0f2027}
+.container{padding:14px;max-width:820px;margin:0 auto}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:12px}
+.card h3{font-size:15px;color:#ffd200;margin-bottom:10px}
+.card p{color:#a0b8c4;font-size:13px;line-height:1.7}
+.video{background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer}
+.video:active{background:rgba(255,210,0,0.12)}
+.video .ic{font-size:32px}
+.video .info{flex:1}
+.video .info .t{color:#fff;font-weight:bold;font-size:14px;margin-bottom:4px}
+.video .info .l{color:#7a9bab;font-size:11px}
+.hidden{display:none}
+.empty{text-align:center;color:#5a7a8a;padding:40px;font-size:13px}
+.exam{background:linear-gradient(135deg,rgba(247,151,30,0.15),rgba(255,210,0,0.08));border:1px solid rgba(255,210,0,0.3);border-radius:14px;padding:16px;margin-bottom:12px}
+.exam .title{color:#ffd200;font-weight:bold;font-size:15px;margin-bottom:6px}
+.exam .meta{font-size:12px;color:#a0b8c4;margin-bottom:10px}
+.exam button{background:linear-gradient(90deg,#f7971e,#ffd200);color:#0f2027;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;cursor:pointer;font-family:Tahoma}
+.exam .done{background:rgba(37,211,102,0.15);color:#a5d6a7;padding:8px 14px;border-radius:10px;font-size:13px;display:inline-block}
+.result-row{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px}
+.result-row:last-child{border-bottom:none}
+.result-row .score{color:#a5d6a7;font-weight:bold}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:100;padding:16px;display:flex;align-items:center;justify-content:center}
+.overlay.hidden{display:none}
+.exam-box{background:#0f2027;border:2px solid #ffd200;border-radius:18px;padding:20px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto}
+.exam-box h2{color:#ffd200;font-size:17px;margin-bottom:6px}
+.exam-box .timer{background:#5d4a00;color:#ffd200;padding:8px 14px;border-radius:10px;text-align:center;font-weight:bold;margin:10px 0;font-size:15px}
+.question{margin:14px 0;padding:12px;background:rgba(255,255,255,0.05);border-radius:12px}
+.question .q{font-size:14px;color:#fff;margin-bottom:10px;line-height:1.7}
+.option{padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;margin-bottom:6px;cursor:pointer;font-size:13px;color:#a0b8c4}
+.option:active{background:rgba(255,210,0,0.15)}
+.option.selected{background:linear-gradient(90deg,rgba(247,151,30,0.3),rgba(255,210,0,0.2));color:#fff;font-weight:bold}
+</style>
+</head>
+<body>
+
+<header>
+<div>
+<h1>📚 {{ subject }}</h1>
+<div class="info" id="userInfo">جاري التحميل...</div>
+</div>
+<a href="#" onclick="logout();return false;">خروج</a>
+</header>
+
+<div class="tabs">
+<div class="tab active" onclick="tab('videos',this)">🎬 الفيديوهات</div>
+<div class="tab" onclick="tab('homework',this)">📝 الواجبات</div>
+<div class="tab" onclick="tab('exams',this)">📊 الامتحانات</div>
+<div class="tab" onclick="tab('results',this)">🏆 نتائجي</div>
+</div>
+
+<div class="container">
+<div id="videosView"></div>
+<div id="homeworkView" class="hidden"></div>
+<div id="examsView" class="hidden"></div>
+<div id="resultsView" class="hidden"></div>
+</div>
+
+<div class="overlay hidden" id="examOverlay">
+<div class="exam-box" id="examBox"></div>
+</div>
+
+<script>
+var student = null;
+var currentExam = null;
+var currentAnswers = [];
+var timerInterval = null;
+
+async function loadMe() {
+    var r = await fetch('/api/me');
+    var d = await r.json();
+    if (!d.ok) { window.location.href = '/login'; return; }
+    student = d.student;
+    var grade = student.grade === 'first' ? 'أول ثانوي' : 'تانية ثانوي';
+    document.getElementById('userInfo').textContent = student.name + ' — ' + grade;
+}
+
+async function loadVideos() {
+    var r = await fetch('/api/videos');
+    var d = await r.json();
+    var b = document.getElementById('videosView');
+    if (!d.length) { b.innerHTML = '<div class="empty">مفيش فيديوهات لسه</div>'; return; }
+    b.innerHTML = d.map(function(v) {
+        return '<div class="video" onclick="window.open(\'' + v.url + '\',\'_blank\')">' +
+            '<div class="ic">🎬</div>' +
+            '<div class="info"><div class="t">' + v.title + '</div>' +
+            '<div class="l">' + (v.lesson ? v.lesson : '') + ' — ' + v.created_at + '</div></div>' +
+            '<div style="color:#ffd200;font-size:20px">›</div>' +
+            '</div>';
+    }).join('');
+}
+
+async function loadHomework() {
+    var r = await fetch('/api/homework');
+    var d = await r.json();
+    var b = document.getElementById('homeworkView');
+    if (!d.length) { b.innerHTML = '<div class="empty">مفيش واجبات لسه</div>'; return; }
+    b.innerHTML = d.map(function(h) {
+        return '<div class="card"><h3>📝 ' + h.title + '</h3>' +
+            '<p>' + h.description + '</p>' +
+            (h.due_date ? '<div style="margin-top:10px;color:#ffd200;font-size:12px">⏰ آخر ميعاد: ' + h.due_date + '</div>' : '') +
+            '</div>';
+    }).join('');
+}
+
+async function loadExams() {
+    var r = await fetch('/api/exams');
+    var d = await r.json();
+    var b = document.getElementById('examsView');
+    if (!d.exams || !d.exams.length) { b.innerHTML = '<div class="empty">مفيش امتحانات متاحة</div>'; return; }
+    b.innerHTML = d.exams.map(function(e) {
+        var isDone = d.done.indexOf(e.id) !== -1;
+        return '<div class="exam">' +
+            '<div class="title">📊 ' + e.title + '</div>' +
+            '<div class="meta">⏰ ' + e.duration + ' دقيقة — ' + e.total_marks + ' سؤال</div>' +
+            (isDone
+                ? '<div class="done">✅ خلصت الامتحان ده</div>'
+                : '<button onclick="startExam(' + e.id + ')">🚀 ابدأ الامتحان</button>') +
+            '</div>';
+    }).join('');
+}
+
+async function loadResults() {
+    var r = await fetch('/api/my-results');
+    var d = await r.json();
+    var b = document.getElementById('resultsView');
+    if (!d.length) { b.innerHTML = '<div class="empty">مفيش نتائج لسه</div>'; return; }
+    b.innerHTML = '<div class="card"><h3>🏆 نتائجي</h3>' + d.map(function(r) {
+        var pct = Math.round((r.score / r.total) * 100);
+        return '<div class="result-row">' +
+            '<span>امتحان #' + r.exam_id + '</span>' +
+            '<span class="score">' + r.score + ' / ' + r.total + ' (' + pct + '%)</span>' +
+            '</div>';
+    }).join('') + '</div>';
+}
+
+async function startExam(id) {
+    if (!confirm('متأكد إنك عايز تبدأ؟ لو خرجت مش هتقدر تدخل تاني')) return;
+    var r = await fetch('/api/exam/' + id);
+    var d = await r.json();
+    if (!d.ok) return alert(d.msg);
+    currentExam = d.exam;
+    currentAnswers = new Array(currentExam.questions.length).fill(null);
+    showExam();
+}
+
+function showExam() {
+    var e = currentExam;
+    var html = '<h2>📊 ' + e.title + '</h2>';
+    html += '<div class="timer" id="timer">⏰ ' + e.duration + ':00</div>';
+    html += '<div id="questions">';
+    e.questions.forEach(function(q, i) {
+        html += '<div class="question">';
+        html += '<div class="q">' + (i+1) + '. ' + q.q + '</div>';
+        ['a', 'b', 'c', 'd'].forEach(function(key, idx) {
+            html += '<div class="option" data-q="' + i + '" data-v="' + idx + '" onclick="pick(this)">' +
+                (idx+1) + '. ' + q[key] + '</div>';
+        });
+        html += '</div>';
+    });
+    html += '</div>';
+    html += '<button style="width:100%;padding:14px;background:linear-gradient(90deg,#f7971e,#ffd200);color:#0f2027;border:none;border-radius:12px;font-weight:bold;font-size:16px;margin-top:14px;font-family:Tahoma;cursor:pointer" onclick="submitExam()">📤 تسليم الامتحان</button>';
+    document.getElementById('examBox').innerHTML = html;
+    document.getElementById('examOverlay').classList.remove('hidden');
+    startTimer(e.duration);
+}
+
+function pick(el) {
+    var qi = parseInt(el.dataset.q);
+    var v = parseInt(el.dataset.v);
+    currentAnswers[qi] = v;
+    document.querySelectorAll('.option[data-q="' + qi + '"]').forEach(function(x){ x.classList.remove('selected'); });
+    el.classList.add('selected');
+}
+
+function startTimer(minutes) {
+    var total = minutes * 60;
+    timerInterval = setInterval(function() {
+        total--;
+        if (total <= 0) {
+            clearInterval(timerInterval);
+            alert('خلص الوقت!');
+            submitExam(true);
+            return;
+        }
+        var m = Math.floor(total / 60);
+        var s = total % 60;
+        var el = document.getElementById('timer');
+        if (el) el.textContent = '⏰ ' + m + ':' + (s < 10 ? '0' : '') + s;
+    }, 1000);
+}
+
+async function submitExam(force) {
+    if (!force && !confirm('متأكد من التسليم؟')) return;
+    clearInterval(timerInterval);
+    var r = await fetch('/api/exam/' + currentExam.id + '/submit', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({answers: currentAnswers})
+    });
+    var d = await r.json();
+    document.getElementById('examOverlay').classList.add('hidden');
+    if (d.ok) {
+        alert('✅ نتيجتك: ' + d.score + ' / ' + d.total);
+        loadExams();
+    } else {
+        alert(d.msg || 'خطأ');
+    }
+}
+
+function tab(t, el) {
+    document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    el.classList.add('active');
+    ['videos','homework','exams','results'].forEach(function(v){
+        document.getElementById(v+'View').classList.add('hidden');
+    });
+    document.getElementById(t+'View').classList.remove('hidden');
+    if (t === 'videos') loadVideos();
+    if (t === 'homework') loadHomework();
+    if (t === 'exams') loadExams();
+    if (t === 'results') loadResults();
+}
+
+async function logout() {
+    await fetch('/api/logout');
+    window.location.href = '/';
+}
+
+loadMe().then(function(){ loadVideos(); });
+</script>
+</body>
+</html>
