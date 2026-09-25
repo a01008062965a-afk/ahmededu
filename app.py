@@ -192,7 +192,7 @@ def admin_pending():
 def admin_students():
     if not require_admin(): return redirect(url_for('admin_login'))
     students = Student.query.order_by(Student.id.desc()).all()
-return render_template('admin_students.html', students=students, teacher=TEACHER, subject=SUBJECT)
+    return render_template('admin_students.html', students=students, teacher=TEACHER, subject=SUBJECT)
 
 @app.route('/admin/approve/<int:id>')
 def admin_approve(id):
