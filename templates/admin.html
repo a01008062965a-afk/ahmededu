@@ -3,141 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة الأستاذ | {{ subject }}</title>
+<title>لوحة الأستاذ</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Cairo','Segoe UI',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:#020617;color:#fff;min-height:100vh;padding-bottom:40px;position:relative}
-.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 60%);pointer-events:none}
-.orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.25}
-.orb1{width:400px;height:400px;background:linear-gradient(135deg,#f7971e,#ffd200);top:-150px;right:-150px}
-.orb2{width:350px;height:350px;background:linear-gradient(135deg,#6366f1,#8b5cf6);bottom:-100px;left:-100px}
-.wrap{position:relative;z-index:2}
-
-header{background:rgba(255,255,255,0.03);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
-header .brand{display:flex;align-items:center;gap:12px}
-header .brand .logo{width:42px;height:42px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px}
+*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#020617;color:#fff;min-height:100vh;padding-bottom:40px}
+header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
 header h1{margin:0;font-size:15px;font-weight:900}
 header .info{font-size:11px;color:#ffd200;margin-top:3px;font-weight:600}
 .logout{color:#ef9a9a;text-decoration:none;font-size:12px;background:rgba(229,57,53,0.15);padding:8px 14px;border-radius:12px;border:1px solid rgba(229,57,53,0.3);font-weight:700}
-
-.tabs{display:flex;gap:6px;padding:12px;overflow-x:auto;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05);position:sticky;top:74px;z-index:40;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{padding:10px 16px;background:rgba(255,255,255,0.05);border-radius:12px;cursor:pointer;font-size:12px;font-weight:800;white-space:nowrap;color:#94a3b8;border:1px solid transparent;transition:.2s}
-.tab.active{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;box-shadow:0 6px 20px rgba(255,210,0,0.35)}
-
+.tabs{display:flex;gap:6px;padding:12px;overflow-x:auto;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05)}
+.tab{padding:10px 14px;background:rgba(255,255,255,0.05);border-radius:12px;cursor:pointer;font-size:12px;font-weight:800;white-space:nowrap;color:#94a3b8;border:1px solid transparent}
+.tab.active{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e}
 .container{padding:16px;max-width:820px;margin:0 auto}
-
-.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,210,0,0.3),transparent)}
-.label{color:#94a3b8;font-size:11px;margin-bottom:4px;font-weight:600}
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:18px;margin-bottom:12px}
+.label{color:#94a3b8;font-size:11px;font-weight:600;margin-bottom:4px}
 .phone{font-size:16px;font-weight:900;color:#ffd200;direction:ltr}
 .name{color:#fff;font-size:15px;margin-top:4px;font-weight:700}
 .grade{display:inline-block;background:rgba(99,102,241,0.15);color:#a5b4fc;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-top:6px}
 .row{display:flex;justify-content:space-between;align-items:start;gap:10px;flex-wrap:wrap}
-.badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;white-space:nowrap;display:inline-block}
-.badge.pending{background:rgba(255,152,0,0.15);color:#ffb74d;border:1px solid rgba(255,152,0,0.3)}
-.badge.approved{background:rgba(37,211,102,0.15);color:#a5d6a7;border:1px solid rgba(37,211,102,0.3)}
-.badge.rejected{background:rgba(229,57,53,0.15);color:#ef9a9a;border:1px solid rgba(229,57,53,0.3)}
-.badge.warn{background:rgba(255,152,0,0.15);color:#ffb74d;border:1px solid rgba(255,152,0,0.3)}
-
-.btn{padding:10px 16px;border:none;border-radius:12px;cursor:pointer;font-weight:800;font-size:12px;font-family:inherit;transition:.2s;display:inline-flex;align-items:center;gap:6px}
-.btn:active{transform:scale(0.97)}
+.badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;display:inline-block}
+.badge.pending{background:rgba(255,152,0,0.15);color:#ffb74d}
+.badge.approved{background:rgba(37,211,102,0.15);color:#a5d6a7}
+.badge.rejected{background:rgba(229,57,53,0.15);color:#ef9a9a}
+.btn{padding:10px 16px;border:none;border-radius:12px;cursor:pointer;font-weight:800;font-size:12px;font-family:inherit;display:inline-flex;align-items:center;gap:6px;margin:4px 4px 0 0}
 .btn-ok{background:#25D366;color:#fff}
 .btn-no{background:#e53935;color:#fff}
 .btn-blue{background:#2c5364;color:#fff}
 .btn-gold{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e}
 .btn-sm{padding:8px 12px;font-size:11px}
-
-input,textarea,select{width:100%;padding:13px 15px;border:1.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:#fff;border-radius:14px;margin-bottom:10px;font-size:14px;font-family:inherit;font-weight:600;transition:.2s}
-input:focus,textarea:focus,select:focus{border-color:#ffd200;outline:none;background:rgba(255,255,255,0.08);box-shadow:0 0 0 4px rgba(255,210,0,0.1)}
-select option{background:#0f172a;color:#fff}
-textarea{min-height:70px;resize:vertical}
-input::placeholder,textarea::placeholder{color:#475569;font-weight:500}
-
+input,textarea,select{width:100%;padding:13px 15px;border:1.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:#fff;border-radius:14px;margin-bottom:10px;font-size:14px;font-family:inherit;font-weight:600}
+input:focus,textarea:focus,select:focus{border-color:#ffd200;outline:none;background:rgba(255,255,255,0.08)}
+select option{background:#0f172a}
+textarea{min-height:70px}
 .add-form{background:rgba(255,255,255,0.02);border:2px dashed rgba(255,210,0,0.25);border-radius:16px;padding:18px;margin-bottom:16px}
-.add-form h3{margin-bottom:14px;color:#ffd200;font-size:14px;font-weight:900;display:flex;align-items:center;gap:8px}
-
+.add-form h3{margin-bottom:14px;color:#ffd200;font-size:14px;font-weight:900}
 .empty{text-align:center;color:#475569;padding:50px 20px;font-size:13px;font-weight:600}
-.empty .ic{font-size:52px;display:block;margin-bottom:14px;opacity:0.5}
 .hidden{display:none}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;text-align:center}
-.stat .num{font-size:26px;font-weight:900;background:linear-gradient(135deg,#ffd200,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.stat .num{font-size:26px;font-weight:900;color:#ffd200;margin-bottom:4px}
 .stat .lbl{font-size:11px;color:#94a3b8;font-weight:700}
-
-.code-box{background:linear-gradient(135deg,rgba(255,210,0,0.15),rgba(247,151,30,0.08));border:2px solid rgba(255,210,0,0.4);padding:14px 18px;border-radius:14px;font-family:'Courier New',monospace;font-size:22px;color:#ffd200;font-weight:900;letter-spacing:4px;direction:ltr;display:block;margin:12px 0;cursor:pointer;text-align:center;transition:.2s}
-.code-box:active{background:rgba(37,211,102,0.2);border-color:#25D366}
-
-.img-box{margin-top:12px}
-.img-box img{max-width:100%;max-height:280px;border-radius:14px;cursor:pointer;border:2px solid rgba(255,255,255,0.1)}
+.code-box{background:rgba(255,210,0,0.15);border:2px solid rgba(255,210,0,0.4);padding:14px 18px;border-radius:14px;font-family:monospace;font-size:20px;color:#ffd200;font-weight:900;letter-spacing:3px;display:block;margin:12px 0;cursor:pointer;text-align:center}
+.img-box img{max-width:100%;max-height:280px;border-radius:14px;margin-top:10px}
 .img-box a{color:#ffd200;text-decoration:none;font-size:13px;font-weight:700;display:inline-block;margin-bottom:10px}
-
-.actions-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-
-.q-edit{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px;margin-bottom:12px}
-.q-edit .opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.q-edit .opts input{margin-bottom:0;font-size:13px;padding:10px 12px}
 </style>
 </head>
 <body>
-<div class="bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
 
-<div class="wrap">
 <header>
-<div class="brand">
-<div class="logo">👑</div>
 <div>
-<h1>لوحة الأستاذ {{ teacher }}</h1>
+<h1>👑 لوحة الأستاذ {{ teacher }}</h1>
 <div class="info">{{ subject }} — إدارة كاملة</div>
-</div>
 </div>
 <a href="/admin/logout" class="logout">خروج</a>
 </header>
 
 <div class="tabs">
-<div class="tab active" onclick="tab('stats',this)">📊 الرئيسية</div>
-<div class="tab" onclick="tab('pending',this)" id="pendingTab">🔔 الطلبات</div>
-<div class="tab" onclick="tab('students',this)">👥 الطلاب</div>
-<div class="tab" onclick="tab('videos',this)">🎬 الفيديوهات</div>
-<div class="tab" onclick="tab('homework',this)">📝 الواجبات</div>
-<div class="tab" onclick="tab('exams',this)">📊 الامتحانات</div>
-<div class="tab" onclick="tab('results',this)">🏆 النتائج</div>
+<div class="tab active" data-tab="stats">📊 الرئيسية</div>
+<div class="tab" data-tab="pending">🔔 الطلبات</div>
+<div class="tab" data-tab="students">👥 الطلاب</div>
+<div class="tab" data-tab="videos">🎬 الفيديوهات</div>
+<div class="tab" data-tab="homework">📝 الواجبات</div>
+<div class="tab" data-tab="exams">📊 الامتحانات</div>
+<div class="tab" data-tab="results">🏆 النتائج</div>
 </div>
 
-<div class="container">
-<div id="statsView"></div>
-<div id="pendingView" class="hidden"></div>
-<div id="studentsView" class="hidden"></div>
-<div id="videosView" class="hidden"></div>
-<div id="homeworkView" class="hidden"></div>
-<div id="examsView" class="hidden"></div>
-<div id="resultsView" class="hidden"></div>
-</div>
-</div>
+<div class="container" id="content"></div>
 
 <script>
 var questions = [];
+var content = document.getElementById('content');
+
+function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/[<>&"]/g, function(c) {
+        return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];
+    });
+}
+
+function load(t) {
+    content.innerHTML = '<div class="empty">جاري التحميل...</div>';
+    if (t === 'stats') loadStats();
+    else if (t === 'pending') loadPending();
+    else if (t === 'students') loadStudents();
+    else if (t === 'videos') loadVideos();
+    else if (t === 'homework') loadHomework();
+    else if (t === 'exams') loadExams();
+    else if (t === 'results') loadResults();
+}
 
 /* ===== الإحصائيات ===== */
 async function loadStats() {
     var r = await fetch('/api/admin/stats');
     var d = await r.json();
-    var b = document.getElementById('statsView');
-    b.innerHTML = '<div class="add-form"><h3>⚡ نظرة سريعة</h3>' +
-        '<div class="grid2">' +
-        '<div class="stat"><div class="num">' + (d.pending || 0) + '</div><div class="lbl">⏳ في الانتظار</div></div>' +
-        '<div class="stat"><div class="num">' + (d.approved || 0) + '</div><div class="lbl">✅ معتمدين</div></div>' +
-        '<div class="stat"><div class="num">' + (d.first || 0) + '</div><div class="lbl">📖 أول ثانوي</div></div>' +
-        '<div class="stat"><div class="num">' + (d.second || 0) + '</div><div class="lbl">📚 تانية ثانوي</div></div>' +
-        '<div class="stat"><div class="num">' + (d.videos || 0) + '</div><div class="lbl">🎬 فيديوهات</div></div>' +
-        '<div class="stat"><div class="num">' + (d.exams || 0) + '</div><div class="lbl">📊 امتحانات</div></div>' +
-        '</div></div>';
-    if (d.pending > 0) {
-        document.getElementById('pendingTab').textContent = '🔔 الطلبات (' + d.pending + ')';
-        document.getElementById('pendingTab').style.background = 'rgba(255,152,0,0.2)';
-        document.getElementById('pendingTab').style.borderColor = 'rgba(255,152,0,0.4)';
-    }
+    content.innerHTML = '<div class="grid2">' +
+        '<div class="stat"><div class="num">' + d.pending + '</div><div class="lbl">⏳ في الانتظار</div></div>' +
+        '<div class="stat"><div class="num">' + d.approved + '</div><div class="lbl">✅ معتمدين</div></div>' +
+        '<div class="stat"><div class="num">' + d.first + '</div><div class="lbl">📖 أول ثانوي</div></div>' +
+        '<div class="stat"><div class="num">' + d.second + '</div><div class="lbl">📚 تانية ثانوي</div></div>' +
+        '<div class="stat"><div class="num">' + d.videos + '</div><div class="lbl">🎬 فيديوهات</div></div>' +
+        '<div class="stat"><div class="num">' + d.exams + '</div><div class="lbl">📊 امتحانات</div></div>' +
+        '</div>';
 }
 
 /* ===== الطلبات ===== */
@@ -145,120 +112,109 @@ async function loadPending() {
     var r = await fetch('/api/admin/students');
     var all = await r.json();
     var d = all.filter(function(s){ return s.status === 'pending'; });
-    var b = document.getElementById('pendingView');
     if (!d.length) {
-        b.innerHTML = '<div class="empty"><span class="ic">✅</span>مفيش طلبات جديدة</div>';
+        content.innerHTML = '<div class="empty">✅ مفيش طلبات جديدة</div>';
         return;
     }
-    b.innerHTML = d.map(function(s) {
-        var img = s.screenshot ? '<div class="img-box"><a href="/uploads/' + s.screenshot + '" target="_blank">📷 عرض صورة التحويل</a><br><img src="/uploads/' + s.screenshot + '" onclick="window.open(this.src)"></div>' : '';
-        return '<div class="card">' +
-            '<div class="row"><div style="flex:1">' +
-            '<div class="phone">' + s.phone + '</div>' +
-            '<div class="name">' + s.name + '</div>' +
-            '<span class="grade">' + s.grade_name + '</span>' +
-            '<div style="margin-top:10px">' +
-            '<div class="label">رقم ولي الأمر:</div>' +
-            '<div class="value" style="direction:ltr;font-weight:700">' + (s.parent_phone || '-') + '</div>' +
-            '</div>' +
-            '<div style="margin-top:8px">' +
-            '<div class="label">رقم الدفع:</div>' +
-            '<div class="value" style="direction:ltr;font-weight:700">' + (s.payment_phone || '-') + '</div>' +
-            '</div>' +
-            '<div class="label" style="margin-top:10px;font-size:10px">' + s.created_at + '</div>' +
-            '</div>' +
-            '<span class="badge pending">⏳ في الانتظار</span></div>' +
-            img +
-            '<div class="actions-row">' +
-            '<button class="btn btn-ok" onclick="approve(' + s.id + ')">✅ موافقة وتوليد كود</button>' +
-            '<button class="btn btn-no" onclick="reject(' + s.id + ')">❌ رفض</button>' +
-            '<button class="btn btn-no btn-sm" onclick="delStudent(' + s.id + ')">🗑️</button>' +
+    var html = '';
+    d.forEach(function(s) {
+        html += '<div class="card"><div class="row"><div style="flex:1">' +
+            '<div class="phone">' + esc(s.phone) + '</div>' +
+            '<div class="name">' + esc(s.name) + '</div>' +
+            '<span class="grade">' + esc(s.grade_name) + '</span>' +
+            '<div style="margin-top:10px"><div class="label">ولي الأمر:</div><div style="direction:ltr;font-weight:700">' + esc(s.parent_phone) + '</div></div>' +
+            '<div style="margin-top:6px"><div class="label">رقم الدفع:</div><div style="direction:ltr;font-weight:700">' + esc(s.payment_phone) + '</div></div>' +
+            '<div class="label" style="margin-top:8px;font-size:10px">' + esc(s.created_at) + '</div>' +
+            '</div><span class="badge pending">⏳</span></div>';
+        if (s.screenshot) {
+            html += '<div class="img-box"><a href="/uploads/' + esc(s.screenshot) + '" target="_blank">📷 عرض صورة التحويل</a><br><img src="/uploads/' + esc(s.screenshot) + '" onclick="window.open(this.src)"></div>';
+        }
+        html += '<div style="margin-top:12px">' +
+            '<button class="btn btn-ok" onclick="approveStudent(' + s.id + ')">✅ موافقة</button>' +
+            '<button class="btn btn-no" onclick="rejectStudent(' + s.id + ')">❌ رفض</button>' +
             '</div></div>';
-    }).join('');
+    });
+    content.innerHTML = html;
 }
 
-async function approve(id) {
-    if (!confirm('الموافقة على الطالب؟ هيتولدله كود تلقائياً')) return;
+async function approveStudent(id) {
+    if (!confirm('الموافقة على الطالب؟ هيتولدله كود')) return;
     var r = await fetch('/api/admin/approve/' + id, {method: 'POST'});
     var d = await r.json();
     if (!d.ok) return alert(d.msg || 'خطأ');
-    alert('✅ تم الموافقة!\n\nالكود: ' + d.code + '\n\nابعته للطالب على واتساب');
-    loadPending();
-    loadStats();
+    alert('✅ تم الموافقة\n\nالكود: ' + d.code + '\n\nابعته للطالب على واتساب');
+    load('pending');
 }
 
-async function reject(id) {
+async function rejectStudent(id) {
     if (!confirm('رفض الطلب؟')) return;
     await fetch('/api/admin/reject/' + id, {method: 'POST'});
-    loadPending();
+    load('pending');
 }
 
 /* ===== الطلاب ===== */
 async function loadStudents() {
     var r = await fetch('/api/admin/students');
     var d = await r.json();
-    var b = document.getElementById('studentsView');
     if (!d.length) {
-        b.innerHTML = '<div class="empty"><span class="ic">👥</span>مفيش طلاب لسه</div>';
+        content.innerHTML = '<div class="empty">👥 مفيش طلاب</div>';
         return;
     }
-    b.innerHTML = d.map(function(s) {
-        var stTxt = s.status === 'pending' ? '⏳ معلق' : s.status === 'approved' ? '✅ معتمد' : '❌ مرفوض';
+    var html = '';
+    d.forEach(function(s) {
+        var stTxt = s.status === 'pending' ? '⏳' : s.status === 'approved' ? '✅' : '❌';
         var stCls = s.status === 'pending' ? 'pending' : s.status === 'approved' ? 'approved' : 'rejected';
-        var img = s.screenshot ? '<div class="img-box"><a href="/uploads/' + s.screenshot + '" target="_blank">📷 إيصال الدفع</a></div>' : '';
-        var codeBlock = s.code ? '<div class="code-box" onclick="copyCode(this,\'' + s.code + '\')">' + s.code + '</div>' : '';
-        return '<div class="card">' +
-            '<div class="row"><div style="flex:1">' +
-            '<div class="phone">' + s.phone + '</div>' +
-            '<div class="name">' + s.name + '</div>' +
-            '<span class="grade">' + s.grade_name + '</span>' +
-            (s.parent_phone ? '<div style="margin-top:8px"><span class="label">ولي الأمر:</span> <b style="direction:ltr;color:#fff">' + s.parent_phone + '</b></div>' : '') +
-            (s.payment_phone ? '<div><span class="label">دفع من:</span> <b style="direction:ltr;color:#fff">' + s.payment_phone + '</b></div>' : '') +
-            '<div class="label" style="margin-top:8px;font-size:10px">' + s.created_at + '</div>' +
-            '</div><span class="badge ' + stCls + '">' + stTxt + '</span></div>' +
-            codeBlock + img +
-            '<div class="actions-row">' +
-            (s.status === 'pending' ? '<button class="btn btn-ok btn-sm" onclick="approve(' + s.id + ')">✅ موافقة</button>' : '') +
+        html += '<div class="card"><div class="row"><div style="flex:1">' +
+            '<div class="phone">' + esc(s.phone) + '</div>' +
+            '<div class="name">' + esc(s.name) + '</div>' +
+            '<span class="grade">' + esc(s.grade_name) + '</span>';
+        if (s.code) {
+            html += '<div class="code-box" onclick="copyText(\'' + esc(s.code) + '\', this)">' + esc(s.code) + '</div>';
+        }
+        html += '</div><span class="badge ' + stCls + '">' + stTxt + '</span></div>' +
+            '<div style="margin-top:10px">' +
+            (s.status === 'pending' ? '<button class="btn btn-ok btn-sm" onclick="approveStudent(' + s.id + ')">✅ موافقة</button>' : '') +
             '<button class="btn btn-no btn-sm" onclick="delStudent(' + s.id + ')">🗑️ حذف</button>' +
             '</div></div>';
-    }).join('');
+    });
+    content.innerHTML = html;
 }
 
-function copyCode(el, code) {
-    navigator.clipboard.writeText(code);
-    var t = el.textContent;
+function copyText(t, el) {
+    navigator.clipboard.writeText(t);
+    var o = el.textContent;
     el.textContent = '✅ تم النسخ';
-    el.style.fontSize = '16px';
-    setTimeout(function(){ el.textContent = t; el.style.fontSize = '22px'; }, 1000);
+    setTimeout(function(){ el.textContent = o; }, 1000);
 }
 
 async function delStudent(id) {
-    if (!confirm('حذف الطالب نهائياً؟')) return;
+    if (!confirm('حذف الطالب؟')) return;
     await fetch('/api/admin/del_student/' + id, {method: 'DELETE'});
-    loadStudents();
+    load('students');
 }
 
 /* ===== الفيديوهات ===== */
 async function loadVideos() {
     var r = await fetch('/api/admin/videos');
     var d = await r.json();
-    var b = document.getElementById('videosView');
-    var form = '<div class="add-form"><h3>➕ إضافة فيديو</h3>' +
+    var html = '<div class="add-form"><h3>➕ إضافة فيديو</h3>' +
         '<input id="v_title" placeholder="عنوان الفيديو">' +
         '<input id="v_url" placeholder="لينك YouTube" style="direction:ltr">' +
         '<input id="v_lesson" placeholder="الدرس (اختياري)">' +
         '<select id="v_grade"><option value="first">أول ثانوي</option><option value="second">تانية ثانوي</option></select>' +
-        '<button class="btn btn-gold" onclick="addVideo()" style="width:100%;justify-content:center">➕ إضافة</button></div>';
-    var list = d.length ? d.map(function(v) {
-        var g = v.grade === 'first' ? 'أول' : 'تانية';
-        return '<div class="card"><div class="row"><div style="flex:1">' +
-            '<div class="name">🎬 ' + v.title + '</div>' +
-            '<span class="grade">' + g + ' ثانوي</span>' +
-            (v.lesson ? '<div class="label" style="margin-top:6px">📖 ' + v.lesson + '</div>' : '') +
-            '<div style="direction:ltr;font-size:11px;color:#475569;margin-top:6px;word-break:break-all">' + v.url.substring(0, 55) + '</div>' +
-            '</div><button class="btn btn-no btn-sm" onclick="delVideo(' + v.id + ')">🗑️</button></div></div>';
-    }).join('') : '<div class="empty"><span class="ic">🎬</span>مفيش فيديوهات</div>';
-    b.innerHTML = form + list;
+        '<button class="btn btn-gold" onclick="addVideo()">➕ إضافة</button></div>';
+    if (d.length) {
+        d.forEach(function(v) {
+            var g = v.grade === 'first' ? 'أول' : 'تانية';
+            html += '<div class="card"><div class="row"><div style="flex:1">' +
+                '<div class="name">🎬 ' + esc(v.title) + '</div>' +
+                '<span class="grade">' + g + ' ثانوي</span>' +
+                '</div><button class="btn btn-no btn-sm" onclick="delVideo(' + v.id + ')">🗑️</button></div></div>';
+        });
+    } else {
+        html += '<div class="empty">🎬 مفيش فيديوهات</div>';
+    }
+    content.innerHTML = html;
 }
 
 async function addVideo() {
@@ -269,37 +225,39 @@ async function addVideo() {
         grade: document.getElementById('v_grade').value
     };
     if (!d.title || !d.url) return alert('اكتب العنوان واللينك');
-    await fetch('/api/admin/videos', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(d)});
-    loadVideos();
+    await fetch('/api/admin/videos', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(d)});
+    load('videos');
 }
 
 async function delVideo(id) {
     if (!confirm('حذف؟')) return;
-    await fetch('/api/admin/video/' + id, {method: 'DELETE'});
-    loadVideos();
+    await fetch('/api/admin/video/' + id, {method:'DELETE'});
+    load('videos');
 }
 
 /* ===== الواجبات ===== */
 async function loadHomework() {
     var r = await fetch('/api/admin/homework');
     var d = await r.json();
-    var b = document.getElementById('homeworkView');
-    var form = '<div class="add-form"><h3>➕ إضافة واجب</h3>' +
+    var html = '<div class="add-form"><h3>➕ إضافة واجب</h3>' +
         '<input id="h_title" placeholder="عنوان الواجب">' +
-        '<textarea id="h_desc" placeholder="تفاصيل الواجب"></textarea>' +
-        '<input id="h_due" placeholder="آخر ميعاد (مثال: 2026-10-15)">' +
+        '<textarea id="h_desc" placeholder="التفاصيل"></textarea>' +
+        '<input id="h_due" placeholder="آخر ميعاد">' +
         '<select id="h_grade"><option value="first">أول ثانوي</option><option value="second">تانية ثانوي</option></select>' +
-        '<button class="btn btn-gold" onclick="addHW()" style="width:100%;justify-content:center">➕ إضافة</button></div>';
-    var list = d.length ? d.map(function(h) {
-        var g = h.grade === 'first' ? 'أول' : 'تانية';
-        return '<div class="card"><div class="row"><div style="flex:1">' +
-            '<div class="name">📝 ' + h.title + '</div>' +
-            '<span class="grade">' + g + ' ثانوي</span>' +
-            (h.due_date ? '<div class="label" style="margin-top:6px">⏰ ' + h.due_date + '</div>' : '') +
-            '<div style="font-size:13px;color:#94a3b8;margin-top:8px;line-height:1.6">' + h.description + '</div>' +
-            '</div><button class="btn btn-no btn-sm" onclick="delHW(' + h.id + ')">🗑️</button></div></div>';
-    }).join('') : '<div class="empty"><span class="ic">📝</span>مفيش واجبات</div>';
-    b.innerHTML = form + list;
+        '<button class="btn btn-gold" onclick="addHW()">➕ إضافة</button></div>';
+    if (d.length) {
+        d.forEach(function(h) {
+            var g = h.grade === 'first' ? 'أول' : 'تانية';
+            html += '<div class="card"><div class="row"><div style="flex:1">' +
+                '<div class="name">📝 ' + esc(h.title) + '</div>' +
+                '<span class="grade">' + g + ' ثانوي</span>' +
+                '<div style="font-size:13px;color:#94a3b8;margin-top:8px">' + esc(h.description) + '</div>' +
+                '</div><button class="btn btn-no btn-sm" onclick="delHW(' + h.id + ')">🗑️</button></div></div>';
+        });
+    } else {
+        html += '<div class="empty">📝 مفيش واجبات</div>';
+    }
+    content.innerHTML = html;
 }
 
 async function addHW() {
@@ -309,36 +267,119 @@ async function addHW() {
         due_date: document.getElementById('h_due').value.trim(),
         grade: document.getElementById('h_grade').value
     };
-    if (!d.title) return alert('اكتب عنوان الواجب');
-    await fetch('/api/admin/homework', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(d)});
-    loadHomework();
+    if (!d.title) return alert('اكتب العنوان');
+    await fetch('/api/admin/homework', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(d)});
+    load('homework');
 }
 
 async function delHW(id) {
     if (!confirm('حذف؟')) return;
-    await fetch('/api/admin/homework/' + id, {method: 'DELETE'});
-    loadHomework();
+    await fetch('/api/admin/homework/' + id, {method:'DELETE'});
+    load('homework');
 }
 
 /* ===== الامتحانات ===== */
 async function loadExams() {
     var r = await fetch('/api/admin/exams');
     var d = await r.json();
-    var b = document.getElementById('examsView');
-    var form = '<div class="add-form"><h3>➕ إنشاء امتحان</h3>' +
+    var html = '<div class="add-form"><h3>➕ إنشاء امتحان</h3>' +
         '<input id="e_title" placeholder="عنوان الامتحان">' +
         '<input type="number" id="e_duration" placeholder="المدة بالدقايق" value="30">' +
         '<select id="e_grade"><option value="first">أول ثانوي</option><option value="second">تانية ثانوي</option></select>' +
-        '<div style="margin-top:12px;margin-bottom:12px;color:#ffd200;font-size:13px;font-weight:800">📋 الأسئلة:</div>' +
+        '<div style="margin:12px 0;color:#ffd200;font-size:13px;font-weight:800">📋 الأسئلة:</div>' +
         '<div id="questionsBox"></div>' +
-        '<button class="btn btn-blue" onclick="addQ()" style="width:100%;justify-content:center">➕ إضافة سؤال</button>' +
-        '<button class="btn btn-gold" onclick="saveExam()" style="width:100%;justify-content:center;margin-top:8px">💾 حفظ الامتحان</button></div>';
-    var list = d.length ? d.map(function(e) {
-        var g = e.grade === 'first' ? 'أول' : 'تانية';
-        return '<div class="card"><div class="row"><div style="flex:1">' +
-            '<div class="name">📊 ' + e.title + '</div>' +
-            '<span class="grade">' + g + ' ثانوي — ' + e.duration + ' دقيقة — ' + e.total + ' سؤال</span>' +
-            '</div><span class="badge ' + (e.active ? 'approved' : 'warn') + '">' + (e.active ? '✅ نشط' : '⏸️ متوقف') + '</span></div>' +
-            '<div class="actions-row">' +
-            '<button class="btn btn-blue btn-sm" onclick="toggleExam(' + e.id + ')">' + (e.active ? '⏸️ إيقاف' : '▶️ تنشيط') + '</button>' +
-            '<button class="btn btn-no btn-sm" onclick="delExam(' + e.id + ')">🗑️ ح
+        '<button class="btn btn-blue" onclick="addQ()">➕ إضافة سؤال</button>' +
+        '<button class="btn btn-gold" onclick="saveExam()">💾 حفظ الامتحان</button></div>';
+    if (d.length) {
+        d.forEach(function(e) {
+            var g = e.grade === 'first' ? 'أول' : 'تانية';
+            html += '<div class="card"><div class="row"><div style="flex:1">' +
+                '<div class="name">📊 ' + esc(e.title) + '</div>' +
+                '<span class="grade">' + g + ' — ' + e.duration + ' د — ' + e.total + ' سؤال</span>' +
+                '</div></div><div style="margin-top:10px">' +
+                '<button class="btn btn-blue btn-sm" onclick="toggleExam(' + e.id + ')">' + (e.active ? '⏸️' : '▶️') + '</button>' +
+                '<button class="btn btn-no btn-sm" onclick="delExam(' + e.id + ')">🗑️</button>' +
+                '</div></div>';
+        });
+    } else {
+        html += '<div class="empty">📊 مفيش امتحانات</div>';
+    }
+    content.innerHTML = html;
+    questions = [];
+    addQ();
+}
+
+function addQ() {
+    var idx = questions.length;
+    questions.push({q:'',a:'',b:'',c:'',d:'',correct:0});
+    var box = document.getElementById('questionsBox');
+    if (!box) return;
+    var html = '<div class="q-edit" style="background:rgba(255,255,255,0.03);border-radius:14px;padding:14px;margin-bottom:12px">' +
+        '<input placeholder="السؤال ' + (idx+1) + '" oninput="questions[' + idx + '].q=this.value">' +
+        '<input placeholder="اختيار 1" oninput="questions[' + idx + '].a=this.value">' +
+        '<input placeholder="اختيار 2" oninput="questions[' + idx + '].b=this.value">' +
+        '<input placeholder="اختيار 3" oninput="questions[' + idx + '].c=this.value">' +
+        '<input placeholder="اختيار 4" oninput="questions[' + idx + '].d=this.value">' +
+        '<select onchange="questions[' + idx + '].correct=parseInt(this.value)">' +
+        '<option value="0">الإجابة: 1</option><option value="1">الإجابة: 2</option>' +
+        '<option value="2">الإجابة: 3</option><option value="3">الإجابة: 4</option>' +
+        '</select></div>';
+    box.insertAdjacentHTML('beforeend', html);
+}
+
+async function saveExam() {
+    var title = document.getElementById('e_title').value.trim();
+    var duration = document.getElementById('e_duration').value;
+    var grade = document.getElementById('e_grade').value;
+    if (!title) return alert('اكتب عنوان الامتحان');
+    var valid = questions.filter(function(q){ return q.q && q.a && q.b && q.c && q.d; });
+    if (!valid.length) return alert('اكتب سؤال واحد على الأقل');
+    await fetch('/api/admin/exams', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({title:title, duration:duration, grade:grade, questions:valid})});
+    alert('✅ تم الحفظ');
+    load('exams');
+}
+
+async function toggleExam(id) {
+    await fetch('/api/admin/exam/' + id + '/toggle', {method:'POST'});
+    load('exams');
+}
+
+async function delExam(id) {
+    if (!confirm('حذف؟')) return;
+    await fetch('/api/admin/exam/' + id, {method:'DELETE'});
+    load('exams');
+}
+
+/* ===== النتائج ===== */
+async function loadResults() {
+    var r = await fetch('/api/admin/results');
+    var d = await r.json();
+    if (!d.length) {
+        content.innerHTML = '<div class="empty">🏆 مفيش نتائج</div>';
+        return;
+    }
+    var html = '';
+    d.forEach(function(x) {
+        var pct = Math.round((x.score / x.total) * 100);
+        html += '<div class="card"><div class="row"><div style="flex:1">' +
+            '<div class="name">' + esc(x.student_name) + '</div>' +
+            '<div class="label" style="margin-top:4px">' + esc(x.created_at) + '</div>' +
+            '</div><span class="badge ' + (pct >= 50 ? 'approved' : 'rejected') + '" style="font-size:14px;padding:8px 16px">' + x.score + '/' + x.total + ' (' + pct + '%)</span></div></div>';
+    });
+    content.innerHTML = html;
+}
+
+/* ===== التابات ===== */
+document.querySelectorAll('.tab').forEach(function(t) {
+    t.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+        t.classList.add('active');
+        load(t.dataset.tab);
+    });
+});
+
+load('stats');
+</script>
+</body>
+</html>
