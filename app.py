@@ -185,15 +185,14 @@ def admin_home():
 def admin_pending():
     if not require_admin(): return redirect(url_for('admin_login'))
     students = Student.query.filter_by(status='pending').order_by(Student.id.desc()).all()
-    return render_template('admin_pending.html', students=students, teacher=TEACHER)
+    return render_template('admin_pending.html', students=students, teacher=TEACHER, subject=SUBJECT)
 
 
 @app.route('/admin/students')
 def admin_students():
     if not require_admin(): return redirect(url_for('admin_login'))
     students = Student.query.order_by(Student.id.desc()).all()
-    return render_template('admin_students.html', students=students, teacher=TEACHER)
-
+return render_template('admin_students.html', students=students, teacher=TEACHER, subject=SUBJECT)
 
 @app.route('/admin/approve/<int:id>')
 def admin_approve(id):
@@ -206,7 +205,7 @@ def admin_approve(id):
         s.code = code
         s.status = 'approved'
         db.session.commit()
-        return render_template('admin_approved.html', student=s, code=code, teacher=TEACHER)
+        return render_template('admin_approved.html', student=s, code=code, teacher=TEACHER, subject=SUBJECT)
     return redirect(url_for('admin_pending'))
 
 
@@ -242,7 +241,7 @@ def admin_videos():
             db.session.commit()
         return redirect(url_for('admin_videos'))
     videos = Video.query.order_by(Video.id.desc()).all()
-    return render_template('admin_videos.html', videos=videos, teacher=TEACHER)
+    return render_template('admin_videos.html', videos=videos, teacher=TEACHER, subject=SUBJECT)
 
 
 @app.route('/admin/video/del/<int:id>')
@@ -268,7 +267,7 @@ def admin_homework():
             db.session.commit()
         return redirect(url_for('admin_homework'))
     hws = Homework.query.order_by(Homework.id.desc()).all()
-    return render_template('admin_homework.html', homeworks=hws, teacher=TEACHER)
+    return render_template('admin_homework.html', homeworks=hws, teacher=TEACHER, subject=SUBJECT)
 
 
 @app.route('/admin/homework/del/<int:id>')
