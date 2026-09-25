@@ -6,249 +6,115 @@
 <title>إنشاء حساب | {{ subject }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Cairo','Segoe UI',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:#020617;min-height:100vh;color:#fff;padding:20px;position:relative;overflow-x:hidden}
-
-.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 60%)}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.4}
-.orb1{width:350px;height:350px;background:linear-gradient(135deg,#f7971e,#ffd200);top:-100px;right:-100px;animation:float1 15s infinite}
-.orb2{width:300px;height:300px;background:linear-gradient(135deg,#6366f1,#8b5cf6);bottom:-80px;left:-80px;animation:float2 18s infinite}
-@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,60px)}}
-@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,-40px)}}
-
+.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 60%);overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35}
+.o1{width:350px;height:350px;background:#f7971e;top:-100px;right:-100px}
+.o2{width:300px;height:300px;background:#6366f1;bottom:-80px;left:-80px}
 .wrap{position:relative;z-index:2;max-width:520px;margin:0 auto}
-
-/* الهيدر */
-.header{text-align:center;padding:20px 0 24px}
-.logo{width:80px;height:80px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 14px;box-shadow:0 20px 50px rgba(247,151,30,0.4);animation:logoFloat 3s infinite}
-@keyframes logoFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
-.header h1{font-size:26px;font-weight:900;background:linear-gradient(135deg,#fff,#ffd200,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
-.header p{color:#94a3b8;font-size:13px;font-weight:600}
-
-/* البطاقة */
-.card{background:rgba(255,255,255,0.03);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:28px 22px;box-shadow:0 30px 80px rgba(0,0,0,0.5);position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,210,0,0.6),transparent)}
-
-.section-label{font-size:13px;color:#ffd200;font-weight:700;letter-spacing:1.5px;margin-bottom:16px;display:flex;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
-.section-label .em{font-size:16px}
-
-/* الحقول */
+.head{text-align:center;padding:20px 0 24px}
+.head .logo{width:80px;height:80px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 14px;box-shadow:0 20px 50px rgba(247,151,30,0.4)}
+.head h1{font-size:26px;font-weight:900;color:#fff;margin-bottom:6px}
+.head p{color:#94a3b8;font-size:13px}
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:28px 22px;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.err{background:rgba(229,57,53,0.15);border:1px solid rgba(229,57,53,0.3);color:#ef9a9a;padding:14px;border-radius:14px;font-size:13px;font-weight:600;margin-bottom:16px;text-align:center}
+.section{font-size:13px;color:#ffd200;font-weight:800;letter-spacing:1.5px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
 .field{margin-bottom:16px;text-align:right}
-.field label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:8px;padding-right:4px;font-weight:600}
-.field label .req{color:#ef4444;margin-left:3px}
-.field input,.field select{width:100%;padding:15px 18px;font-size:15px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.08);border-radius:16px;color:#fff;font-family:inherit;text-align:right;transition:.25s;font-weight:600}
-.field input:focus,.field select:focus{outline:none;border-color:#ffd200;background:rgba(255,255,255,0.08);box-shadow:0 0 0 4px rgba(255,210,0,0.1)}
-.field input::placeholder{color:#475569;font-weight:500}
-.field select option{background:#0f172a;color:#fff;padding:10px}
-
-/* رقم الدفع */
-.phone-card{background:linear-gradient(135deg,rgba(247,151,30,0.15),rgba(255,210,0,0.08));border:2px solid rgba(255,210,0,0.3);border-radius:18px;padding:18px;text-align:center;margin:16px 0;cursor:pointer;position:relative;overflow:hidden}
-.phone-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent);animation:shineCard 4s infinite}
-@keyframes shineCard{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(100%) rotate(45deg)}}
-.phone-card .lbl{font-size:12px;color:#94a3b8;margin-bottom:8px;font-weight:600;position:relative;z-index:2}
-.phone-card .num{font-size:26px;font-weight:900;color:#ffd200;direction:ltr;letter-spacing:2px;margin-bottom:6px;position:relative;z-index:2}
-.phone-card .tip{font-size:11px;color:#94a3b8;position:relative;z-index:2}
-.phone-card:active{background:linear-gradient(135deg,rgba(37,211,102,0.2),rgba(16,185,129,0.1));border-color:#25D366}
-
-/* رفع الملف */
-.upload-area{background:rgba(255,255,255,0.03);border:2px dashed rgba(255,210,0,0.25);border-radius:18px;padding:20px;text-align:center;cursor:pointer;transition:.25s;margin-bottom:16px}
-.upload-area:active{background:rgba(255,210,0,0.08);border-color:#ffd200}
-.upload-area .ic{font-size:36px;margin-bottom:8px;display:block}
-.upload-area .tx{font-size:13px;color:#cbd5e1;font-weight:700;margin-bottom:4px}
-.upload-area .sub{font-size:11px;color:#64748b}
-.upload-area.has-file{background:rgba(37,211,102,0.08);border-color:#25D366;border-style:solid}
-.upload-area.has-file .tx{color:#a5d6a7}
-
-/* زر الإرسال */
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:18px;font-size:16px;font-weight:900;border:none;border-radius:18px;text-decoration:none;cursor:pointer;font-family:inherit;transition:.25s;margin-top:8px}
+.field label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:8px;font-weight:600}
+.field label .req{color:#ef4444}
+.field input,.field select{width:100%;padding:15px 18px;font-size:15px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.08);border-radius:16px;color:#fff;font-family:inherit;text-align:right;font-weight:600}
+.field input:focus,.field select:focus{outline:none;border-color:#ffd200;background:rgba(255,255,255,0.08)}
+.field input::placeholder{color:#475569}
+.field select option{background:#0f172a}
+.phone-card{background:linear-gradient(135deg,rgba(247,151,30,0.15),rgba(255,210,0,0.08));border:2px solid rgba(255,210,0,0.3);border-radius:18px;padding:18px;text-align:center;margin:16px 0}
+.phone-card .lbl{font-size:12px;color:#94a3b8;margin-bottom:8px;font-weight:600}
+.phone-card .num{font-size:26px;font-weight:900;color:#ffd200;direction:ltr;letter-spacing:2px}
+.upload{background:rgba(255,255,255,0.03);border:2px dashed rgba(255,210,0,0.25);border-radius:18px;padding:24px;text-align:center;cursor:pointer;margin-bottom:16px}
+.upload .ic{font-size:38px;display:block;margin-bottom:8px}
+.upload .tx{font-size:13px;color:#cbd5e1;font-weight:700}
+.upload.has{background:rgba(37,211,102,0.08);border-color:#25D366;border-style:solid}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:18px;font-size:16px;font-weight:900;border:none;border-radius:18px;cursor:pointer;font-family:inherit;text-decoration:none;margin-top:8px}
 .btn:active{transform:scale(0.97)}
-.btn-primary{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;box-shadow:0 15px 40px rgba(247,151,30,0.35);position:relative;overflow:hidden}
-.btn-primary::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)}
-.btn-primary:active::after{left:100%;transition:.6s}
-.btn-primary:disabled{opacity:0.6}
-.btn-ghost{background:transparent;color:#94a3b8;font-size:13px;padding:12px;font-weight:600}
-.btn-ghost:active{color:#ffd200}
-
-/* خطوات صغيرة */
-.steps{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
-.step{width:38px;height:5px;background:rgba(255,255,255,0.08);border-radius:3px}
-.step.active{background:linear-gradient(90deg,#f7971e,#ffd200);box-shadow:0 0 12px rgba(255,210,0,0.5)}
-
-/* شاشة النجاح */
-.success-card{text-align:center;padding:40px 24px}
-.success-card .big-ic{font-size:80px;margin-bottom:16px;display:block;animation:pop 0.6s cubic-bezier(.5,1.8,.5,1)}
-@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
-.success-card h2{font-size:24px;background:linear-gradient(135deg,#fff,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;font-weight:900}
-.success-card p{color:#cbd5e1;font-size:14px;line-height:2;margin-bottom:8px}
-.success-card .pending-box{background:rgba(255,152,0,0.1);border:1.5px solid rgba(255,152,0,0.3);border-radius:16px;padding:16px;margin:18px 0;font-size:13px;line-height:1.9;color:#ffb74d;text-align:right}
-.success-card .pending-box b{color:#ffd200}
-
-.hidden{display:none}
+.btn-primary{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;box-shadow:0 15px 40px rgba(247,151,30,0.35)}
+.btn-ghost{background:transparent;color:#94a3b8;font-size:13px;padding:12px}
 </style>
 </head>
 <body>
 
-<div class="bg">
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-</div>
+<div class="bg"><div class="orb o1"></div><div class="orb o2"></div></div>
 
 <div class="wrap">
-
-<div class="header">
+<div class="head">
 <div class="logo">📝</div>
 <h1>إنشاء حساب جديد</h1>
 <p>{{ subject }} — الأستاذ {{ teacher }}</p>
 </div>
 
-<div class="steps">
-<div class="step active"></div>
-<div class="step active"></div>
-<div class="step active"></div>
-</div>
+<div class="card">
+{% if error %}<div class="err">❌ {{ error }}</div>{% endif %}
 
-<!-- فورم التسجيل -->
-<div class="card" id="mainCard">
+<form method="POST" enctype="multipart/form-data">
 
-<div class="section-label"><span class="em">👤</span> بياناتك الشخصية</div>
+<div class="section">👤 بياناتك الشخصية</div>
 
 <div class="field">
 <label>الاسم الكامل <span class="req">*</span></label>
-<input type="text" id="inName" placeholder="اكتب اسمك الثلاثي" autocomplete="name">
+<input type="text" name="name" placeholder="اكتب اسمك الثلاثي" required>
 </div>
 
 <div class="field">
 <label>رقم الموبايل <span class="req">*</span></label>
-<input type="tel" id="inPhone" placeholder="01xxxxxxxxx" maxlength="11" inputmode="numeric" autocomplete="tel">
+<input type="tel" name="phone" placeholder="01xxxxxxxxx" maxlength="11" required>
 </div>
 
 <div class="field">
 <label>رقم ولي الأمر <span class="req">*</span></label>
-<input type="tel" id="inParent" placeholder="01xxxxxxxxx" maxlength="11" inputmode="numeric">
+<input type="tel" name="parent_phone" placeholder="01xxxxxxxxx" maxlength="11" required>
 </div>
 
 <div class="field">
 <label>الصف <span class="req">*</span></label>
-<select id="inGrade">
+<select name="grade" required>
 <option value="">-- اختر الصف --</option>
 <option value="first">📖 أول ثانوي</option>
 <option value="second">📚 تانية ثانوي</option>
 </select>
 </div>
 
-<div class="section-label" style="margin-top:24px"><span class="em">💰</span> الدفع</div>
+<div class="section" style="margin-top:20px">💰 الدفع</div>
 
-<div class="phone-card" onclick="copyNum(this)">
+<div class="phone-card">
 <div class="lbl">حوّل {{ price }} جنيه على الرقم</div>
 <div class="num">{{ vodafone }}</div>
-<div class="tip">فودافون كاش / إنستاباي — اضغط للنسخ 📋</div>
 </div>
 
 <div class="field">
 <label>الرقم اللي حوّلت منه <span class="req">*</span></label>
-<input type="tel" id="inPaymentPhone" placeholder="01xxxxxxxxx" maxlength="11" inputmode="numeric">
+<input type="tel" name="payment_phone" placeholder="01xxxxxxxxx" maxlength="11" required>
 </div>
 
-<div class="section-label" style="margin-top:24px"><span class="em">📷</span> إثبات التحويل</div>
+<div class="section" style="margin-top:20px">📷 إثبات التحويل</div>
 
-<div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-<span class="ic">📤</span>
+<div class="upload" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+<span class="ic" id="uploadIcon">📤</span>
 <div class="tx" id="uploadTx">اضغط لرفع صورة التحويل</div>
-<div class="sub">PNG / JPG / JPEG — من الكاميرا أو المعرض</div>
 </div>
-<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="filePicked(this)">
+<input type="file" name="screenshot" id="fileInput" accept="image/*" style="display:none" onchange="filePicked(this)">
 
-<button class="btn btn-primary" id="submitBtn" onclick="submitForm()">
-<span>🚀</span> إرسال الطلب
-</button>
-
+<button type="submit" class="btn btn-primary">🚀 إرسال الطلب</button>
 <a href="/" class="btn btn-ghost">← رجوع للرئيسية</a>
 
+</form>
 </div>
-
-<!-- شاشة النجاح -->
-<div class="card success-card hidden" id="successCard">
-<span class="big-ic">⏳</span>
-<h2>تم استلام طلبك</h2>
-<p>طلبك في انتظار موافقة الأستاذ</p>
-
-<div class="pending-box">
-<b>الخطوة الجاية:</b><br>
-1. الأستاذ هيراجع صورة التحويل<br>
-2. هيتواصل معاك على واتساب<br>
-3. هيبعتلك <b>كود التفعيل</b><br>
-4. هتدخل بيه المنصة وتشوف الدروس
-</div>
-
-<a href="/" class="btn btn-primary" style="margin-top:12px">← رجوع للرئيسية</a>
-</div>
-
 </div>
 
 <script>
-var curFile = null;
-
-function copyNum(el) {
-    navigator.clipboard.writeText(el.querySelector('.num').textContent.trim());
-    var num = el.querySelector('.num');
-    var t = num.textContent;
-    num.textContent = '✅ تم النسخ';
-    num.style.fontSize = '20px';
-    setTimeout(function(){ num.textContent = t; num.style.fontSize = '26px'; }, 1200);
-}
-
 function filePicked(inp) {
     if (inp.files && inp.files[0]) {
-        curFile = inp.files[0];
-        var area = document.getElementById('uploadArea');
-        area.classList.add('has-file');
+        document.getElementById('uploadArea').classList.add('has');
         document.getElementById('uploadTx').textContent = '✅ تم اختيار الصورة';
-        document.querySelector('#uploadArea .ic').textContent = '✅';
-    }
-}
-
-async function submitForm() {
-    var name = document.getElementById('inName').value.trim();
-    var phone = document.getElementById('inPhone').value.trim();
-    var parent = document.getElementById('inParent').value.trim();
-    var grade = document.getElementById('inGrade').value;
-    var payPhone = document.getElementById('inPaymentPhone').value.trim();
-
-    if (!name || name.length < 3) return alert('اكتب اسمك كامل');
-    if (!phone || phone.length !== 11) return alert('اكتب رقم موبايل صحيح (11 رقم)');
-    if (!parent || parent.length !== 11) return alert('اكتب رقم ولي الأمر صحيح');
-    if (!grade) return alert('اختر صفك');
-    if (!payPhone || payPhone.length !== 11) return alert('اكتب الرقم اللي حوّلت منه');
-    if (!curFile) return alert('ارفع صورة التحويل');
-
-    var btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span>⏳</span> جاري الإرسال...';
-
-    var fd = new FormData();
-    fd.append('name', name);
-    fd.append('phone', phone);
-    fd.append('parent_phone', parent);
-    fd.append('grade', grade);
-    fd.append('payment_phone', payPhone);
-    fd.append('screenshot', curFile);
-
-    try {
-        var r = await fetch('/api/register', { method: 'POST', body: fd });
-        var d = await r.json();
-        if (!d.ok) {
-            alert('❌ ' + d.msg);
-            btn.disabled = false;
-            btn.innerHTML = '<span>🚀</span> إرسال الطلب';
-            return;
-        }
-        document.getElementById('mainCard').classList.add('hidden');
-        document.getElementById('successCard').classList.remove('hidden');
-        window.scrollTo({top:0, behavior:'smooth'});
-    } catch(e) {
-        alert('خطأ في الاتصال');
-        btn.disabled = false;
-        btn.innerHTML = '<span>🚀</span> إرسال الطلب';
+        document.getElementById('uploadIcon').textContent = '✅';
     }
 }
 </script>
