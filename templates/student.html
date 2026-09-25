@@ -6,47 +6,76 @@
 <title>صفحة الطالب | {{ subject }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:#020617;color:#fff;min-height:100vh;padding-bottom:40px;position:relative}
-.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 60%);overflow:hidden;pointer-events:none}
-.orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.2}
-.o1{width:400px;height:400px;background:#f7971e;top:-150px;right:-150px}
-.o2{width:350px;height:350px;background:#6366f1;bottom:-100px;left:-100px}
-.wrap{position:relative;z-index:2}
-
+*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0}
+body{background:#020617;color:#fff;min-height:100vh;padding-bottom:40px}
 header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
 .user{display:flex;align-items:center;gap:12px}
 .avatar{width:46px;height:46px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#0a0f1e}
 .user .name{font-size:14px;font-weight:800}
 .user .grade{font-size:11px;color:#94a3b8;margin-top:2px}
 .logout{color:#ef9a9a;text-decoration:none;font-size:12px;background:rgba(229,57,53,0.15);padding:8px 14px;border-radius:12px;border:1px solid rgba(229,57,53,0.3);font-weight:700}
-
-.tabs{display:flex;gap:6px;padding:12px;overflow-x:auto;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05)}
+.tabs{display:flex;gap:6px;padding:12px;overflow-x:auto;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05);position:sticky;top:70px;z-index:40}
 .tab{padding:10px 14px;background:rgba(255,255,255,0.05);border-radius:12px;cursor:pointer;font-size:12px;font-weight:800;white-space:nowrap;color:#94a3b8;border:1px solid transparent}
 .tab.active{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e}
-
 .container{padding:16px;max-width:820px;margin:0 auto}
-.section-title{font-size:14px;color:#ffd200;font-weight:900;margin-bottom:14px;letter-spacing:1px}
+.section-title{font-size:14px;color:#ffd200;font-weight:900;margin-bottom:14px}
 .card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:16px;margin-bottom:12px}
 .video{display:flex;gap:12px;align-items:center;cursor:pointer}
 .video .ic{width:56px;height:56px;background:linear-gradient(135deg,rgba(247,151,30,0.2),rgba(255,210,0,0.08));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
 .video .info{flex:1}
-.video .info .t{font-size:14px;font-weight:800;margin-bottom:4px}
-.video .info .l{font-size:11px;color:#94a3b8}
+.video .t{font-size:14px;font-weight:800;margin-bottom:4px}
+.video .l{font-size:11px;color:#94a3b8}
 .hw{border-right:3px solid #ffd200}
 .hw .t{font-size:15px;font-weight:800;color:#ffd200;margin-bottom:8px}
-.hw .d{font-size:13px;color:#94a3b8;line-height:1.8}
+.hw .d{font-size:13px;color:#cbd5e1;line-height:1.8}
 .hw .due{margin-top:10px;font-size:12px;color:#ffb74d;background:rgba(255,152,0,0.1);padding:6px 10px;border-radius:8px;display:inline-block}
-.empty{text-align:center;color:#475569;padding:60px 20px;font-size:14px;font-weight:600}
+.hw .actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:10px 18px;border:none;border-radius:12px;cursor:pointer;font-weight:800;font-size:13px;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn:active{transform:scale(0.97)}
+.btn-gold{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e}
+.btn-blue{background:rgba(99,102,241,0.2);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3)}
+.btn-green{background:#25D366;color:#fff}
+.submitted{background:rgba(37,211,102,0.15);color:#a5d6a7;padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;display:inline-block}
+.exam{border-right:3px solid #6366f1}
+.exam .t{font-size:15px;font-weight:800;color:#a5b4fc;margin-bottom:6px}
+.exam .meta{font-size:12px;color:#94a3b8;margin-bottom:12px}
+.result-row{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.result-row:last-child{border-bottom:none}
+.result-score{background:rgba(37,211,102,0.15);color:#a5d6a7;padding:4px 12px;border-radius:20px;font-weight:700}
+.result-score.low{background:rgba(229,57,53,0.15);color:#ef9a9a}
+.empty{text-align:center;color:#475569;padding:60px 20px;font-size:14px}
 .empty .ic{font-size:52px;display:block;margin-bottom:14px;opacity:0.5}
 .hidden{display:none}
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal.hidden{display:none}
+.modal-box{background:#0f172a;border:1px solid rgba(255,210,0,0.3);border-radius:20px;padding:22px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto}
+.modal-box h3{color:#ffd200;font-size:17px;margin-bottom:14px;text-align:center}
+.modal-box label{display:block;font-size:12px;color:#cbd5e1;margin:10px 0 6px;font-weight:700}
+.modal-box textarea,.modal-box input[type=text]{width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:#fff;border-radius:12px;font-family:inherit;font-size:14px}
+.modal-box textarea{min-height:100px;resize:vertical}
+.canvas-wrap{background:#fff;border-radius:12px;padding:6px;margin-top:8px}
+canvas{width:100%;height:auto;border-radius:8px;touch-action:none;cursor:crosshair;display:block}
+.draw-tools{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.color-btn{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);cursor:pointer}
+.color-btn.active{border-color:#ffd200}
+.size-btn{padding:6px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:#fff;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700}
+.size-btn.active{background:#ffd200;color:#0a0f1e;border-color:#ffd200}
+.timer{background:linear-gradient(135deg,rgba(247,151,30,0.2),rgba(255,210,0,0.1));border:1.5px solid rgba(255,210,0,0.3);color:#ffd200;padding:12px;border-radius:14px;text-align:center;font-weight:900;margin:10px 0;font-size:16px}
+.timer.warning{background:rgba(229,57,53,0.2);border-color:rgba(229,57,53,0.4);color:#ef9a9a}
+.q-box{margin:14px 0;padding:14px;background:rgba(255,255,255,0.04);border-radius:14px}
+.q-text{font-size:14px;margin-bottom:12px;line-height:1.8;font-weight:700}
+.opt{padding:12px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px}
+.opt:active{background:rgba(255,210,0,0.1)}
+.opt.selected{background:linear-gradient(135deg,rgba(247,151,30,0.2),rgba(255,210,0,0.1));border-color:#ffd200;color:#fff;font-weight:700}
+.opt .mark{width:24px;height:24px;border-radius:50%;border:2px solid #475569;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#94a3b8;flex-shrink:0}
+.opt.selected .mark{background:#ffd200;color:#0a0f1e;border-color:#ffd200}
+.essay-input{width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:#fff;border-radius:12px;font-family:inherit;font-size:14px;min-height:80px;resize:vertical;margin-top:8px}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.modal-actions .btn{flex:1;justify-content:center}
 </style>
 </head>
 <body>
-
-<div class="bg"><div class="orb o1"></div><div class="orb o2"></div></div>
-
-<div class="wrap">
 
 <header>
 <div class="user">
@@ -60,12 +89,15 @@ header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,25
 </header>
 
 <div class="tabs">
-<div class="tab active" onclick="showTab('videos', this)">🎬 الفيديوهات</div>
-<div class="tab" onclick="showTab('homework', this)">📝 الواجبات</div>
+<div class="tab active" data-tab="videos" onclick="showTab('videos', this)">🎬 الفيديوهات</div>
+<div class="tab" data-tab="homework" onclick="showTab('homework', this)">📝 الواجبات</div>
+<div class="tab" data-tab="exams" onclick="showTab('exams', this)">📊 الامتحانات</div>
+<div class="tab" data-tab="results" onclick="showTab('results', this)">🏆 نتائجي</div>
 </div>
 
 <div class="container">
 
+<!-- الفيديوهات -->
 <div id="videosView">
 <div class="section-title">🎬 الفيديوهات المتاحة</div>
 {% if videos %}
@@ -86,6 +118,7 @@ header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,25
 {% endif %}
 </div>
 
+<!-- الواجبات -->
 <div id="homeworkView" class="hidden">
 <div class="section-title">📝 الواجبات</div>
 {% if homeworks %}
@@ -94,6 +127,13 @@ header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,25
 <div class="t">📝 {{ h.title }}</div>
 <div class="d">{{ h.description }}</div>
 {% if h.due_date %}<div class="due">⏰ آخر ميعاد: {{ h.due_date }}</div>{% endif %}
+<div class="actions">
+{% if h.id in submitted_hw_ids %}
+<span class="submitted">✅ تم التسليم</span>
+{% else %}
+<button class="btn btn-gold" onclick="openSubmit({{ h.id }}, '{{ h.title }}', '{{ h.hw_type }}')">📤 سلّم الواجب</button>
+{% endif %}
+</div>
 </div>
 {% endfor %}
 {% else %}
@@ -101,16 +141,273 @@ header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,25
 {% endif %}
 </div>
 
+<!-- الامتحانات -->
+<div id="examsView" class="hidden">
+<div class="section-title">📊 الامتحانات</div>
+{% if exams %}
+{% for e in exams %}
+<div class="card exam">
+<div class="t">📊 {{ e.title }}</div>
+<div class="meta">⏰ {{ e.duration }} دقيقة — {{ e.questions | length if e.questions else 0 }} سؤال</div>
+{% if e.id in taken_exam_ids %}
+<span class="submitted">✅ خلصت الامتحان ده</span>
+{% else %}
+<button class="btn btn-gold" onclick="startExam({{ e.id }})">🚀 ابدأ الامتحان</button>
+{% endif %}
+</div>
+{% endfor %}
+{% else %}
+<div class="empty"><span class="ic">📊</span>مفيش امتحانات لسه</div>
+{% endif %}
+</div>
+
+<!-- النتائج -->
+<div id="resultsView" class="hidden">
+<div class="section-title">🏆 نتائجي</div>
+{% if my_results %}
+<div class="card">
+{% for r in my_results %}
+<div class="result-row">
+<span>امتحان #{{ r.exam_id }} — {{ r.created_at.strftime('%Y-%m-%d') }}</span>
+<span class="result-score {% if r.score < r.total / 2 %}low{% endif %}">{{ r.score }} / {{ r.total }}</span>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="empty"><span class="ic">🏆</span>مفيش نتائج لسه</div>
+{% endif %}
+</div>
+
+</div>
+
+<!-- Modal تسليم واجب -->
+<div class="modal hidden" id="submitModal">
+<div class="modal-box">
+<h3 id="submitTitle">📤 تسليم الواجب</h3>
+<label>✍️ اكتب حلك (اختياري)</label>
+<textarea id="submitText" placeholder="اكتب حلك هنا..."></textarea>
+<label>📷 ارفع صورة (اختياري)</label>
+<input type="file" id="submitImage" accept="image/*" style="color:#fff">
+<label>🎨 أو ارسم الحل</label>
+<div class="canvas-wrap"><canvas id="drawCanvas" width="400" height="300"></canvas></div>
+<div class="draw-tools">
+<div class="color-btn active" data-color="#000000" style="background:#000" onclick="pickColor(this)"></div>
+<div class="color-btn" data-color="#e53935" style="background:#e53935" onclick="pickColor(this)"></div>
+<div class="color-btn" data-color="#1e88e5" style="background:#1e88e5" onclick="pickColor(this)"></div>
+<div class="color-btn" data-color="#43a047" style="background:#43a047" onclick="pickColor(this)"></div>
+<div class="color-btn" data-color="#fb8c00" style="background:#fb8c00" onclick="pickColor(this)"></div>
+<button class="size-btn active" data-size="3" onclick="pickSize(this)">رفيع</button>
+<button class="size-btn" data-size="6" onclick="pickSize(this)">وسط</button>
+<button class="size-btn" data-size="12" onclick="pickSize(this)">سميك</button>
+<button class="size-btn" onclick="clearCanvas()">🗑️ مسح</button>
+</div>
+<div class="modal-actions">
+<button class="btn btn-green" onclick="submitHW()">📤 تسليم</button>
+<button class="btn btn-blue" onclick="closeSubmit()">إلغاء</button>
+</div>
 </div>
 </div>
 
+<!-- Modal امتحان -->
+<div class="modal hidden" id="examModal">
+<div class="modal-box" id="examBox"></div>
+</div>
+
 <script>
-function showTab(tab, el) {
+var currentHW = null;
+var examData = null;
+var answers = [];
+var timerInt = null;
+var canvas = document.getElementById('drawCanvas');
+var ctx = canvas.getContext('2d');
+var drawing = false;
+var curColor = '#000000';
+var curSize = 3;
+var hasDrawing = false;
+
+/* ===== التابات ===== */
+function showTab(t, el) {
     document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
     el.classList.add('active');
-    document.getElementById('videosView').classList.add('hidden');
-    document.getElementById('homeworkView').classList.add('hidden');
-    document.getElementById(tab + 'View').classList.remove('hidden');
+    ['videos','homework','exams','results'].forEach(function(v){
+        document.getElementById(v+'View').classList.add('hidden');
+    });
+    document.getElementById(t+'View').classList.remove('hidden');
+}
+
+/* ===== الرسم ===== */
+function getPos(e) {
+    var r = canvas.getBoundingClientRect();
+    var x, y;
+    if (e.touches) {
+        x = e.touches[0].clientX - r.left;
+        y = e.touches[0].clientY - r.top;
+    } else {
+        x = e.clientX - r.left;
+        y = e.clientY - r.top;
+    }
+    return {x: x * (canvas.width / r.width), y: y * (canvas.height / r.height)};
+}
+canvas.addEventListener('mousedown', function(e){ drawing = true; var p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+canvas.addEventListener('mousemove', function(e){ if (drawing) { var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.strokeStyle = curColor; ctx.lineWidth = curSize; ctx.lineCap = 'round'; ctx.stroke(); hasDrawing = true; }});
+canvas.addEventListener('mouseup', function(){ drawing = false; });
+canvas.addEventListener('mouseout', function(){ drawing = false; });
+canvas.addEventListener('touchstart', function(e){ e.preventDefault(); drawing = true; var p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+canvas.addEventListener('touchmove', function(e){ e.preventDefault(); if (drawing) { var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.strokeStyle = curColor; ctx.lineWidth = curSize; ctx.lineCap = 'round'; ctx.stroke(); hasDrawing = true; }});
+canvas.addEventListener('touchend', function(e){ e.preventDefault(); drawing = false; });
+
+function pickColor(el) {
+    document.querySelectorAll('.color-btn').forEach(function(x){ x.classList.remove('active'); });
+    el.classList.add('active');
+    curColor = el.dataset.color;
+}
+function pickSize(el) {
+    document.querySelectorAll('.size-btn[data-size]').forEach(function(x){ x.classList.remove('active'); });
+    el.classList.add('active');
+    curSize = parseInt(el.dataset.size);
+}
+function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hasDrawing = false;
+}
+
+/* ===== تسليم الواجب ===== */
+function openSubmit(hwId, title, type) {
+    currentHW = hwId;
+    document.getElementById('submitTitle').textContent = '📤 ' + title;
+    document.getElementById('submitText').value = '';
+    document.getElementById('submitImage').value = '';
+    clearCanvas();
+    document.getElementById('submitModal').classList.remove('hidden');
+}
+function closeSubmit() {
+    document.getElementById('submitModal').classList.add('hidden');
+}
+
+async function submitHW() {
+    var text = document.getElementById('submitText').value.trim();
+    var imgInput = document.getElementById('submitImage');
+    var imgFile = imgInput.files[0];
+
+    var hasImg = !!imgFile;
+    if (!text && !hasImg && !hasDrawing) {
+        return alert('اكتب أو ارفع صورة أو ارسم الحل');
+    }
+
+    var fd = new FormData();
+    fd.append('text_answer', text);
+    if (imgFile) fd.append('image', imgFile);
+    if (hasDrawing) {
+        await new Promise(function(resolve) {
+            canvas.toBlob(function(blob) {
+                fd.append('drawing', blob, 'draw.png');
+                resolve();
+            }, 'image/png');
+        });
+    }
+
+    try {
+        var r = await fetch('/api/submit_homework/' + currentHW, {method: 'POST', body: fd});
+        var d = await r.json();
+        if (!d.ok) return alert(d.msg);
+        alert('✅ تم تسليم الواجب');
+        location.reload();
+    } catch(e) {
+        alert('خطأ في الاتصال');
+    }
+}
+
+/* ===== الامتحانات ===== */
+async function startExam(id) {
+    if (!confirm('متأكد؟ مش هتقدر ترجع تاني!')) return;
+    try {
+        var r = await fetch('/api/exam/' + id + '/start', {method: 'POST'});
+        var d = await r.json();
+        if (!d.ok) return alert(d.msg);
+        examData = d.exam;
+        answers = new Array(examData.questions.length).fill(null);
+        showExam();
+    } catch(e) { alert('خطأ'); }
+}
+
+function showExam() {
+    var html = '<h3>📊 ' + examData.title + '</h3>';
+    html += '<div class="timer" id="examTimer">⏰ ' + examData.duration + ':00</div>';
+    examData.questions.forEach(function(q, i) {
+        html += '<div class="q-box">';
+        html += '<div class="q-text">' + (i+1) + '. ' + q.q + '</div>';
+        if (q.type === 'mcq') {
+            q.opts.forEach(function(opt, j) {
+                html += '<div class="opt" data-q="' + i + '" data-v="' + j + '" onclick="pickOpt(this)">' +
+                    '<span class="mark">' + (j+1) + '</span> ' + opt +
+                    '</div>';
+            });
+        } else {
+            html += '<textarea class="essay-input" placeholder="اكتب إجابتك هنا..." oninput="answers[' + i + ']=this.value"></textarea>';
+        }
+        html += '</div>';
+    });
+    html += '<div class="modal-actions">';
+    html += '<button class="btn btn-green" onclick="submitExam()">📤 تسليم الامتحان</button>';
+    html += '<button class="btn btn-blue" onclick="closeExam()">إلغاء</button>';
+    html += '</div>';
+    document.getElementById('examBox').innerHTML = html;
+    document.getElementById('examModal').classList.remove('hidden');
+    startTimer(examData.duration);
+}
+
+function pickOpt(el) {
+    var qi = parseInt(el.dataset.q);
+    var v = parseInt(el.dataset.v);
+    answers[qi] = v;
+    document.querySelectorAll('.opt[data-q="' + qi + '"]').forEach(function(x){ x.classList.remove('selected'); });
+    el.classList.add('selected');
+}
+
+function startTimer(min) {
+    var total = min * 60;
+    clearInterval(timerInt);
+    timerInt = setInterval(function() {
+        total--;
+        if (total <= 0) {
+            clearInterval(timerInt);
+            alert('⏰ خلص الوقت!');
+            submitExam(true);
+            return;
+        }
+        var m = Math.floor(total / 60);
+        var s = total % 60;
+        var el = document.getElementById('examTimer');
+        if (el) {
+            el.textContent = '⏰ ' + m + ':' + (s < 10 ? '0' : '') + s;
+            if (total <= 60) el.classList.add('warning');
+        }
+    }, 1000);
+}
+
+async function submitExam(force) {
+    if (!force && !confirm('تسليم الامتحان؟ مش هتقدر ترجع!')) return;
+    clearInterval(timerInt);
+    try {
+        var r = await fetch('/api/exam/' + examData.id + '/submit', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({answers: answers})
+        });
+        var d = await r.json();
+        document.getElementById('examModal').classList.add('hidden');
+        if (d.ok) {
+            alert('🎉 نتيجتك: ' + d.score + ' / ' + d.total);
+            location.reload();
+        } else {
+            alert(d.msg);
+        }
+    } catch(e) { alert('خطأ'); }
+}
+
+function closeExam() {
+    if (!confirm('لو خرجت هيتسجل غياب! متأكد؟')) return;
+    clearInterval(timerInt);
+    document.getElementById('examModal').classList.add('hidden');
 }
 </script>
 </body>
