@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ subject }} - {{ teacher }}</title>
+<style>
+*{box-sizing:border-box;font-family:Tahoma;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:linear-gradient(160deg,#0a1929 0%,#0f2027 40%,#1a3a4a 100%);min-height:100vh;color:#fff}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+.logo{font-size:64px;margin-bottom:14px}
+.brand{font-size:28px;font-weight:bold;background:linear-gradient(90deg,#f7971e,#ffd200,#f7971e);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite;margin-bottom:8px}
+@keyframes shine{to{background-position:200% center}}
+.tagline{color:#a0b8c4;font-size:14px;margin-bottom:30px}
+.info{background:rgba(255,255,255,0.05);border:1px solid rgba(255,210,0,0.2);border-radius:20px;padding:24px 20px;width:100%;max-width:420px}
+.info h2{color:#ffd200;font-size:18px;margin-bottom:14px}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:14px}
+.row:last-child{border-bottom:none}
+.row span{color:#a0b8c4}
+.row b{color:#fff}
+.btn-main{display:block;width:100%;padding:16px;font-size:17px;background:linear-gradient(90deg,#f7971e,#ffd200);color:#0f2027;border:none;border-radius:14px;text-decoration:none;font-weight:bold;margin-top:16px;text-align:center}
+.btn-out{display:block;width:100%;padding:14px;font-size:15px;background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.15);border-radius:14px;text-decoration:none;font-weight:bold;margin-top:10px;text-align:center}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;max-width:420px;width:100%}
+.feat{background:rgba(255,255,255,0.05);border:1px solid rgba(255,210,0,0.15);border-radius:14px;padding:16px 10px;text-align:center}
+.feat .ic{font-size:28px;margin-bottom:6px}
+.feat .lb{font-size:12px;color:#a0b8c4}
+.footer{text-align:center;color:#5a7a8a;font-size:12px;margin-top:30px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<div class="logo">📚</div>
+<div class="brand">{{ subject }}</div>
+<div class="tagline">منصة تعليمية احترافية — الأستاذ {{ teacher }}</div>
+
+<div class="info">
+<h2>✍️ معلومات الكورس</h2>
+<div class="row"><span>المدرس:</span><b>{{ teacher }}</b></div>
+<div class="row"><span>المادة:</span><b>{{ subject }}</b></div>
+<div class="row"><span>الصفوف:</span><b>أول وتانية ثانوي</b></div>
+<div class="row"><span>السعر:</span><b>{{ price }} جنيه / الترم</b></div>
+<a href="/register" class="btn-main">🎓 سجّل الآن</a>
+<a href="/login" class="btn-out">🔑 دخول الطلاب</a>
+</div>
+
+<div class="features">
+<div class="feat"><div class="ic">🎬</div><div class="lb">فيديوهات شاملة</div></div>
+<div class="feat"><div class="ic">📝</div><div class="lb">واجبات</div></div>
+<div class="feat"><div class="ic">📊</div><div class="lb">امتحانات إلكترونية</div></div>
+<div class="feat"><div class="ic">🏆</div><div class="lb">متابعة تقدمك</div></div>
+</div>
+
+<div class="footer">
+منصة {{ teacher }} © 2027
+<br>
+<a href="/admin/login" style="color:#5a7a8a;text-decoration:none;font-size:11px">دخول الأدمن</a>
+</div>
+</div>
+
+</body>
+</html>
