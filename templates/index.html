@@ -4,26 +4,180 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ subject }} | {{ teacher }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:Tahoma;margin:0;padding:0}
-body{background:#020617;min-height:100vh;color:#fff;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{text-align:center;max-width:480px;width:100%}
-.logo{width:120px;height:120px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:36px;display:flex;align-items:center;justify-content:center;font-size:60px;margin:0 auto 24px;box-shadow:0 25px 70px rgba(247,151,30,0.5)}
-h1{font-size:42px;font-weight:900;background:linear-gradient(135deg,#fff,#ffd200,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px}
-.teacher{font-size:18px;color:#94a3b8;margin-bottom:30px}
-.teacher b{color:#ffd200}
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:18px;font-size:16px;font-weight:900;border:none;border-radius:18px;text-decoration:none;cursor:pointer;margin-bottom:12px;font-family:inherit}
-.btn1{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;box-shadow:0 15px 40px rgba(247,151,30,0.4)}
+*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:#020617;min-height:100vh;color:#fff;overflow-x:hidden;position:relative}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 60%)}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.3;will-change:transform}
+.o1{width:400px;height:400px;background:#f7971e;top:-120px;right:-120px;animation:f1 18s infinite}
+.o2{width:380px;height:380px;background:#6366f1;top:40%;left:-150px;animation:f2 20s infinite}
+.o3{width:300px;height:300px;background:#06b6d4;bottom:-100px;right:20%;animation:f3 22s infinite}
+@keyframes f1{0%,100%{transform:translate(0,0)}50%{transform:translate(-80px,80px)}}
+@keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(80px,-60px)}}
+@keyframes f3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,-40px) scale(1.1)}}
+.stars{position:absolute;inset:0}
+.star{position:absolute;background:#fff;border-radius:50%;animation:tw 3s infinite}
+@keyframes tw{0%,100%{opacity:0.2}50%{opacity:1}}
+.wrap{position:relative;z-index:2}
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(2,6,23,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
+.top-bar .logo-mini{display:flex;align-items:center;gap:10px;font-weight:900;font-size:15px}
+.top-bar .logo-mini .ic{width:36px;height:36px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.top-bar .cta{padding:9px 16px;background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;border-radius:100px;text-decoration:none;font-size:12px;font-weight:900}
+.hero{padding:100px 20px 60px;text-align:center;max-width:520px;margin:0 auto}
+.logo-wrap{position:relative;margin-bottom:24px;display:inline-block}
+.logo-glow{position:absolute;inset:-10px;background:radial-gradient(circle,rgba(247,151,30,0.5),transparent 70%);filter:blur(40px);animation:pl 3s infinite}
+@keyframes pl{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}
+.logo{position:relative;width:120px;height:120px;background:linear-gradient(135deg,#f7971e 0%,#ffd200 50%,#f7971e 100%);background-size:200% 200%;border-radius:36px;display:flex;align-items:center;justify-content:center;font-size:60px;margin:0 auto;box-shadow:0 25px 70px rgba(247,151,30,0.5);animation:lr 8s infinite ease-in-out,lgl 3s infinite}
+@keyframes lr{0%,100%{transform:rotate(-3deg) scale(1)}50%{transform:rotate(3deg) scale(1.05)}}
+@keyframes lgl{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+h1{font-size:42px;font-weight:900;background:linear-gradient(135deg,#fff 0%,#ffd200 40%,#f7971e 70%,#fff 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;letter-spacing:-1px;animation:sh 4s linear infinite;line-height:1.15}
+@keyframes sh{to{background-position:200% center}}
+.teacher{font-size:18px;color:#94a3b8;margin-bottom:6px;font-weight:600}
+.teacher b{color:#ffd200;font-weight:900}
+.tagline{font-size:14px;color:#64748b;margin-bottom:32px;line-height:1.7}
+.hero-cta{display:flex;flex-direction:column;gap:12px;max-width:400px;margin:0 auto}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:18px 24px;font-size:16px;font-weight:900;border:none;border-radius:18px;text-decoration:none;cursor:pointer;font-family:inherit;transition:.25s;position:relative;overflow:hidden}
+.btn:active{transform:scale(0.97)}
+.btn1{background:linear-gradient(135deg,#f7971e 0%,#ffd200 50%,#f7971e 100%);background-size:200% 100%;color:#0a0f1e;box-shadow:0 15px 40px rgba(247,151,30,0.4)}
+.btn1::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.5),transparent)}
+.btn1:active::after{left:100%;transition:.6s}
 .btn2{background:rgba(255,255,255,0.05);color:#fff;border:1.5px solid rgba(255,255,255,0.12)}
+.btn2:active{background:rgba(255,210,0,0.1);border-color:rgba(255,210,0,0.4)}
+.section{padding:60px 20px;max-width:900px;margin:0 auto}
+.section-title{text-align:center;font-size:28px;font-weight:900;margin-bottom:10px;background:linear-gradient(135deg,#fff,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-sub{text-align:center;color:#94a3b8;font-size:14px;margin-bottom:36px;font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:22px 10px;text-align:center}
+.stat .num{font-size:32px;font-weight:900;background:linear-gradient(135deg,#ffd200,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.stat .lbl{font-size:12px;color:#94a3b8;font-weight:700}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.feat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:22px 16px;text-align:center}
+.feat .ic{font-size:36px;display:block;margin-bottom:12px}
+.feat .t{font-size:15px;font-weight:900;color:#fff;margin-bottom:6px}
+.feat .d{font-size:12px;color:#94a3b8;line-height:1.6}
+.steps{display:flex;flex-direction:column;gap:16px}
+.step-item{display:flex;gap:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;align-items:center}
+.step-num{width:46px;height:46px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#0a0f1e;flex-shrink:0}
+.step-text .t{font-size:15px;font-weight:900;margin-bottom:4px}
+.step-text .d{font-size:13px;color:#94a3b8;line-height:1.6}
+.price-card{background:linear-gradient(135deg,rgba(247,151,30,0.12),rgba(255,210,0,0.06));border:2px solid rgba(255,210,0,0.3);border-radius:28px;padding:32px 24px;text-align:center;position:relative;overflow:hidden}
+.price-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#ffd200,transparent)}
+.price-card .lbl{font-size:14px;color:#94a3b8;margin-bottom:12px;font-weight:700}
+.price-card .amount{font-size:56px;font-weight:900;background:linear-gradient(135deg,#fff,#ffd200,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:8px}
+.price-card .currency{font-size:18px;color:#cbd5e1;font-weight:700;margin-bottom:20px}
+.price-card .note{font-size:13px;color:#ffd200;font-weight:700;background:rgba(255,210,0,0.1);padding:10px 16px;border-radius:100px;display:inline-block}
+.faq{display:flex;flex-direction:column;gap:10px}
+.faq-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;overflow:hidden}
+.faq-q{padding:18px;font-size:14px;font-weight:800;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-q .arrow{transition:.3s;color:#ffd200;font-size:18px}
+.faq-item.open .faq-q .arrow{transform:rotate(180deg)}
+.faq-a{padding:0 18px;max-height:0;overflow:hidden;transition:.3s;color:#94a3b8;font-size:13px;line-height:1.8}
+.faq-item.open .faq-a{max-height:200px;padding:0 18px 18px}
+.cta-bottom{padding:60px 20px;text-align:center;background:linear-gradient(180deg,transparent,rgba(247,151,30,0.05))}
+.cta-bottom h2{font-size:26px;font-weight:900;margin-bottom:12px}
+.cta-bottom p{color:#94a3b8;font-size:14px;margin-bottom:24px;font-weight:600}
+footer{background:rgba(0,0,0,0.3);border-top:1px solid rgba(255,255,255,0.06);padding:32px 20px;text-align:center;color:#64748b;font-size:13px;line-height:2}
+footer a{color:#94a3b8;text-decoration:none;font-weight:700;display:inline-block;margin:0 8px}
+footer .fbrand{font-size:16px;font-weight:900;color:#fff;margin-bottom:8px}
+footer .fbrand .gold{color:#ffd200}
+@media(max-width:420px){h1{font-size:36px}.logo{width:100px;height:100px;font-size:50px}.section-title{font-size:24px}.price-card .amount{font-size:46px}.stat .num{font-size:26px}}
 </style>
 </head>
 <body>
-<div class="card">
+<div class="bg">
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+<div class="orb o3"></div>
+<div class="stars" id="stars"></div>
+</div>
+<div class="wrap">
+<div class="top-bar">
+<div class="logo-mini">
+<div class="ic">📚</div>
+<div>{{ teacher }}</div>
+</div>
+<a href="/login" class="cta">دخول</a>
+</div>
+<div class="hero">
+<div class="logo-wrap">
+<div class="logo-glow"></div>
 <div class="logo">📚</div>
+</div>
 <h1>{{ subject }}</h1>
 <div class="teacher">مع الأستاذ <b>{{ teacher }}</b></div>
+<div class="tagline">منصة تعليمية احترافية — فيديوهات + واجبات + امتحانات + متابعة</div>
+<div class="hero-cta">
 <a href="/register" class="btn btn1">✨ اشترك الآن</a>
 <a href="/login" class="btn btn2">🔐 تسجيل الدخول</a>
 </div>
+</div>
+<div class="section" style="padding-top:0">
+<div class="stats">
+<div class="stat"><div class="num">+500</div><div class="lbl">طالب مشترك</div></div>
+<div class="stat"><div class="num">+50</div><div class="lbl">فيديو تعليمي</div></div>
+<div class="stat"><div class="num">100%</div><div class="lbl">متابعة شاملة</div></div>
+</div>
+</div>
+<div class="section">
+<div class="section-title">ليه تشترك معانا؟</div>
+<div class="section-sub">مميزات المنصة اللي هتخليك تتفوق</div>
+<div class="features">
+<div class="feat"><div class="ic">🎬</div><div class="t">فيديوهات HD</div><div class="d">شرح كامل لكل درس</div></div>
+<div class="feat"><div class="ic">📝</div><div class="t">واجبات تفاعلية</div><div class="d">اكتب أو ارسم حلك</div></div>
+<div class="feat"><div class="ic">📊</div><div class="t">امتحانات إلكترونية</div><div class="d">اختبر نفسك في أي وقت</div></div>
+<div class="feat"><div class="ic">🏆</div><div class="t">نتائج فورية</div><div class="d">اعرف درجتك مباشرة</div></div>
+</div>
+</div>
+<div class="section">
+<div class="section-title">إزاي تبدأ؟</div>
+<div class="section-sub">3 خطوات بسيطة</div>
+<div class="steps">
+<div class="step-item"><div class="step-num">1</div><div class="step-text"><div class="t">سجّل في المنصة</div><div class="d">املأ بياناتك وارفع صورة التحويل</div></div></div>
+<div class="step-item"><div class="step-num">2</div><div class="step-text"><div class="t">استلم كود التفعيل</div><div class="d">الأستاذ هيراجع طلبك ويبعتلك الكود</div></div></div>
+<div class="step-item"><div class="step-num">3</div><div class="step-text"><div class="t">ابدأ التعلم</div><div class="d">فيديوهات + واجبات + امتحانات</div></div></div>
+</div>
+</div>
+<div class="section">
+<div class="section-title">الاشتراك</div>
+<div class="section-sub">سعر واحد — الترم كامل</div>
+<div class="price-card">
+<div class="lbl">سعر الترم كامل</div>
+<div class="amount">{{ price }}</div>
+<div class="currency">جنيه مصري</div>
+<div class="note">💎 سعر واحد — كل الفيديوهات والامتحانات</div>
+</div>
+</div>
+<div class="section">
+<div class="section-title">الأسئلة الشائعة</div>
+<div class="section-sub">كل اللي عايز تعرفه</div>
+<div class="faq">
+<div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">إزاي أشترك في المنصة؟<span class="arrow">⌄</span></div><div class="faq-a">اضغط على "اشترك الآن" واملأ بياناتك، حوّل {{ price }} جنيه على الرقم اللي هيظهرلك، ارفع صورة التحويل. الأستاذ هيراجع الطلب ويبعتلك كود التفعيل.</div></div>
+<div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">الاشتراك بيشمل إيه؟<span class="arrow">⌄</span></div><div class="faq-a">الاشتراك شامل كل الفيديوهات + كل الواجبات + كل الامتحانات للترم كامل.</div></div>
+<div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">ينفع أدخل من الموبايل؟<span class="arrow">⌄</span></div><div class="faq-a">أيوه، المنصة تشتغل على كل الأجهزة.</div></div>
+</div>
+</div>
+<div class="cta-bottom">
+<h2>جاهز تبدأ رحلتك؟</h2>
+<p>انضم لأكتر من 500 طالب بيذاكروا معانا</p>
+<a href="/register" class="btn btn1" style="max-width:300px;margin:0 auto">🚀 اشترك دلوقتي</a>
+</div>
+<footer>
+<div class="fbrand">منصة <span class="gold">{{ teacher }}</span></div>
+<div>{{ subject }} — أول وتانية ثانوي</div>
+<div style="margin-top:14px">
+<a href="/register">اشترك</a>
+<a href="/login">دخول</a>
+<a href="/admin/login">الأستاذ</a>
+</div>
+<div style="margin-top:16px;font-size:11px;color:#475569">© 2027 جميع الحقوق محفوظة</div>
+</footer>
+</div>
+<script>
+var sb=document.getElementById('stars');
+for(var i=0;i<50;i++){var s=document.createElement('div');s.className='star';var sz=Math.random()*2+1;s.style.width=sz+'px';s.style.height=sz+'px';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=(Math.random()*3)+'s';sb.appendChild(s)}
+function toggleFaq(el){el.classList.toggle('open')}
+</script>
 </body>
 </html>
