@@ -77,7 +77,19 @@ canvas{width:100%;height:auto;border-radius:8px;touch-action:none;cursor:crossha
 </head>
 <body>
 
-<header>
+
+<div style="padding:16px 18px 4px;max-width:820px;margin:0 auto">
+<div style="background:linear-gradient(135deg,rgba(247,151,30,0.12),rgba(255,210,0,0.04));border:1.5px solid rgba(255,210,0,0.25);border-radius:20px;padding:18px 20px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+<div style="font-size:14px;font-weight:900;color:#ffd200">🏆 {{ level_name }}</div>
+<div style="font-size:26px;font-weight:900;color:#ffd200">{{ progress }}%</div>
+</div>
+<div style="height:14px;background:rgba(0,0,0,0.4);border-radius:100px;overflow:hidden">
+<div style="height:100%;background:linear-gradient(90deg,#f7971e,#ffd200);border-radius:100px;width:{{ progress }}%"></div>
+</div>
+<div style="margin-top:10px;font-size:12px;color:#94a3b8;font-weight:700">📊 خلّصت {{ done_items }} من {{ total_items }} عنصر</div>
+</div>
+</div><header>
 <div class="user">
 <div class="avatar">{{ student.name[0] }}</div>
 <div>
@@ -92,7 +104,8 @@ canvas{width:100%;height:auto;border-radius:8px;touch-action:none;cursor:crossha
 <div class="tab active" data-tab="videos" onclick="showTab('videos', this)">🎬 الفيديوهات</div>
 <div class="tab" data-tab="homework" onclick="showTab('homework', this)">📝 الواجبات</div>
 <div class="tab" data-tab="exams" onclick="showTab('exams', this)">📊 الامتحانات</div>
-<div class="tab" data-tab="results" onclick="showTab('results', this)">🏆 نتائجي</div>
+<div class="tab" 
+<div class="tab" onclick="showTab('progress', this)">📈 تقدمي</div>data-tab="results" onclick="showTab('results', this)">🏆 نتائجي</div>
 </div>
 
 <div class="container">
