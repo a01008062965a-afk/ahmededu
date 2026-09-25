@@ -4,182 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ subject }} | {{ teacher }}</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Cairo','Segoe UI',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-
-body{background:#020617;min-height:100vh;color:#fff;overflow-x:hidden;position:relative;display:flex;align-items:center;justify-content:center;padding:20px}
-
-/* خلفية متحركة فخمة */
-.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 50%)}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.5}
-.orb1{width:400px;height:400px;background:linear-gradient(135deg,#f7971e,#ffd200);top:-100px;right:-100px;animation:float1 15s infinite ease-in-out}
-.orb2{width:350px;height:350px;background:linear-gradient(135deg,#6366f1,#8b5cf6);bottom:-100px;left:-100px;animation:float2 18s infinite ease-in-out}
-.orb3{width:250px;height:250px;background:linear-gradient(135deg,#06b6d4,#0891b2);top:40%;left:40%;animation:float3 20s infinite ease-in-out}
-@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,60px) scale(1.1)}}
-@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-40px) scale(1.15)}}
-@keyframes float3{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-40px,-50px) scale(0.9)}66%{transform:translate(50px,30px) scale(1.05)}}
-
-/* نجوم */
-.stars{position:absolute;inset:0;overflow:hidden}
-.star{position:absolute;background:#fff;border-radius:50%;opacity:0.6;animation:twinkle 3s infinite}
-@keyframes twinkle{0%,100%{opacity:0.2}50%{opacity:1}}
-
-/* المحتوى */
+*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#020617;min-height:100vh;color:#fff;position:relative;display:flex;align-items:center;justify-content:center;padding:20px;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 60%);overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35}
+.o1{width:400px;height:400px;background:#f7971e;top:-120px;right:-120px}
+.o2{width:350px;height:350px;background:#6366f1;bottom:-100px;left:-100px}
 .wrap{position:relative;z-index:2;max-width:480px;width:100%;text-align:center}
-
-/* الشعار */
-.logo-wrap{position:relative;margin-bottom:24px}
-.logo-glow{position:absolute;inset:0;background:radial-gradient(circle,rgba(247,151,30,0.4),transparent 70%);filter:blur(30px);animation:pulse 3s infinite}
-@keyframes pulse{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:0.8;transform:scale(1.1)}}
-.logo{position:relative;width:110px;height:110px;background:linear-gradient(135deg,#f7971e 0%,#ffd200 50%,#f7971e 100%);background-size:200% 200%;border-radius:32px;display:flex;align-items:center;justify-content:center;font-size:56px;margin:0 auto;box-shadow:0 25px 60px rgba(247,151,30,0.4),inset 0 -6px 20px rgba(0,0,0,0.15);animation:logoRotate 8s infinite ease-in-out,logoGlow 3s infinite}
-@keyframes logoRotate{0%,100%{transform:rotate(-3deg) scale(1)}50%{transform:rotate(3deg) scale(1.03)}}
-@keyframes logoGlow{0%,100%{background-position:0% 50%;box-shadow:0 25px 60px rgba(247,151,30,0.4)}50%{background-position:100% 50%;box-shadow:0 25px 80px rgba(255,210,0,0.6)}}
-
-/* العنوان */
-.title{font-size:38px;font-weight:900;background:linear-gradient(135deg,#fff 0%,#ffd200 40%,#f7971e 70%,#fff 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;line-height:1.2;animation:shine 4s linear infinite;letter-spacing:-1px}
-@keyframes shine{to{background-position:200% center}}
-.teacher{font-size:16px;color:#94a3b8;font-weight:600;margin-bottom:4px}
-.teacher b{color:#ffd200;font-weight:700}
-.badge-line{display:flex;align-items:center;justify-content:center;gap:10px;margin:20px 0 30px}
-.badge-line .line{width:40px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,210,0,0.5),transparent)}
-.badge-line .dot{width:6px;height:6px;background:#ffd200;border-radius:50%;box-shadow:0 0 10px #ffd200}
-
-/* البطاقة الرئيسية */
-.card{background:rgba(255,255,255,0.03);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,0.08);border-radius:32px;padding:32px 24px 28px;box-shadow:0 30px 80px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1);position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,210,0,0.6),transparent)}
-
-/* معلومات صغيرة */
-.info-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px}
-.chip{padding:8px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:12px;color:#cbd5e1;font-weight:600;display:flex;align-items:center;gap:6px}
-.chip .em{font-size:14px}
-.chip.gold{background:rgba(255,210,0,0.1);border-color:rgba(255,210,0,0.3);color:#ffd200}
-
-/* الأزرار الرئيسية */
-.actions{display:flex;flex-direction:column;gap:14px}
-.btn{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:20px 24px;font-size:17px;font-weight:800;border:none;border-radius:20px;text-decoration:none;cursor:pointer;font-family:inherit;transition:all .3s cubic-bezier(.4,0,.2,1);overflow:hidden;letter-spacing:-0.3px}
+.logo{width:110px;height:110px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:32px;display:flex;align-items:center;justify-content:center;font-size:56px;margin:0 auto 20px;box-shadow:0 25px 60px rgba(247,151,30,0.4)}
+h1{font-size:38px;font-weight:900;background:linear-gradient(135deg,#fff,#ffd200,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.teacher{font-size:16px;color:#94a3b8;margin-bottom:30px}
+.teacher b{color:#ffd200}
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:32px;padding:30px 24px;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.chip{display:inline-block;padding:8px 16px;background:rgba(255,210,0,0.1);border:1px solid rgba(255,210,0,0.3);border-radius:100px;font-size:13px;color:#ffd200;font-weight:700;margin-bottom:24px}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:18px;font-size:16px;font-weight:900;border:none;border-radius:18px;text-decoration:none;cursor:pointer;font-family:inherit;margin-bottom:12px}
 .btn:active{transform:scale(0.97)}
-.btn .ic{font-size:22px;position:relative;z-index:2}
-.btn .tx{position:relative;z-index:2}
-.btn .arrow{position:absolute;left:20px;top:50%;transform:translateY(-50%);font-size:22px;opacity:0.5;transition:.3s;z-index:2}
-
-.btn-primary{background:linear-gradient(135deg,#f7971e 0%,#ffd200 50%,#f7971e 100%);background-size:200% 100%;color:#0a0f1e;box-shadow:0 15px 40px rgba(247,151,30,0.35),inset 0 -3px 8px rgba(0,0,0,0.1);font-weight:900}
-.btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);transition:.6s}
-.btn-primary:active::before{left:100%}
-.btn-primary:hover{background-position:100% 50%;box-shadow:0 20px 50px rgba(255,210,0,0.5)}
-
-.btn-secondary{background:rgba(255,255,255,0.04);color:#fff;border:1.5px solid rgba(255,255,255,0.12);backdrop-filter:blur(10px)}
-.btn-secondary:active{background:rgba(255,255,255,0.08);border-color:rgba(255,210,0,0.4)}
-.btn-secondary:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,210,0,0.4)}
-
-/* المميزات */
-.features{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:24px}
-.feat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px 6px;text-align:center;transition:.3s}
-.feat:active{background:rgba(255,210,0,0.08);border-color:rgba(255,210,0,0.2)}
-.feat .ic{font-size:22px;margin-bottom:6px;display:block}
-.feat .tx{font-size:10px;color:#94a3b8;font-weight:600;line-height:1.3}
-
-/* الفوتر */
-.footer{margin-top:24px;color:#475569;font-size:11px;line-height:1.8}
-.footer a{color:#94a3b8;text-decoration:none;font-weight:600}
-.footer a:active{color:#ffd200}
-
-/* شريط الحالة */
-.status{margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:#94a3b8;font-weight:600}
-.status .dot{width:8px;height:8px;background:#10b981;border-radius:50%;box-shadow:0 0 12px #10b981;animation:pulse2 2s infinite}
-@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
-
-@media(max-width:380px){
-.title{font-size:32px}
-.logo{width:90px;height:90px;font-size:46px}
-.card{padding:24px 18px 22px}
-.feat .tx{font-size:9px}
-}
+.btn1{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;box-shadow:0 15px 40px rgba(247,151,30,0.35)}
+.btn2{background:rgba(255,255,255,0.05);color:#fff;border:1.5px solid rgba(255,255,255,0.12)}
+.footer{margin-top:20px;color:#475569;font-size:12px}
+.footer a{color:#94a3b8;text-decoration:none}
 </style>
 </head>
 <body>
 
-<div class="bg">
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-<div class="orb orb3"></div>
-<div class="stars" id="stars"></div>
-</div>
+<div class="bg"><div class="orb o1"></div><div class="orb o2"></div></div>
 
 <div class="wrap">
-
-<div class="logo-wrap">
-<div class="logo-glow"></div>
 <div class="logo">📚</div>
-</div>
-
-<h1 class="title">{{ subject }}</h1>
+<h1>{{ subject }}</h1>
 <div class="teacher">مع الأستاذ <b>{{ teacher }}</b></div>
 
-<div class="badge-line">
-<div class="line"></div>
-<div class="dot"></div>
-<div class="line"></div>
-</div>
-
 <div class="card">
-
-<div class="info-chips">
-<div class="chip gold"><span class="em">💎</span> {{ price }} جنيه / الترم</div>
-<div class="chip"><span class="em">🎓</span> أول و تانية ثانوي</div>
-</div>
-
-<div class="actions">
-<a href="/register" class="btn btn-primary">
-<span class="ic">✨</span>
-<span class="tx">إنشاء حساب جديد</span>
-<span class="arrow">←</span>
-</a>
-<a href="/login" class="btn btn-secondary">
-<span class="ic">🔐</span>
-<span class="tx">تسجيل الدخول</span>
-<span class="arrow">←</span>
-</a>
-</div>
-
-<div class="features">
-<div class="feat"><span class="ic">🎬</span><span class="tx">فيديوهات</span></div>
-<div class="feat"><span class="ic">📝</span><span class="tx">واجبات</span></div>
-<div class="feat"><span class="ic">📊</span><span class="tx">امتحانات</span></div>
-<div class="feat"><span class="ic">🏆</span><span class="tx">نتائج</span></div>
-</div>
-
-<div class="status">
-<div class="dot"></div>
-<span>المنصة تعمل الآن</span>
-</div>
-
+<div class="chip">💎 {{ price }} جنيه / الترم</div>
+<a href="/register" class="btn btn1">✨ إنشاء حساب جديد</a>
+<a href="/login" class="btn btn2">🔐 تسجيل الدخول</a>
 </div>
 
 <div class="footer">
-منصة الأستاذ {{ teacher }} © 2027
-<br>
-<a href="/admin/login">لوحة الأستاذ</a>
+منصة {{ teacher }} © 2027<br>
+<a href="/admin/login">دخول الأستاذ</a>
+</div>
 </div>
 
-</div>
-
-<script>
-// نجوم متحركة
-var starsBox = document.getElementById('stars');
-for (var i = 0; i < 40; i++) {
-    var s = document.createElement('div');
-    s.className = 'star';
-    var size = Math.random() * 2 + 1;
-    s.style.width = size + 'px';
-    s.style.height = size + 'px';
-    s.style.left = Math.random() * 100 + '%';
-    s.style.top = Math.random() * 100 + '%';
-    s.style.animationDelay = (Math.random() * 3) + 's';
-    starsBox.appendChild(s);
-}
-</script>
 </body>
 </html>
