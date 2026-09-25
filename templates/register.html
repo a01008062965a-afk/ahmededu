@@ -3,342 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>التسجيل | {{ subject }}</title>
+<title>إنشاء حساب | {{ subject }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:#050914;min-height:100vh;color:#fff;padding:20px;position:relative}
+*{box-sizing:border-box;font-family:'Cairo','Segoe UI',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#020617;min-height:100vh;color:#fff;padding:20px;position:relative;overflow-x:hidden}
 
-.bg{position:fixed;inset:0;z-index:0;overflow:hidden}
-.bg::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(247,151,30,0.15),transparent 70%);border-radius:50%;animation:float1 20s infinite ease-in-out}
-.bg::after{content:'';position:absolute;bottom:-30%;left:-20%;width:500px;height:500px;background:radial-gradient(circle,rgba(0,180,255,0.12),transparent 70%);border-radius:50%;animation:float2 25s infinite ease-in-out}
-@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,40px)}}
-@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-40px)}}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 60%)}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.4}
+.orb1{width:350px;height:350px;background:linear-gradient(135deg,#f7971e,#ffd200);top:-100px;right:-100px;animation:float1 15s infinite}
+.orb2{width:300px;height:300px;background:linear-gradient(135deg,#6366f1,#8b5cf6);bottom:-80px;left:-80px;animation:float2 18s infinite}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,60px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,-40px)}}
 
-.wrap{position:relative;z-index:1;max-width:480px;margin:0 auto}
+.wrap{position:relative;z-index:2;max-width:520px;margin:0 auto}
 
-.header{text-align:center;margin-bottom:20px;padding:20px 0}
-.header .logo{font-size:52px;margin-bottom:10px}
-.header h1{font-size:24px;background:linear-gradient(135deg,#fff,#ffd200,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
-.header p{color:#7a9bab;font-size:13px}
+/* الهيدر */
+.header{text-align:center;padding:20px 0 24px}
+.logo{width:80px;height:80px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 14px;box-shadow:0 20px 50px rgba(247,151,30,0.4);animation:logoFloat 3s infinite}
+@keyframes logoFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+.header h1{font-size:26px;font-weight:900;background:linear-gradient(135deg,#fff,#ffd200,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.header p{color:#94a3b8;font-size:13px;font-weight:600}
 
-.progress{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
-.step{width:36px;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;transition:.3s}
-.step.active{background:linear-gradient(90deg,#f7971e,#ffd200);box-shadow:0 0 12px rgba(255,210,0,0.5)}
-.step.done{background:#25D366}
+/* البطاقة */
+.card{background:rgba(255,255,255,0.03);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:28px 22px;box-shadow:0 30px 80px rgba(0,0,0,0.5);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,210,0,0.6),transparent)}
 
-.card{background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:26px 22px;box-shadow:0 20px 60px rgba(0,0,0,0.5);position:relative;overflow:hidden;margin-bottom:16px}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,210,0,0.5),transparent)}
+.section-label{font-size:13px;color:#ffd200;font-weight:700;letter-spacing:1.5px;margin-bottom:16px;display:flex;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.section-label .em{font-size:16px}
 
-.card h2{font-size:18px;color:#ffd200;margin-bottom:6px;text-align:center}
-.card .sub{font-size:12px;color:#7a9bab;text-align:center;margin-bottom:18px}
+/* الحقول */
+.field{margin-bottom:16px;text-align:right}
+.field label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:8px;padding-right:4px;font-weight:600}
+.field label .req{color:#ef4444;margin-left:3px}
+.field input,.field select{width:100%;padding:15px 18px;font-size:15px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.08);border-radius:16px;color:#fff;font-family:inherit;text-align:right;transition:.25s;font-weight:600}
+.field input:focus,.field select:focus{outline:none;border-color:#ffd200;background:rgba(255,255,255,0.08);box-shadow:0 0 0 4px rgba(255,210,0,0.1)}
+.field input::placeholder{color:#475569;font-weight:500}
+.field select option{background:#0f172a;color:#fff;padding:10px}
 
-.field{margin-bottom:14px;text-align:right}
-.field label{display:block;font-size:13px;color:#a0b8c4;margin-bottom:6px;padding-right:4px;font-weight:600}
-.field input,.field select{width:100%;padding:14px 16px;font-size:15px;background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.08);border-radius:14px;color:#fff;font-family:inherit;text-align:right;transition:.2s}
-.field input:focus,.field select:focus{outline:none;border-color:#ffd200;background:rgba(255,255,255,0.1)}
-.field input::placeholder{color:#5a7a8a}
-.field select option{background:#0f2027;color:#fff}
+/* رقم الدفع */
+.phone-card{background:linear-gradient(135deg,rgba(247,151,30,0.15),rgba(255,210,0,0.08));border:2px solid rgba(255,210,0,0.3);border-radius:18px;padding:18px;text-align:center;margin:16px 0;cursor:pointer;position:relative;overflow:hidden}
+.phone-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent);animation:shineCard 4s infinite}
+@keyframes shineCard{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(100%) rotate(45deg)}}
+.phone-card .lbl{font-size:12px;color:#94a3b8;margin-bottom:8px;font-weight:600;position:relative;z-index:2}
+.phone-card .num{font-size:26px;font-weight:900;color:#ffd200;direction:ltr;letter-spacing:2px;margin-bottom:6px;position:relative;z-index:2}
+.phone-card .tip{font-size:11px;color:#94a3b8;position:relative;z-index:2}
+.phone-card:active{background:linear-gradient(135deg,rgba(37,211,102,0.2),rgba(16,185,129,0.1));border-color:#25D366}
 
-.code-status{font-size:12px;padding:8px 12px;border-radius:10px;margin-top:6px;display:none}
-.code-status.ok{background:rgba(37,211,102,0.15);color:#a5d6a7;display:block}
-.code-status.err{background:rgba(229,57,53,0.15);color:#ef9a9a;display:block}
+/* رفع الملف */
+.upload-area{background:rgba(255,255,255,0.03);border:2px dashed rgba(255,210,0,0.25);border-radius:18px;padding:20px;text-align:center;cursor:pointer;transition:.25s;margin-bottom:16px}
+.upload-area:active{background:rgba(255,210,0,0.08);border-color:#ffd200}
+.upload-area .ic{font-size:36px;margin-bottom:8px;display:block}
+.upload-area .tx{font-size:13px;color:#cbd5e1;font-weight:700;margin-bottom:4px}
+.upload-area .sub{font-size:11px;color:#64748b}
+.upload-area.has-file{background:rgba(37,211,102,0.08);border-color:#25D366;border-style:solid}
+.upload-area.has-file .tx{color:#a5d6a7}
 
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;font-size:16px;font-weight:bold;border:none;border-radius:16px;text-decoration:none;cursor:pointer;font-family:inherit;transition:.2s;margin-top:8px}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0f2027;box-shadow:0 8px 30px rgba(255,210,0,0.3)}
-.btn-secondary{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.1)}
-.btn-ghost{background:transparent;color:#7a9bab;font-size:13px;padding:10px}
+/* زر الإرسال */
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:18px;font-size:16px;font-weight:900;border:none;border-radius:18px;text-decoration:none;cursor:pointer;font-family:inherit;transition:.25s;margin-top:8px}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;box-shadow:0 15px 40px rgba(247,151,30,0.35);position:relative;overflow:hidden}
+.btn-primary::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)}
+.btn-primary:active::after{left:100%;transition:.6s}
+.btn-primary:disabled{opacity:0.6}
+.btn-ghost{background:transparent;color:#94a3b8;font-size:13px;padding:12px;font-weight:600}
 .btn-ghost:active{color:#ffd200}
 
-.phone-box{background:linear-gradient(135deg,rgba(247,151,30,0.15),rgba(255,210,0,0.08));border:2px solid rgba(255,210,0,0.3);padding:16px;border-radius:14px;text-align:center;direction:ltr;font-size:22px;font-weight:bold;color:#ffd200;letter-spacing:2px;margin:12px 0;cursor:pointer;transition:.2s}
-.phone-box:active{background:rgba(37,211,102,0.15);border-color:#25D366}
+/* خطوات صغيرة */
+.steps{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
+.step{width:38px;height:5px;background:rgba(255,255,255,0.08);border-radius:3px}
+.step.active{background:linear-gradient(90deg,#f7971e,#ffd200);box-shadow:0 0 12px rgba(255,210,0,0.5)}
 
-.note{background:rgba(255,255,255,0.03);border-right:3px solid #ffd200;padding:14px;border-radius:10px;font-size:13px;line-height:1.8;color:#a0b8c4;margin:12px 0}
-.note b{color:#ffd200}
-
-.upload-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
-.upload-btn{padding:14px;background:rgba(255,255,255,0.06);border:2px dashed rgba(255,210,0,0.3);border-radius:14px;text-align:center;cursor:pointer;font-size:13px;color:#a0b8c4;transition:.2s}
-.upload-btn:active{background:rgba(255,210,0,0.12);color:#ffd200}
-
-.file-ok{background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.4);color:#a5d6a7;padding:10px;border-radius:10px;text-align:center;font-size:13px;margin-top:8px;display:none}
-
-.success{background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.4);color:#a5d6a7;padding:20px;border-radius:14px;text-align:center;line-height:1.9}
-.success .ic{font-size:48px;display:block;margin-bottom:10px}
-.success .t{font-size:17px;font-weight:bold;color:#fff;margin-bottom:6px}
+/* شاشة النجاح */
+.success-card{text-align:center;padding:40px 24px}
+.success-card .big-ic{font-size:80px;margin-bottom:16px;display:block;animation:pop 0.6s cubic-bezier(.5,1.8,.5,1)}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.success-card h2{font-size:24px;background:linear-gradient(135deg,#fff,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;font-weight:900}
+.success-card p{color:#cbd5e1;font-size:14px;line-height:2;margin-bottom:8px}
+.success-card .pending-box{background:rgba(255,152,0,0.1);border:1.5px solid rgba(255,152,0,0.3);border-radius:16px;padding:16px;margin:18px 0;font-size:13px;line-height:1.9;color:#ffb74d;text-align:right}
+.success-card .pending-box b{color:#ffd200}
 
 .hidden{display:none}
 </style>
 </head>
 <body>
 
-<div class="bg"></div>
+<div class="bg">
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+</div>
 
 <div class="wrap">
+
 <div class="header">
-<div class="logo">📚</div>
-<h1>التسجيل في {{ subject }}</h1>
-<p>الأستاذ {{ teacher }} — {{ price }} جنيه للترم</p>
+<div class="logo">📝</div>
+<h1>إنشاء حساب جديد</h1>
+<p>{{ subject }} — الأستاذ {{ teacher }}</p>
 </div>
 
-<div class="progress">
-<div class="step active" id="step1"></div>
-<div class="step" id="step2"></div>
-<div class="step" id="step3"></div>
+<div class="steps">
+<div class="step active"></div>
+<div class="step active"></div>
+<div class="step active"></div>
 </div>
 
-<!-- خطوة 1: البيانات -->
-<div class="card" id="card1">
-<h2>الخطوة 1: بياناتك</h2>
-<div class="sub">اكتب بياناتك الشخصية</div>
+<!-- فورم التسجيل -->
+<div class="card" id="mainCard">
+
+<div class="section-label"><span class="em">👤</span> بياناتك الشخصية</div>
 
 <div class="field">
-<label>👤 الاسم الكامل</label>
-<input type="text" id="inName" placeholder="مثال: محمد أحمد علي" autocomplete="off">
-</div>
-
-<div class="field">
-<label>📱 رقم الموبايل (هتدخل بيه بعدين)</label>
-<input type="tel" id="inPhone" placeholder="01xxxxxxxxx" maxlength="11">
+<label>الاسم الكامل <span class="req">*</span></label>
+<input type="text" id="inName" placeholder="اكتب اسمك الثلاثي" autocomplete="name">
 </div>
 
 <div class="field">
-<label>👨‍👩‍👦 رقم ولي الأمر</label>
-<input type="tel" id="inParent" placeholder="01xxxxxxxxx" maxlength="11">
+<label>رقم الموبايل <span class="req">*</span></label>
+<input type="tel" id="inPhone" placeholder="01xxxxxxxxx" maxlength="11" inputmode="numeric" autocomplete="tel">
 </div>
 
 <div class="field">
-<label>🔐 كلمة السر</label>
-<input type="password" id="inPass" placeholder="اكتب كلمة سر قوية" autocomplete="new-password">
+<label>رقم ولي الأمر <span class="req">*</span></label>
+<input type="tel" id="inParent" placeholder="01xxxxxxxxx" maxlength="11" inputmode="numeric">
 </div>
 
 <div class="field">
-<label>📚 الصف</label>
+<label>الصف <span class="req">*</span></label>
 <select id="inGrade">
-<option value="">-- اختار صفك --</option>
-<option value="first">أول ثانوي</option>
-<option value="second">تانية ثانوي</option>
+<option value="">-- اختر الصف --</option>
+<option value="first">📖 أول ثانوي</option>
+<option value="second">📚 تانية ثانوي</option>
 </select>
 </div>
 
-<button class="btn btn-primary" onclick="nextStep()">التالي ←</button>
+<div class="section-label" style="margin-top:24px"><span class="em">💰</span> الدفع</div>
+
+<div class="phone-card" onclick="copyNum(this)">
+<div class="lbl">حوّل {{ price }} جنيه على الرقم</div>
+<div class="num">{{ vodafone }}</div>
+<div class="tip">فودافون كاش / إنستاباي — اضغط للنسخ 📋</div>
+</div>
+
+<div class="field">
+<label>الرقم اللي حوّلت منه <span class="req">*</span></label>
+<input type="tel" id="inPaymentPhone" placeholder="01xxxxxxxxx" maxlength="11" inputmode="numeric">
+</div>
+
+<div class="section-label" style="margin-top:24px"><span class="em">📷</span> إثبات التحويل</div>
+
+<div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+<span class="ic">📤</span>
+<div class="tx" id="uploadTx">اضغط لرفع صورة التحويل</div>
+<div class="sub">PNG / JPG / JPEG — من الكاميرا أو المعرض</div>
+</div>
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="filePicked(this)">
+
+<button class="btn btn-primary" id="submitBtn" onclick="submitForm()">
+<span>🚀</span> إرسال الطلب
+</button>
+
 <a href="/" class="btn btn-ghost">← رجوع للرئيسية</a>
+
 </div>
 
-<!-- خطوة 2: الدفع -->
-<div class="card hidden" id="card2">
-<h2>الخطوة 2: الدفع</h2>
-<div class="sub">حوّل {{ price }} جنيه على الرقم</div>
+<!-- شاشة النجاح -->
+<div class="card success-card hidden" id="successCard">
+<span class="big-ic">⏳</span>
+<h2>تم استلام طلبك</h2>
+<p>طلبك في انتظار موافقة الأستاذ</p>
 
-<div class="phone-box" onclick="copyNum(this)">{{ vodafone }}</div>
-<div style="text-align:center;font-size:12px;color:#7a9bab">فودافون كاش / إنستاباي — اضغط للنسخ 📋</div>
-
-<div class="note">
-<b>الخطوات:</b><br>
-1. حوّل {{ price }} جنيه على الرقم اللي فوق<br>
-2. خد صورة التحويل (سكرين شوت)<br>
-3. ارفعها تحت
-</div>
-
-<div class="field">
-<label>📞 الرقم اللي حوّلت منه</label>
-<input type="tel" id="inPaymentPhone" placeholder="01xxxxxxxxx" maxlength="11">
+<div class="pending-box">
+<b>الخطوة الجاية:</b><br>
+1. الأستاذ هيراجع صورة التحويل<br>
+2. هيتواصل معاك على واتساب<br>
+3. هيبعتلك <b>كود التفعيل</b><br>
+4. هتدخل بيه المنصة وتشوف الدروس
 </div>
 
-<div class="field">
-<label>📷 صورة التحويل</label>
-<div class="upload-row">
-<div class="upload-btn" onclick="document.getElementById('cam').click()">
-<div style="font-size:24px;margin-bottom:4px">📷</div>
-<div>الكاميرا</div>
-</div>
-<div class="upload-btn" onclick="document.getElementById('gal').click()">
-<div style="font-size:24px;margin-bottom:4px">🖼️</div>
-<div>المعرض</div>
-</div>
-</div>
-<input type="file" id="cam" accept="image/*" capture="environment" style="display:none" onchange="picked(this)">
-<input type="file" id="gal" accept="image/*" style="display:none" onchange="picked(this)">
-<div class="file-ok" id="fileOk">✅ تم اختيار الصورة</div>
-</div>
-
-<button class="btn btn-primary" onclick="goStep3()">التالي ←</button>
-<button class="btn btn-secondary" onclick="backStep1()">← رجوع</button>
-</div>
-
-<!-- خطوة 3: كود التفعيل -->
-<div class="card hidden" id="card3">
-<h2>الخطوة 3: كود التفعيل</h2>
-<div class="sub">اكتب الكود اللي وصلك من الأستاذ</div>
-
-<div class="note">
-<b>مهم:</b> لو معندكش كود تفعيل، كلم الأستاذ {{ teacher }} على واتساب الأول
-</div>
-
-<div class="field">
-<label>🔑 كود التفعيل</label>
-<input type="text" id="inCode" placeholder="مثال: A7B2X9K5" style="font-family:'Courier New',monospace;letter-spacing:2px;text-transform:uppercase;text-align:center;font-size:18px" oninput="checkCode(this)">
-<div class="code-status" id="codeStatus"></div>
-</div>
-
-<button class="btn btn-primary" onclick="submitAll()" id="submitBtn" disabled style="opacity:0.5">🚀 إنشاء الحساب</button>
-<button class="btn btn-secondary" onclick="backStep2()">← رجوع</button>
-</div>
-
-<!-- النجاح -->
-<div class="card hidden" id="cardDone">
-<div class="success">
-<span class="ic">🎉</span>
-<div class="t">تم إنشاء حسابك بنجاح</div>
-<div>يمكنك الآن تسجيل الدخول بـ:<br><b style="direction:ltr;display:inline-block">رقم الموبايل</b> + <b>كلمة السر</b></div>
-<a href="/login" class="btn btn-primary" style="margin-top:16px">🔑 الدخول الآن</a>
-</div>
+<a href="/" class="btn btn-primary" style="margin-top:12px">← رجوع للرئيسية</a>
 </div>
 
 </div>
 
 <script>
 var curFile = null;
-var codeValid = false;
 
 function copyNum(el) {
-    navigator.clipboard.writeText(el.textContent.trim());
-    var t = el.textContent;
-    el.textContent = '✅ تم النسخ';
-    el.style.fontSize = '18px';
-    setTimeout(function(){ el.textContent = t; el.style.fontSize = '22px'; }, 1200);
+    navigator.clipboard.writeText(el.querySelector('.num').textContent.trim());
+    var num = el.querySelector('.num');
+    var t = num.textContent;
+    num.textContent = '✅ تم النسخ';
+    num.style.fontSize = '20px';
+    setTimeout(function(){ num.textContent = t; num.style.fontSize = '26px'; }, 1200);
 }
 
-function nextStep() {
-    var n = document.getElementById('inName').value.trim();
-    var p = document.getElementById('inPhone').value.trim();
-    var pr = document.getElementById('inParent').value.trim();
-    var pw = document.getElementById('inPass').value.trim();
-    var g = document.getElementById('inGrade').value;
-    if (!n) return alert('اكتب اسمك');
-    if (!p || p.length < 10) return alert('اكتب رقم موبايل صحيح');
-    if (!pr || pr.length < 10) return alert('اكتب رقم ولي الأمر');
-    if (!pw || pw.length < 4) return alert('كلمة السر قصيرة (4 أحرف على الأقل)');
-    if (!g) return alert('اختار صفك');
-    document.getElementById('card1').classList.add('hidden');
-    document.getElementById('card2').classList.remove('hidden');
-    document.getElementById('step1').classList.remove('active');
-    document.getElementById('step1').classList.add('done');
-    document.getElementById('step2').classList.add('active');
-    window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function backStep1() {
-    document.getElementById('card2').classList.add('hidden');
-    document.getElementById('card1').classList.remove('hidden');
-    document.getElementById('step1').classList.add('active');
-    document.getElementById('step1').classList.remove('done');
-    document.getElementById('step2').classList.remove('active');
-}
-
-function picked(inp) {
+function filePicked(inp) {
     if (inp.files && inp.files[0]) {
         curFile = inp.files[0];
-        document.getElementById('fileOk').style.display = 'block';
+        var area = document.getElementById('uploadArea');
+        area.classList.add('has-file');
+        document.getElementById('uploadTx').textContent = '✅ تم اختيار الصورة';
+        document.querySelector('#uploadArea .ic').textContent = '✅';
     }
 }
 
-function goStep3() {
-    var pp = document.getElementById('inPaymentPhone').value.trim();
-    if (!pp || pp.length < 10) return alert('اكتب الرقم اللي حوّلت منه');
+async function submitForm() {
+    var name = document.getElementById('inName').value.trim();
+    var phone = document.getElementById('inPhone').value.trim();
+    var parent = document.getElementById('inParent').value.trim();
+    var grade = document.getElementById('inGrade').value;
+    var payPhone = document.getElementById('inPaymentPhone').value.trim();
+
+    if (!name || name.length < 3) return alert('اكتب اسمك كامل');
+    if (!phone || phone.length !== 11) return alert('اكتب رقم موبايل صحيح (11 رقم)');
+    if (!parent || parent.length !== 11) return alert('اكتب رقم ولي الأمر صحيح');
+    if (!grade) return alert('اختر صفك');
+    if (!payPhone || payPhone.length !== 11) return alert('اكتب الرقم اللي حوّلت منه');
     if (!curFile) return alert('ارفع صورة التحويل');
-    document.getElementById('card2').classList.add('hidden');
-    document.getElementById('card3').classList.remove('hidden');
-    document.getElementById('step2').classList.remove('active');
-    document.getElementById('step2').classList.add('done');
-    document.getElementById('step3').classList.add('active');
-    window.scrollTo({top:0,behavior:'smooth'});
-}
 
-function backStep2() {
-    document.getElementById('card3').classList.add('hidden');
-    document.getElementById('card2').classList.remove('hidden');
-    document.getElementById('step2').classList.add('active');
-    document.getElementById('step2').classList.remove('done');
-    document.getElementById('step3').classList.remove('active');
-}
-
-async function checkCode(inp) {
-    var code = inp.value.trim().toUpperCase();
-    inp.value = code;
-    var st = document.getElementById('codeStatus');
-    var btn = document.getElementById('submitBtn');
-    if (code.length < 4) {
-        st.className = 'code-status';
-        st.style.display = 'none';
-        codeValid = false;
-        btn.disabled = true;
-        btn.style.opacity = '0.5';
-        return;
-    }
-    try {
-        var r = await fetch('/api/check-code', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({code: code})
-        });
-        var d = await r.json();
-        if (d.ok) {
-            st.className = 'code-status ok';
-            st.textContent = '✅ الكود صحيح — ' + d.grade_name;
-            codeValid = true;
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            // لو الطالب اختار صف مختلف عن الكود
-            var selGrade = document.getElementById('inGrade').value;
-            if (selGrade && selGrade !== d.grade) {
-                alert('⚠️ الكود بتاع صف ' + d.grade_name + ' — الصف اللي اختارته مختلف!');
-            }
-        } else {
-            st.className = 'code-status err';
-            st.textContent = '❌ ' + d.msg;
-            codeValid = false;
-            btn.disabled = true;
-            btn.style.opacity = '0.5';
-        }
-    } catch(e) {
-        st.className = 'code-status err';
-        st.textContent = '❌ خطأ في الاتصال';
-        codeValid = false;
-    }
-}
-
-async function submitAll() {
-    if (!codeValid) return alert('الكود مش صحيح');
     var btn = document.getElementById('submitBtn');
     btn.disabled = true;
-    btn.textContent = '⏳ جاري إنشاء الحساب...';
+    btn.innerHTML = '<span>⏳</span> جاري الإرسال...';
 
     var fd = new FormData();
-    fd.append('name', document.getElementById('inName').value.trim());
-    fd.append('phone', document.getElementById('inPhone').value.trim());
-    fd.append('parent_phone', document.getElementById('inParent').value.trim());
-    fd.append('password', document.getElementById('inPass').value.trim());
-    fd.append('grade', document.getElementById('inGrade').value);
-    fd.append('payment_phone', document.getElementById('inPaymentPhone').value.trim());
-    fd.append('code', document.getElementById('inCode').value.trim().toUpperCase());
+    fd.append('name', name);
+    fd.append('phone', phone);
+    fd.append('parent_phone', parent);
+    fd.append('grade', grade);
+    fd.append('payment_phone', payPhone);
     fd.append('screenshot', curFile);
 
     try {
-        var r = await fetch('/api/register', {method: 'POST', body: fd});
+        var r = await fetch('/api/register', { method: 'POST', body: fd });
         var d = await r.json();
         if (!d.ok) {
             alert('❌ ' + d.msg);
             btn.disabled = false;
-            btn.textContent = '🚀 إنشاء الحساب';
+            btn.innerHTML = '<span>🚀</span> إرسال الطلب';
             return;
         }
-        document.getElementById('card3').classList.add('hidden');
-        document.getElementById('cardDone').classList.remove('hidden');
-        document.getElementById('step3').classList.remove('active');
-        document.getElementById('step3').classList.add('done');
+        document.getElementById('mainCard').classList.add('hidden');
+        document.getElementById('successCard').classList.remove('hidden');
+        window.scrollTo({top:0, behavior:'smooth'});
     } catch(e) {
         alert('خطأ في الاتصال');
         btn.disabled = false;
-        btn.textContent = '🚀 إنشاء الحساب';
+        btn.innerHTML = '<span>🚀</span> إرسال الطلب';
     }
 }
 </script>
