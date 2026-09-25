@@ -6,124 +6,169 @@
 <title>صفحة الطالب | {{ subject }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0}
-body{background:#020617;color:#fff;min-height:100vh;padding-bottom:40px}
-header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
+*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#020617;color:#fff;min-height:100vh;padding-bottom:60px;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at top,#0f1e3d 0%,#020617 60%);pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.25}
+.o1{width:400px;height:400px;background:#f7971e;top:-150px;right:-150px}
+.o2{width:380px;height:380px;background:#6366f1;bottom:-120px;left:-120px}
+.wrap{position:relative;z-index:2}
+header{background:rgba(255,255,255,0.02);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
 .user{display:flex;align-items:center;gap:12px}
-.avatar{width:46px;height:46px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#0a0f1e}
-.user .name{font-size:14px;font-weight:800}
-.user .grade{font-size:11px;color:#94a3b8;margin-top:2px}
-.logout{color:#ef9a9a;text-decoration:none;font-size:12px;background:rgba(229,57,53,0.15);padding:8px 14px;border-radius:12px;border:1px solid rgba(229,57,53,0.3);font-weight:700}
-.tabs{display:flex;gap:6px;padding:12px;overflow-x:auto;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05);position:sticky;top:70px;z-index:40}
-.tab{padding:10px 14px;background:rgba(255,255,255,0.05);border-radius:12px;cursor:pointer;font-size:12px;font-weight:800;white-space:nowrap;color:#94a3b8;border:1px solid transparent}
-.tab.active{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e}
-.container{padding:16px;max-width:820px;margin:0 auto}
-.section-title{font-size:14px;color:#ffd200;font-weight:900;margin-bottom:14px}
-.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:16px;margin-bottom:12px}
-.video{display:flex;gap:12px;align-items:center;cursor:pointer}
-.video .ic{width:56px;height:56px;background:linear-gradient(135deg,rgba(247,151,30,0.2),rgba(255,210,0,0.08));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
-.video .info{flex:1}
-.video .t{font-size:14px;font-weight:800;margin-bottom:4px}
-.video .l{font-size:11px;color:#94a3b8}
-.hw{border-right:3px solid #ffd200}
-.hw .t{font-size:15px;font-weight:800;color:#ffd200;margin-bottom:8px}
-.hw .d{font-size:13px;color:#cbd5e1;line-height:1.8}
-.hw .due{margin-top:10px;font-size:12px;color:#ffb74d;background:rgba(255,152,0,0.1);padding:6px 10px;border-radius:8px;display:inline-block}
-.hw .actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
-.btn{padding:10px 18px;border:none;border-radius:12px;cursor:pointer;font-weight:800;font-size:13px;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-.btn:active{transform:scale(0.97)}
-.btn-gold{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e}
-.btn-blue{background:rgba(99,102,241,0.2);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3)}
-.btn-green{background:#25D366;color:#fff}
-.submitted{background:rgba(37,211,102,0.15);color:#a5d6a7;padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;display:inline-block}
-.exam{border-right:3px solid #6366f1}
-.exam .t{font-size:15px;font-weight:800;color:#a5b4fc;margin-bottom:6px}
-.exam .meta{font-size:12px;color:#94a3b8;margin-bottom:12px}
-.result-row{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
-.result-row:last-child{border-bottom:none}
-.result-score{background:rgba(37,211,102,0.15);color:#a5d6a7;padding:4px 12px;border-radius:20px;font-weight:700}
-.result-score.low{background:rgba(229,57,53,0.15);color:#ef9a9a}
-.empty{text-align:center;color:#475569;padding:60px 20px;font-size:14px}
-.empty .ic{font-size:52px;display:block;margin-bottom:14px;opacity:0.5}
+.avatar{width:52px;height:52px;background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#0a0f1e;box-shadow:0 10px 30px rgba(247,151,30,0.4)}
+.user .name{font-size:15px;font-weight:900}
+.user .grade{font-size:11px;color:#94a3b8;margin-top:2px;font-weight:600}
+.logout{color:#ef9a9a;text-decoration:none;font-size:12px;background:rgba(229,57,53,0.15);padding:10px 16px;border-radius:12px;border:1.5px solid rgba(229,57,53,0.3);font-weight:800}
+.progress-top{padding:18px 18px 8px;max-width:820px;margin:0 auto}
+.prog-card{background:linear-gradient(135deg,rgba(247,151,30,0.15),rgba(255,210,0,0.05));border:2px solid rgba(255,210,0,0.3);border-radius:24px;padding:22px;box-shadow:0 15px 40px rgba(247,151,30,0.15)}
+.prog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.prog-head .lvl{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:900;color:#ffd200}
+.prog-head .lvl .em{font-size:26px}
+.prog-head .pct{font-size:32px;font-weight:900;background:linear-gradient(135deg,#fff,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.prog-bar{height:16px;background:rgba(0,0,0,0.5);border-radius:100px;overflow:hidden;box-shadow:inset 0 3px 8px rgba(0,0,0,0.4)}
+.prog-fill{height:100%;background:linear-gradient(90deg,#f7971e,#ffd200,#f7971e);background-size:200% 100%;border-radius:100px;transition:width 1.5s;box-shadow:0 0 25px rgba(255,210,0,0.8)}
+.prog-foot{margin-top:12px;font-size:13px;color:#cbd5e1;font-weight:700;display:flex;justify-content:space-between}
+.chip-sm{background:rgba(255,210,0,0.15);padding:4px 10px;border-radius:100px;font-size:11px;font-weight:800;color:#ffd200;margin-left:4px}
+.tabs-wrap{padding:16px 18px;max-width:820px;margin:0 auto}
+.tabs-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.tab-btn{position:relative;padding:20px 14px;border-radius:22px;border:2px solid transparent;cursor:pointer;font-weight:900;font-size:14px;font-family:inherit;color:#fff;transition:.3s;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:10px}
+.tab-btn .tb-ic{font-size:32px;display:block}
+.tab-btn .tb-tx{font-size:14px;font-weight:900}
+.tab-btn .tb-num{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.4);color:#fff;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:900}
+.tab-btn:active{transform:scale(0.96)}
+.tb-videos{background:linear-gradient(135deg,#f7971e,#ff5722);box-shadow:0 10px 30px rgba(247,151,30,0.4)}
+.tb-videos.active{box-shadow:0 0 0 3px #ffd200,0 15px 40px rgba(247,151,30,0.6);transform:translateY(-2px)}
+.tb-homework{background:linear-gradient(135deg,#25D366,#1b8a4a);box-shadow:0 10px 30px rgba(37,211,102,0.4)}
+.tb-homework.active{box-shadow:0 0 0 3px #4ade80,0 15px 40px rgba(37,211,102,0.6);transform:translateY(-2px)}
+.tb-exams{background:linear-gradient(135deg,#6366f1,#8b5cf6);box-shadow:0 10px 30px rgba(99,102,241,0.4)}
+.tb-exams.active{box-shadow:0 0 0 3px #a5b4fc,0 15px 40px rgba(99,102,241,0.6);transform:translateY(-2px)}
+.tb-progress{background:linear-gradient(135deg,#06b6d4,#0891b2);box-shadow:0 10px 30px rgba(6,182,212,0.4)}
+.tb-progress.active{box-shadow:0 0 0 3px #67e8f9,0 15px 40px rgba(6,182,212,0.6);transform:translateY(-2px)}
+.tb-results{background:linear-gradient(135deg,#f43f5e,#e11d48);box-shadow:0 10px 30px rgba(244,63,94,0.4);grid-column:1/-1}
+.tb-results.active{box-shadow:0 0 0 3px #fda4af,0 15px 40px rgba(244,63,94,0.6);transform:translateY(-2px)}
+.tab-btn.active .tb-ic{animation:iconPulse 1.5s infinite}
+@keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.container{padding:8px 18px 20px;max-width:820px;margin:0 auto}
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:22px;padding:20px;margin-bottom:14px}
+.card.watched{border-color:rgba(37,211,102,0.4);background:linear-gradient(135deg,rgba(37,211,102,0.08),rgba(37,211,102,0.02))}
+.card.hw-card{border-right:4px solid #ffd200}
+.card.hw-card.done{border-right-color:#25D366;background:linear-gradient(135deg,rgba(37,211,102,0.08),transparent)}
+.card.exam-card{border-right:4px solid #6366f1}
+.card.exam-card.done{border-right-color:#25D366;background:linear-gradient(135deg,rgba(37,211,102,0.08),transparent)}
+.video{display:flex;gap:14px;align-items:center;cursor:pointer}
+.v-ic{width:62px;height:62px;background:linear-gradient(135deg,rgba(247,151,30,0.3),rgba(255,210,0,0.1));border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0;position:relative}
+.v-ic .check{position:absolute;top:-5px;right:-5px;background:#25D366;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #020617}
+.v-info{flex:1}
+.v-info .t{font-size:15px;font-weight:800;margin-bottom:4px}
+.v-info .l{font-size:11px;color:#94a3b8}
+.play{color:#ffd200;font-size:24px}
+.hw-title{font-size:17px;font-weight:900;color:#ffd200;margin-bottom:10px}
+.hw-card.done .hw-title{color:#a5d6a7}
+.hw-desc{font-size:14px;color:#cbd5e1;line-height:1.8;margin-bottom:10px}
+.hw-due{margin-top:8px;font-size:12px;color:#ffb74d;background:rgba(255,152,0,0.12);padding:8px 14px;border-radius:12px;display:inline-block;font-weight:700}
+.hw-type-tag{display:inline-block;background:rgba(99,102,241,0.15);color:#a5b4fc;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:10px}
+.hw-actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.ex-title{font-size:17px;font-weight:900;color:#a5b4fc;margin-bottom:10px}
+.exam-card.done .ex-title{color:#a5d6a7}
+.ex-meta{font-size:12px;color:#94a3b8;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border:none;border-radius:16px;cursor:pointer;font-weight:900;font-size:14px;font-family:inherit;text-decoration:none;transition:.25s;box-shadow:0 6px 18px rgba(0,0,0,0.3)}
+.btn:active{transform:scale(0.95)}
+.btn-gold{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;box-shadow:0 10px 30px rgba(247,151,30,0.4)}
+.btn-blue{background:rgba(99,102,241,0.25);color:#a5b4fc;border:1.5px solid rgba(99,102,241,0.4)}
+.btn-green{background:linear-gradient(135deg,#25D366,#1b8a4a);color:#fff;box-shadow:0 10px 30px rgba(37,211,102,0.4)}
+.badge-submitted{background:rgba(37,211,102,0.15);color:#a5d6a7;padding:10px 16px;border-radius:14px;font-size:13px;font-weight:800;display:inline-flex;align-items:center;gap:8px;border:1.5px solid rgba(37,211,102,0.3)}
+.empty{text-align:center;color:#475569;padding:70px 20px;font-size:14px;font-weight:700}
+.empty .ic{font-size:64px;display:block;margin-bottom:16px;opacity:0.4}
 .hidden{display:none}
-/* Modal */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.prog-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;margin-bottom:14px}
+.pi-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.pi-ic{font-size:32px}
+.pi-t{font-size:16px;font-weight:900;margin-bottom:2px}
+.pi-s{font-size:12px;color:#94a3b8;font-weight:600}
+.pi-bar{height:12px;background:rgba(0,0,0,0.4);border-radius:100px;overflow:hidden}
+.pi-fill{height:100%;background:linear-gradient(90deg,#f7971e,#ffd200);border-radius:100px;transition:width 1.5s}
+.pi-num{margin-top:8px;font-size:13px;color:#cbd5e1;font-weight:700}
+.levels-info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:20px}
+.lvl-box{background:rgba(255,255,255,0.03);border:2px solid rgba(255,255,255,0.06);border-radius:18px;padding:16px 8px;text-align:center;transition:.3s}
+.lvl-box.active{background:linear-gradient(135deg,rgba(247,151,30,0.25),rgba(255,210,0,0.1));border-color:#ffd200;transform:scale(1.05);box-shadow:0 15px 40px rgba(255,210,0,0.3)}
+.lvl-em{font-size:30px;display:block;margin-bottom:6px}
+.lvl-nm{font-size:12px;font-weight:900;color:#94a3b8}
+.lvl-box.active .lvl-nm{color:#ffd200}
+.lvl-rng{font-size:10px;color:#64748b;margin-top:2px;font-weight:700}
+.modal{position:fixed;inset:0;background:rgba(2,6,23,0.92);backdrop-filter:blur(12px);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
 .modal.hidden{display:none}
-.modal-box{background:#0f172a;border:1px solid rgba(255,210,0,0.3);border-radius:20px;padding:22px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto}
-.modal-box h3{color:#ffd200;font-size:17px;margin-bottom:14px;text-align:center}
-.modal-box label{display:block;font-size:12px;color:#cbd5e1;margin:10px 0 6px;font-weight:700}
-.modal-box textarea,.modal-box input[type=text]{width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:#fff;border-radius:12px;font-family:inherit;font-size:14px}
+.modal-box{background:#0f172a;border:2px solid rgba(255,210,0,0.25);border-radius:28px;padding:26px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto}
+.modal-box h3{color:#ffd200;font-size:18px;margin-bottom:16px;text-align:center;font-weight:900}
+.modal-box label{display:block;font-size:13px;color:#cbd5e1;margin:16px 0 8px;font-weight:800}
+.modal-box textarea,.modal-box input[type=file]{width:100%;padding:14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:#fff;border-radius:14px;font-family:inherit;font-size:14px}
 .modal-box textarea{min-height:100px;resize:vertical}
-.canvas-wrap{background:#fff;border-radius:12px;padding:6px;margin-top:8px}
-canvas{width:100%;height:auto;border-radius:8px;touch-action:none;cursor:crosshair;display:block}
-.draw-tools{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.color-btn{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);cursor:pointer}
-.color-btn.active{border-color:#ffd200}
-.size-btn{padding:6px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:#fff;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700}
-.size-btn.active{background:#ffd200;color:#0a0f1e;border-color:#ffd200}
-.timer{background:linear-gradient(135deg,rgba(247,151,30,0.2),rgba(255,210,0,0.1));border:1.5px solid rgba(255,210,0,0.3);color:#ffd200;padding:12px;border-radius:14px;text-align:center;font-weight:900;margin:10px 0;font-size:16px}
-.timer.warning{background:rgba(229,57,53,0.2);border-color:rgba(229,57,53,0.4);color:#ef9a9a}
-.q-box{margin:14px 0;padding:14px;background:rgba(255,255,255,0.04);border-radius:14px}
-.q-text{font-size:14px;margin-bottom:12px;line-height:1.8;font-weight:700}
-.opt{padding:12px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px}
-.opt:active{background:rgba(255,210,0,0.1)}
-.opt.selected{background:linear-gradient(135deg,rgba(247,151,30,0.2),rgba(255,210,0,0.1));border-color:#ffd200;color:#fff;font-weight:700}
-.opt .mark{width:24px;height:24px;border-radius:50%;border:2px solid #475569;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#94a3b8;flex-shrink:0}
+.canvas-wrap{background:#fff;border-radius:16px;padding:8px;margin-top:10px}
+canvas{width:100%;height:auto;border-radius:12px;touch-action:none;cursor:crosshair;display:block}
+.draw-tools{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.color-btn{width:36px;height:36px;border-radius:50%;border:3px solid rgba(255,255,255,0.15);cursor:pointer}
+.color-btn.active{border-color:#ffd200;transform:scale(1.2)}
+.size-btn{padding:9px 16px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:#fff;border-radius:12px;cursor:pointer;font-size:12px;font-weight:800;font-family:inherit}
+.size-btn.active{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-actions .btn{flex:1}
+.timer{background:linear-gradient(135deg,rgba(247,151,30,0.2),rgba(255,210,0,0.1));border:2px solid rgba(255,210,0,0.35);color:#ffd200;padding:16px;border-radius:18px;text-align:center;font-weight:900;margin:14px 0 20px;font-size:20px}
+.timer.warning{background:rgba(229,57,53,0.2);color:#ef9a9a}
+.q-box{margin:18px 0;padding:18px;background:rgba(255,255,255,0.04);border-radius:18px}
+.q-text{font-size:14px;margin-bottom:16px;line-height:1.8;font-weight:800}
+.opt{padding:14px 16px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:14px;margin-bottom:10px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:12px}
+.opt.selected{background:linear-gradient(135deg,rgba(247,151,30,0.2),rgba(255,210,0,0.1));border-color:#ffd200;font-weight:800}
+.opt .mark{width:28px;height:28px;border-radius:50%;border:2px solid #475569;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#94a3b8;flex-shrink:0}
 .opt.selected .mark{background:#ffd200;color:#0a0f1e;border-color:#ffd200}
-.essay-input{width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:#fff;border-radius:12px;font-family:inherit;font-size:14px;min-height:80px;resize:vertical;margin-top:8px}
-.modal-actions{display:flex;gap:8px;margin-top:16px}
-.modal-actions .btn{flex:1;justify-content:center}
+.essay-input{width:100%;padding:14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:#fff;border-radius:14px;font-family:inherit;font-size:14px;min-height:90px;resize:vertical;margin-top:8px}
+.result-row{display:flex;justify-content:space-between;padding:14px;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.result-score{background:linear-gradient(135deg,#25D366,#1b8a4a);color:#fff;padding:6px 16px;border-radius:20px;font-weight:900;font-size:12px}
+.result-score.low{background:linear-gradient(135deg,#e53935,#b71c1c)}
 </style>
 </head>
 <body>
-
-
-<div style="padding:16px 18px 4px;max-width:820px;margin:0 auto">
-<div style="background:linear-gradient(135deg,rgba(247,151,30,0.12),rgba(255,210,0,0.04));border:1.5px solid rgba(255,210,0,0.25);border-radius:20px;padding:18px 20px">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-<div style="font-size:14px;font-weight:900;color:#ffd200">🏆 {{ level_name }}</div>
-<div style="font-size:26px;font-weight:900;color:#ffd200">{{ progress }}%</div>
-</div>
-<div style="height:14px;background:rgba(0,0,0,0.4);border-radius:100px;overflow:hidden">
-<div style="height:100%;background:linear-gradient(90deg,#f7971e,#ffd200);border-radius:100px;width:{{ progress }}%"></div>
-</div>
-<div style="margin-top:10px;font-size:12px;color:#94a3b8;font-weight:700">📊 خلّصت {{ done_items }} من {{ total_items }} عنصر</div>
-</div>
-</div><header>
+<div class="bg"><div class="orb o1"></div><div class="orb o2"></div></div>
+<div class="wrap">
+<header>
 <div class="user">
 <div class="avatar">{{ student.name[0] }}</div>
-<div>
-<div class="name">{{ student.name }}</div>
-<div class="grade">{{ 'أول ثانوي' if student.grade == 'first' else 'تانية ثانوي' }}</div>
-</div>
+<div><div class="name">{{ student.name }}</div><div class="grade">{{ 'أول ثانوي' if student.grade == 'first' else 'تانية ثانوي' }}</div></div>
 </div>
 <a href="/student/logout" class="logout">خروج</a>
 </header>
 
-<div class="tabs">
-<div class="tab active" data-tab="videos" onclick="showTab('videos', this)">🎬 الفيديوهات</div>
-<div class="tab" data-tab="homework" onclick="showTab('homework', this)">📝 الواجبات</div>
-<div class="tab" data-tab="exams" onclick="showTab('exams', this)">📊 الامتحانات</div>
-<div class="tab" 
-<div class="tab" onclick="showTab('progress', this)">📈 تقدمي</div>
-<div class="tab" onclick="showTab('results', this)">🏆 نتائجي</div>
+<div class="progress-top">
+<div class="prog-card">
+<div class="prog-head">
+<div class="lvl"><span class="em">🏆</span> {{ level_name }}</div>
+<div class="pct">{{ progress }}%</div>
+</div>
+<div class="prog-bar"><div class="prog-fill" style="width: {{ progress }}%"></div></div>
+<div class="prog-foot">
+<span>📊 خلّصت {{ done_items }} من {{ total_items }} عنصر</span>
+<div><span class="chip-sm">🎬 {{ viewed_video_ids|length }}</span><span class="chip-sm">📝 {{ submitted_hw_ids|length }}</span><span class="chip-sm">📊 {{ taken_exam_ids|length }}</span></div>
+</div>
+</div>
+</div>
+
+<div class="tabs-wrap">
+<div class="tabs-grid">
+<button class="tab-btn tb-videos active" onclick="showTab('videos', this)"><span class="tb-ic">🎬</span><span class="tb-tx">الفيديوهات</span><span class="tb-num">{{ videos|length }}</span></button>
+<button class="tab-btn tb-homework" onclick="showTab('homework', this)"><span class="tb-ic">📝</span><span class="tb-tx">الواجبات</span><span class="tb-num">{{ homeworks|length }}</span></button>
+<button class="tab-btn tb-exams" onclick="showTab('exams', this)"><span class="tb-ic">📊</span><span class="tb-tx">الامتحانات</span><span class="tb-num">{{ exams|length }}</span></button>
+<button class="tab-btn tb-progress" onclick="showTab('progress', this)"><span class="tb-ic">📈</span><span class="tb-tx">تقدمي</span><span class="tb-num">{{ progress }}%</span></button>
+<button class="tab-btn tb-results" onclick="showTab('results', this)"><span class="tb-ic">🏆</span><span class="tb-tx">نتائجي</span><span class="tb-num">{{ my_results|length }}</span></button>
+</div>
 </div>
 
 <div class="container">
-
-<!-- الفيديوهات -->
 <div id="videosView">
-<div class="section-title">🎬 الفيديوهات المتاحة</div>
 {% if videos %}
 {% for v in videos %}
-<div class="card">
-<div class="video" onclick="window.open('{{ v.url }}', '_blank')">
-<div class="ic">🎬</div>
-<div class="info">
-<div class="t">{{ v.title }}</div>
-<div class="l">{{ v.created_at.strftime('%Y-%m-%d') }}</div>
-</div>
-<div style="color:#ffd200;font-size:22px">›</div>
+<div class="card {% if v.id in viewed_video_ids %}watched{% endif %}">
+<div class="video" onclick="openVideo({{ v.id }}, '{{ v.url }}')">
+<div class="v-ic">🎬{% if v.id in viewed_video_ids %}<div class="check">✓</div>{% endif %}</div>
+<div class="v-info"><div class="t">{{ v.title }}</div><div class="l">📅 {{ v.created_at.strftime('%Y-%m-%d') }}</div></div>
+<div class="play">▶</div>
 </div>
 </div>
 {% endfor %}
@@ -132,20 +177,19 @@ canvas{width:100%;height:auto;border-radius:8px;touch-action:none;cursor:crossha
 {% endif %}
 </div>
 
-<!-- الواجبات -->
 <div id="homeworkView" class="hidden">
-<div class="section-title">📝 الواجبات</div>
 {% if homeworks %}
 {% for h in homeworks %}
-<div class="card hw">
-<div class="t">📝 {{ h.title }}</div>
-<div class="d">{{ h.description }}</div>
-{% if h.due_date %}<div class="due">⏰ آخر ميعاد: {{ h.due_date }}</div>{% endif %}
-<div class="actions">
+<div class="card hw-card {% if h.id in submitted_hw_ids %}done{% endif %}">
+<div class="hw-title">{% if h.id in submitted_hw_ids %}✅{% else %}📝{% endif %} {{ h.title }}</div>
+<span class="hw-type-tag">{% if h.hw_type == 'text' %}✍️ كتابة{% elif h.hw_type == 'draw' %}🎨 رسم{% elif h.hw_type == 'image' %}📷 صورة{% else %}✅ أي طريقة{% endif %}</span>
+<div class="hw-desc">{{ h.description }}</div>
+{% if h.due_date %}<div class="hw-due">⏰ آخر ميعاد: {{ h.due_date }}</div>{% endif %}
+<div class="hw-actions">
 {% if h.id in submitted_hw_ids %}
-<span class="submitted">✅ تم التسليم</span>
+<span class="badge-submitted">✅ تم التسليم</span>
 {% else %}
-<button class="btn btn-gold" onclick="openSubmit({{ h.id }}, '{{ h.title }}', '{{ h.hw_type }}')">📤 سلّم الواجب</button>
+<button class="btn btn-gold" onclick="openSubmit({{ h.id }}, '{{ h.title }}')">📤 سلّم الواجب</button>
 {% endif %}
 </div>
 </div>
@@ -155,16 +199,14 @@ canvas{width:100%;height:auto;border-radius:8px;touch-action:none;cursor:crossha
 {% endif %}
 </div>
 
-<!-- الامتحانات -->
 <div id="examsView" class="hidden">
-<div class="section-title">📊 الامتحانات</div>
 {% if exams %}
 {% for e in exams %}
-<div class="card exam">
-<div class="t">📊 {{ e.title }}</div>
-<div class="meta">⏰ {{ e.duration }} دقيقة — {{ e.questions | length if e.questions else 0 }} سؤال</div>
+<div class="card exam-card {% if e.id in taken_exam_ids %}done{% endif %}">
+<div class="ex-title">{% if e.id in taken_exam_ids %}✅{% else %}📊{% endif %} {{ e.title }}</div>
+<div class="ex-meta">⏰ {{ e.duration }} دقيقة</div>
 {% if e.id in taken_exam_ids %}
-<span class="submitted">✅ خلصت الامتحان ده</span>
+<span class="badge-submitted">✅ خلصت الامتحان ده</span>
 {% else %}
 <button class="btn btn-gold" onclick="startExam({{ e.id }})">🚀 ابدأ الامتحان</button>
 {% endif %}
@@ -175,15 +217,38 @@ canvas{width:100%;height:auto;border-radius:8px;touch-action:none;cursor:crossha
 {% endif %}
 </div>
 
-<!-- النتائج -->
+<div id="progressView" class="hidden">
+<div class="prog-item">
+<div class="pi-head"><div class="pi-ic">🎬</div><div><div class="pi-t">الفيديوهات</div><div class="pi-s">شاهد {{ viewed_video_ids|length }} من {{ videos|length }}</div></div></div>
+<div class="pi-bar"><div class="pi-fill" style="width:{% if videos|length > 0 %}{{ (viewed_video_ids|length / videos|length * 100) | int }}{% else %}0{% endif %}%"></div></div>
+<div class="pi-num">{% if videos|length > 0 %}{{ (viewed_video_ids|length / videos|length * 100) | int }}{% else %}0{% endif %}%</div>
+</div>
+<div class="prog-item">
+<div class="pi-head"><div class="pi-ic">📝</div><div><div class="pi-t">الواجبات</div><div class="pi-s">سلّمت {{ submitted_hw_ids|length }} من {{ homeworks|length }}</div></div></div>
+<div class="pi-bar"><div class="pi-fill" style="width:{% if homeworks|length > 0 %}{{ (submitted_hw_ids|length / homeworks|length * 100) | int }}{% else %}0{% endif %}%"></div></div>
+<div class="pi-num">{% if homeworks|length > 0 %}{{ (submitted_hw_ids|length / homeworks|length * 100) | int }}{% else %}0{% endif %}%</div>
+</div>
+<div class="prog-item">
+<div class="pi-head"><div class="pi-ic">📊</div><div><div class="pi-t">الامتحانات</div><div class="pi-s">خلّصت {{ taken_exam_ids|length }} من {{ exams|length }}</div></div></div>
+<div class="pi-bar"><div class="pi-fill" style="width:{% if exams|length > 0 %}{{ (taken_exam_ids|length / exams|length * 100) | int }}{% else %}0{% endif %}%"></div></div>
+<div class="pi-num">{% if exams|length > 0 %}{{ (taken_exam_ids|length / exams|length * 100) | int }}{% else %}0{% endif %}%</div>
+</div>
+<div style="text-align:center;margin-top:24px;font-size:16px;font-weight:900;color:#ffd200">🎯 المستويات</div>
+<div class="levels-info">
+<div class="lvl-box {% if level == 1 %}active{% endif %}"><span class="lvl-em">🥉</span><div class="lvl-nm">المستوى الأول</div><div class="lvl-rng">0% - 30%</div></div>
+<div class="lvl-box {% if level == 2 %}active{% endif %}"><span class="lvl-em">🥈</span><div class="lvl-nm">المستوى الثاني</div><div class="lvl-rng">30% - 60%</div></div>
+<div class="lvl-box {% if level == 3 %}active{% endif %}"><span class="lvl-em">🥇</span><div class="lvl-nm">المستوى الثالث</div><div class="lvl-rng">60% - 100%</div></div>
+</div>
+</div>
+
 <div id="resultsView" class="hidden">
-<div class="section-title">🏆 نتائجي</div>
 {% if my_results %}
 <div class="card">
 {% for r in my_results %}
+{% set pct = (r.score / r.total * 100) | int %}
 <div class="result-row">
-<span>امتحان #{{ r.exam_id }} — {{ r.created_at.strftime('%Y-%m-%d') }}</span>
-<span class="result-score {% if r.score < r.total / 2 %}low{% endif %}">{{ r.score }} / {{ r.total }}</span>
+<span>🏆 امتحان #{{ r.exam_id }} — {{ r.created_at.strftime('%Y-%m-%d') }}</span>
+<span class="result-score {% if pct < 50 %}low{% endif %}">{{ r.score }} / {{ r.total }}</span>
 </div>
 {% endfor %}
 </div>
@@ -191,19 +256,18 @@ canvas{width:100%;height:auto;border-radius:8px;touch-action:none;cursor:crossha
 <div class="empty"><span class="ic">🏆</span>مفيش نتائج لسه</div>
 {% endif %}
 </div>
-
+</div>
 </div>
 
-<!-- Modal تسليم واجب -->
 <div class="modal hidden" id="submitModal">
 <div class="modal-box">
 <h3 id="submitTitle">📤 تسليم الواجب</h3>
 <label>✍️ اكتب حلك (اختياري)</label>
 <textarea id="submitText" placeholder="اكتب حلك هنا..."></textarea>
 <label>📷 ارفع صورة (اختياري)</label>
-<input type="file" id="submitImage" accept="image/*" style="color:#fff">
+<input type="file" id="submitImage" accept="image/*">
 <label>🎨 أو ارسم الحل</label>
-<div class="canvas-wrap"><canvas id="drawCanvas" width="400" height="300"></canvas></div>
+<div class="canvas-wrap"><canvas id="drawCanvas" width="500" height="350"></canvas></div>
 <div class="draw-tools">
 <div class="color-btn active" data-color="#000000" style="background:#000" onclick="pickColor(this)"></div>
 <div class="color-btn" data-color="#e53935" style="background:#e53935" onclick="pickColor(this)"></div>
@@ -222,207 +286,34 @@ canvas{width:100%;height:auto;border-radius:8px;touch-action:none;cursor:crossha
 </div>
 </div>
 
-<!-- Modal امتحان -->
-<div class="modal hidden" id="examModal">
-<div class="modal-box" id="examBox"></div>
-</div>
+<div class="modal hidden" id="examModal"><div class="modal-box" id="examBox"></div></div>
 
 <script>
-var currentHW = null;
-var examData = null;
-var answers = [];
-var timerInt = null;
-var canvas = document.getElementById('drawCanvas');
-var ctx = canvas.getContext('2d');
-var drawing = false;
-var curColor = '#000000';
-var curSize = 3;
-var hasDrawing = false;
-
-/* ===== التابات ===== */
-function showTab(t, el) {
-    document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
-    el.classList.add('active');
-    ['videos','homework','exams','results'].forEach(function(v){
-        document.getElementById(v+'View').classList.add('hidden');
-    });
-    document.getElementById(t+'View').classList.remove('hidden');
-}
-
-/* ===== الرسم ===== */
-function getPos(e) {
-    var r = canvas.getBoundingClientRect();
-    var x, y;
-    if (e.touches) {
-        x = e.touches[0].clientX - r.left;
-        y = e.touches[0].clientY - r.top;
-    } else {
-        x = e.clientX - r.left;
-        y = e.clientY - r.top;
-    }
-    return {x: x * (canvas.width / r.width), y: y * (canvas.height / r.height)};
-}
-canvas.addEventListener('mousedown', function(e){ drawing = true; var p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
-canvas.addEventListener('mousemove', function(e){ if (drawing) { var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.strokeStyle = curColor; ctx.lineWidth = curSize; ctx.lineCap = 'round'; ctx.stroke(); hasDrawing = true; }});
-canvas.addEventListener('mouseup', function(){ drawing = false; });
-canvas.addEventListener('mouseout', function(){ drawing = false; });
-canvas.addEventListener('touchstart', function(e){ e.preventDefault(); drawing = true; var p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
-canvas.addEventListener('touchmove', function(e){ e.preventDefault(); if (drawing) { var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.strokeStyle = curColor; ctx.lineWidth = curSize; ctx.lineCap = 'round'; ctx.stroke(); hasDrawing = true; }});
-canvas.addEventListener('touchend', function(e){ e.preventDefault(); drawing = false; });
-
-function pickColor(el) {
-    document.querySelectorAll('.color-btn').forEach(function(x){ x.classList.remove('active'); });
-    el.classList.add('active');
-    curColor = el.dataset.color;
-}
-function pickSize(el) {
-    document.querySelectorAll('.size-btn[data-size]').forEach(function(x){ x.classList.remove('active'); });
-    el.classList.add('active');
-    curSize = parseInt(el.dataset.size);
-}
-function clearCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    hasDrawing = false;
-}
-
-/* ===== تسليم الواجب ===== */
-function openSubmit(hwId, title, type) {
-    currentHW = hwId;
-    document.getElementById('submitTitle').textContent = '📤 ' + title;
-    document.getElementById('submitText').value = '';
-    document.getElementById('submitImage').value = '';
-    clearCanvas();
-    document.getElementById('submitModal').classList.remove('hidden');
-}
-function closeSubmit() {
-    document.getElementById('submitModal').classList.add('hidden');
-}
-
-async function submitHW() {
-    var text = document.getElementById('submitText').value.trim();
-    var imgInput = document.getElementById('submitImage');
-    var imgFile = imgInput.files[0];
-
-    var hasImg = !!imgFile;
-    if (!text && !hasImg && !hasDrawing) {
-        return alert('اكتب أو ارفع صورة أو ارسم الحل');
-    }
-
-    var fd = new FormData();
-    fd.append('text_answer', text);
-    if (imgFile) fd.append('image', imgFile);
-    if (hasDrawing) {
-        await new Promise(function(resolve) {
-            canvas.toBlob(function(blob) {
-                fd.append('drawing', blob, 'draw.png');
-                resolve();
-            }, 'image/png');
-        });
-    }
-
-    try {
-        var r = await fetch('/api/submit_homework/' + currentHW, {method: 'POST', body: fd});
-        var d = await r.json();
-        if (!d.ok) return alert(d.msg);
-        alert('✅ تم تسليم الواجب');
-        location.reload();
-    } catch(e) {
-        alert('خطأ في الاتصال');
-    }
-}
-
-/* ===== الامتحانات ===== */
-async function startExam(id) {
-    if (!confirm('متأكد؟ مش هتقدر ترجع تاني!')) return;
-    try {
-        var r = await fetch('/api/exam/' + id + '/start', {method: 'POST'});
-        var d = await r.json();
-        if (!d.ok) return alert(d.msg);
-        examData = d.exam;
-        answers = new Array(examData.questions.length).fill(null);
-        showExam();
-    } catch(e) { alert('خطأ'); }
-}
-
-function showExam() {
-    var html = '<h3>📊 ' + examData.title + '</h3>';
-    html += '<div class="timer" id="examTimer">⏰ ' + examData.duration + ':00</div>';
-    examData.questions.forEach(function(q, i) {
-        html += '<div class="q-box">';
-        html += '<div class="q-text">' + (i+1) + '. ' + q.q + '</div>';
-        if (q.type === 'mcq') {
-            q.opts.forEach(function(opt, j) {
-                html += '<div class="opt" data-q="' + i + '" data-v="' + j + '" onclick="pickOpt(this)">' +
-                    '<span class="mark">' + (j+1) + '</span> ' + opt +
-                    '</div>';
-            });
-        } else {
-            html += '<textarea class="essay-input" placeholder="اكتب إجابتك هنا..." oninput="answers[' + i + ']=this.value"></textarea>';
-        }
-        html += '</div>';
-    });
-    html += '<div class="modal-actions">';
-    html += '<button class="btn btn-green" onclick="submitExam()">📤 تسليم الامتحان</button>';
-    html += '<button class="btn btn-blue" onclick="closeExam()">إلغاء</button>';
-    html += '</div>';
-    document.getElementById('examBox').innerHTML = html;
-    document.getElementById('examModal').classList.remove('hidden');
-    startTimer(examData.duration);
-}
-
-function pickOpt(el) {
-    var qi = parseInt(el.dataset.q);
-    var v = parseInt(el.dataset.v);
-    answers[qi] = v;
-    document.querySelectorAll('.opt[data-q="' + qi + '"]').forEach(function(x){ x.classList.remove('selected'); });
-    el.classList.add('selected');
-}
-
-function startTimer(min) {
-    var total = min * 60;
-    clearInterval(timerInt);
-    timerInt = setInterval(function() {
-        total--;
-        if (total <= 0) {
-            clearInterval(timerInt);
-            alert('⏰ خلص الوقت!');
-            submitExam(true);
-            return;
-        }
-        var m = Math.floor(total / 60);
-        var s = total % 60;
-        var el = document.getElementById('examTimer');
-        if (el) {
-            el.textContent = '⏰ ' + m + ':' + (s < 10 ? '0' : '') + s;
-            if (total <= 60) el.classList.add('warning');
-        }
-    }, 1000);
-}
-
-async function submitExam(force) {
-    if (!force && !confirm('تسليم الامتحان؟ مش هتقدر ترجع!')) return;
-    clearInterval(timerInt);
-    try {
-        var r = await fetch('/api/exam/' + examData.id + '/submit', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({answers: answers})
-        });
-        var d = await r.json();
-        document.getElementById('examModal').classList.add('hidden');
-        if (d.ok) {
-            alert('🎉 نتيجتك: ' + d.score + ' / ' + d.total);
-            location.reload();
-        } else {
-            alert(d.msg);
-        }
-    } catch(e) { alert('خطأ'); }
-}
-
-function closeExam() {
-    if (!confirm('لو خرجت هيتسجل غياب! متأكد؟')) return;
-    clearInterval(timerInt);
-    document.getElementById('examModal').classList.add('hidden');
-}
+var currentHW=null,examData=null,answers=[],timerInt=null;
+var canvas=document.getElementById('drawCanvas'),ctx=canvas.getContext('2d');
+var drawing=false,curColor='#000000',curSize=3,hasDrawing=false;
+function showTab(t,el){document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});el.classList.add('active');['videos','homework','exams','progress','results'].forEach(function(v){document.getElementById(v+'View').classList.add('hidden')});document.getElementById(t+'View').classList.remove('hidden')}
+async function openVideo(id,url){window.open(url,'_blank');try{await fetch('/api/video_watched/'+id,{method:'POST'})}catch(e){}}
+function getPos(e){var r=canvas.getBoundingClientRect(),x,y;if(e.touches){x=e.touches[0].clientX-r.left;y=e.touches[0].clientY-r.top}else{x=e.clientX-r.left;y=e.clientY-r.top}return{x:x*(canvas.width/r.width),y:y*(canvas.height/r.height)}}
+canvas.addEventListener('mousedown',function(e){drawing=true;var p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y)});
+canvas.addEventListener('mousemove',function(e){if(drawing){var p=getPos(e);ctx.lineTo(p.x,p.y);ctx.strokeStyle=curColor;ctx.lineWidth=curSize;ctx.lineCap='round';ctx.stroke();hasDrawing=true}});
+canvas.addEventListener('mouseup',function(){drawing=false});
+canvas.addEventListener('mouseout',function(){drawing=false});
+canvas.addEventListener('touchstart',function(e){e.preventDefault();drawing=true;var p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y)},{passive:false});
+canvas.addEventListener('touchmove',function(e){e.preventDefault();if(drawing){var p=getPos(e);ctx.lineTo(p.x,p.y);ctx.strokeStyle=curColor;ctx.lineWidth=curSize;ctx.lineCap='round';ctx.stroke();hasDrawing=true}},{passive:false});
+canvas.addEventListener('touchend',function(e){e.preventDefault();drawing=false},{passive:false});
+function pickColor(el){document.querySelectorAll('.color-btn').forEach(function(x){x.classList.remove('active')});el.classList.add('active');curColor=el.dataset.color}
+function pickSize(el){document.querySelectorAll('.size-btn[data-size]').forEach(function(x){x.classList.remove('active')});el.classList.add('active');curSize=parseInt(el.dataset.size)}
+function clearCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height);hasDrawing=false}
+function openSubmit(hwId,title){currentHW=hwId;document.getElementById('submitTitle').textContent='📤 '+title;document.getElementById('submitText').value='';document.getElementById('submitImage').value='';clearCanvas();document.getElementById('submitModal').classList.remove('hidden')}
+function closeSubmit(){document.getElementById('submitModal').classList.add('hidden')}
+async function submitHW(){var text=document.getElementById('submitText').value.trim();var imgFile=document.getElementById('submitImage').files[0];if(!text&&!imgFile&&!hasDrawing)return alert('اكتب أو ارفع صورة أو ارسم الحل');var fd=new FormData();fd.append('text_answer',text);if(imgFile)fd.append('image',imgFile);if(hasDrawing){await new Promise(function(resolve){canvas.toBlob(function(blob){fd.append('drawing',blob,'draw.png');resolve()},'image/png')})}try{var r=await fetch('/api/submit_homework/'+currentHW,{method:'POST',body:fd});var d=await r.json();if(!d.ok)return alert(d.msg);alert('✅ تم تسليم الواجب');location.reload()}catch(e){alert('خطأ')}}
+async function startExam(id){if(!confirm('متأكد؟'))return;try{var r=await fetch('/api/exam/'+id+'/start',{method:'POST'});var d=await r.json();if(!d.ok)return alert(d.msg);examData=d.exam;answers=new Array(examData.questions.length).fill(null);showExam()}catch(e){alert('خطأ')}}
+function showExam(){var html='<h3>📊 '+examData.title+'</h3>';html+='<div class="timer" id="examTimer">⏰ '+examData.duration+':00</div>';examData.questions.forEach(function(q,i){html+='<div class="q-box"><div class="q-text">'+(i+1)+'. '+q.q+'</div>';if(q.type==='mcq'){q.opts.forEach(function(opt,j){html+='<div class="opt" data-q="'+i+'" data-v="'+j+'" onclick="pickOpt(this)"><span class="mark">'+(j+1)+'</span> '+opt+'</div>'})}else{html+='<textarea class="essay-input" oninput="answers['+i+']=this.value"></textarea>'}html+='</div>'});html+='<div class="modal-actions"><button class="btn btn-green" onclick="submitExam()">📤 تسليم</button><button class="btn btn-blue" onclick="closeExam()">إلغاء</button></div>';document.getElementById('examBox').innerHTML=html;document.getElementById('examModal').classList.remove('hidden');startTimer(examData.duration)}
+function pickOpt(el){var qi=parseInt(el.dataset.q),v=parseInt(el.dataset.v);answers[qi]=v;document.querySelectorAll('.opt[data-q="'+qi+'"]').forEach(function(x){x.classList.remove('selected')});el.classList.add('selected')}
+function startTimer(min){var total=min*60;clearInterval(timerInt);timerInt=setInterval(function(){total--;if(total<=0){clearInterval(timerInt);alert('⏰ خلص الوقت!');submitExam(true);return}var m=Math.floor(total/60),s=total%60;var el=document.getElementById('examTimer');if(el){el.textContent='⏰ '+m+':'+(s<10?'0':'')+s;if(total<=60)el.classList.add('warning')}},1000)}
+async function submitExam(force){if(!force&&!confirm('تسليم؟'))return;clearInterval(timerInt);try{var r=await fetch('/api/exam/'+examData.id+'/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers:answers})});var d=await r.json();document.getElementById('examModal').classList.add('hidden');if(d.ok){alert('🎉 نتيجتك: '+d.score+' / '+d.total);location.reload()}else{alert(d.msg)}}catch(e){alert('خطأ')}}
+function closeExam(){if(!confirm('متأكد؟'))return;clearInterval(timerInt);document.getElementById('examModal').classList.add('hidden')}
 </script>
 </body>
 </html>
