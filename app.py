@@ -3,10 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
-import os
+import os, json, random, string
 
 app = Flask(__name__)
-app.secret_key = "edu-ahmed-2027"
+app.secret_key = "ahmed-edu-2027-secret-key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///edu.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -21,6 +21,7 @@ VODAFONE = "01090933634"
 TEACHER = "أحمد إبراهيم"
 SUBJECT = "الفلسفة"
 PRICE = 70
+WHATSAPP = "201090933634"
 ADMIN_USER = "Mh"
 ADMIN_PASS = "@2027"
 
@@ -30,36 +31,44 @@ class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     phone = db.Column(db.String(20), unique=True)
-    grade = db.Column(db.String(20))  # "first" أو "second"
-    code = db.Column(db.String(50), unique=True)
-    activated = db.Column(db.Boolean, default=False)
+    parent_phone = db.Column(db.String(20))
+    password_hash = db.Column(db.String(255))
+    grade = db.Column(db.String(20))
+    code = db.Column(db.String(50))
+    payment_phone = db.Column(db.String(20))
+    screenshot = db.Column(db.String(255))
+    active = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
         return {
             'id': self.id, 'name': self.name, 'phone': self.phone,
-            'grade': self.grade, 'code': self.code or '',
-            'activated': self.activated,
+            'parent_phone': self.parent_phone or '',
+            'grade': self.grade,
+            'grade_name': 'أول ثانوي' if self.grade == 'first' else 'تانية ثانوي',
+            'code': self.code or '',
+            'payment_phone': self.payment_phone or '',
+            'screenshot': self.screenshot,
+            'active': self.active,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M') if self.created_at else ''
         }
 
 
-class Enrollment(db.Model):
-    __tablename__ = 'enrollments'
+class ActivationCode(db.Model):
+    __tablename__ = 'codes'
     id = db.Column(db.Integer, primary_key=True)
-    student_name = db.Column(db.String(100))
-    phone = db.Column(db.String(20))
+    code = db.Column(db.String(50), unique=True)
     grade = db.Column(db.String(20))
-    screenshot = db.Column(db.String(255))
-    status = db.Column(db.String(20), default='pending')  # pending / approved / rejected
+    used = db.Column(db.Boolean, default=False)
+    used_by = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
         return {
-            'id': self.id, 'student_name': self.student_name,
-            'phone': self.phone, 'grade': self.grade,
-            'screenshot': self.screenshot, 'status': self.status,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M') if self.created_at else ''
+            'id': self.id, 'code': self.code, 'grade': self.grade,
+            'grade_name': 'أول ثانوي' if self.grade == 'first' else 'تانية ثانوي',
+            'used': self.used, 'used_by': self.used_by or '',
+            'created_at': self.created_at.strftime('%Y-%m-%d') if self.created_at else ''
         }
 
 
@@ -102,26 +111,25 @@ class Exam(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     grade = db.Column(db.String(20))
-    questions = db.Column(db.Text)  # JSON string
-    duration = db.Column(db.Integer)  # minutes
-    total_marks = db.Column(db.Integer)
+    questions = db.Column(db.Text)
+    duration = db.Column(db.Integer)
     active = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
         return {
             'id': self.id, 'title': self.title, 'grade': self.grade,
-            'duration': self.duration, 'total_marks': self.total_marks,
+            'duration': self.duration, 'total': len(json.loads(self.questions or '[]')),
             'active': self.active,
             'created_at': self.created_at.strftime('%Y-%m-%d') if self.created_at else ''
         }
 
 
 class ExamResult(db.Model):
-    __tablename__ = 'exam_results'
+    __tablename__ = 'results'
     id = db.Column(db.Integer, primary_key=True)
     exam_id = db.Column(db.Integer)
-    student_phone = db.Column(db.String(20))
+    student_id = db.Column(db.Integer)
     student_name = db.Column(db.String(100))
     score = db.Column(db.Integer)
     total = db.Column(db.Integer)
@@ -129,14 +137,13 @@ class ExamResult(db.Model):
 
     def to_dict(self):
         return {
-            'id': self.id, 'exam_id': self.exam_id,
-            'student_phone': self.student_phone, 'student_name': self.student_name,
-            'score': self.score, 'total': self.total,
+            'id': self.id, 'exam_id': self.exam_id, 'student_id': self.student_id,
+            'student_name': self.student_name, 'score': self.score, 'total': self.total,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M') if self.created_at else ''
         }
 
 
-# ===== صفحات =====
+# ===== Pages =====
 @app.route('/')
 def home():
     return render_template('index.html', teacher=TEACHER, subject=SUBJECT, price=PRICE, vodafone=VODAFONE)
@@ -184,18 +191,39 @@ def admin_panel():
     return render_template('admin.html', teacher=TEACHER, subject=SUBJECT)
 
 
-# ===== APIs =====
-@app.route('/api/enroll', methods=['POST'])
-def api_enroll():
+# ===== Student APIs =====
+@app.route('/api/check-code', methods=['POST'])
+def api_check_code():
+    d = request.get_json() or {}
+    code = d.get('code', '').strip().upper()
+    c = ActivationCode.query.filter_by(code=code).first()
+    if not c:
+        return jsonify({'ok': False, 'msg': 'الكود غلط أو مش موجود'}), 404
+    if c.used:
+        return jsonify({'ok': False, 'msg': 'الكود ده مستخدم بالفعل'}), 400
+    return jsonify({'ok': True, 'grade': c.grade, 'grade_name': 'أول ثانوي' if c.grade == 'first' else 'تانية ثانوي'})
+
+
+@app.route('/api/register', methods=['POST'])
+def api_register():
     name = request.form.get('name', '').strip()
     phone = request.form.get('phone', '').strip()
-    grade = request.form.get('grade', '').strip()
-    if not name or not phone or not grade:
-        return jsonify({'ok': False, 'msg': 'اكمل البيانات'}), 400
-    if Enrollment.query.filter_by(phone=phone, status='pending').first():
-        return jsonify({'ok': False, 'msg': 'فيه طلب معلق بالفعل'}), 400
-    if Student.query.filter_by(phone=phone, activated=True).first():
+    parent_phone = request.form.get('parent_phone', '').strip()
+    password = request.form.get('password', '').strip()
+    payment_phone = request.form.get('payment_phone', '').strip()
+    code = request.form.get('code', '').strip().upper()
+
+    if not all([name, phone, parent_phone, password, payment_phone, code]):
+        return jsonify({'ok': False, 'msg': 'اكمل كل البيانات'}), 400
+
+    if Student.query.filter_by(phone=phone).first():
         return jsonify({'ok': False, 'msg': 'الرقم ده مسجل بالفعل'}), 400
+
+    c = ActivationCode.query.filter_by(code=code).first()
+    if not c:
+        return jsonify({'ok': False, 'msg': 'كود التفعيل غلط'}), 404
+    if c.used:
+        return jsonify({'ok': False, 'msg': 'الكود مستخدم'}), 400
 
     fn = None
     if 'screenshot' in request.files:
@@ -206,34 +234,38 @@ def api_enroll():
                 fn = secure_filename(phone + "_" + str(int(datetime.now().timestamp())) + "." + ext)
                 f.save(os.path.join(app.config['UPLOAD_FOLDER'], fn))
 
-    db.session.add(Enrollment(student_name=name, phone=phone, grade=grade, screenshot=fn))
+    s = Student(
+        name=name, phone=phone, parent_phone=parent_phone,
+        password_hash=generate_password_hash(password),
+        grade=c.grade, code=code, payment_phone=payment_phone,
+        screenshot=fn, active=True
+    )
+    c.used = True
+    c.used_by = name
+    db.session.add(s)
     db.session.commit()
-    return jsonify({'ok': True, 'msg': 'تم إرسال الطلب'})
+    return jsonify({'ok': True, 'msg': 'تم إنشاء الحساب'})
 
 
 @app.route('/api/login', methods=['POST'])
 def api_login():
     d = request.get_json() or {}
     phone = d.get('phone', '').strip()
-    code = d.get('code', '').strip()
-    if not phone or not code:
+    password = d.get('password', '').strip()
+    if not phone or not password:
         return jsonify({'ok': False, 'msg': 'اكمل البيانات'}), 400
     s = Student.query.filter_by(phone=phone).first()
     if not s:
         return jsonify({'ok': False, 'msg': 'الرقم غير مسجل'}), 404
-    if not s.activated:
-        return jsonify({'ok': False, 'msg': 'لم يتم تفعيل حسابك بعد'}), 403
-    if s.code != code:
-        return jsonify({'ok': False, 'msg': 'كود التفعيل غلط'}), 403
+    if not check_password_hash(s.password_hash, password):
+        return jsonify({'ok': False, 'msg': 'كلمة السر غلط'}), 403
     session['student_id'] = s.id
-    session['student_phone'] = s.phone
-    return jsonify({'ok': True, 'student': s.to_dict()})
+    return jsonify({'ok': True})
 
 
 @app.route('/api/logout')
 def api_logout():
     session.pop('student_id', None)
-    session.pop('student_phone', None)
     return jsonify({'ok': True})
 
 
@@ -254,8 +286,8 @@ def api_videos():
     s = Student.query.get(session['student_id'])
     if not s:
         return jsonify({'ok': False}), 404
-    vids = Video.query.filter_by(grade=s.grade).order_by(Video.id.desc()).all()
-    return jsonify([v.to_dict() for v in vids])
+    v = Video.query.filter_by(grade=s.grade).order_by(Video.id.desc()).all()
+    return jsonify([x.to_dict() for x in v])
 
 
 @app.route('/api/homework')
@@ -265,8 +297,8 @@ def api_homework():
     s = Student.query.get(session['student_id'])
     if not s:
         return jsonify({'ok': False}), 404
-    hw = Homework.query.filter_by(grade=s.grade).order_by(Homework.id.desc()).all()
-    return jsonify([h.to_dict() for h in hw])
+    h = Homework.query.filter_by(grade=s.grade).order_by(Homework.id.desc()).all()
+    return jsonify([x.to_dict() for x in h])
 
 
 @app.route('/api/exams')
@@ -277,12 +309,8 @@ def api_exams():
     if not s:
         return jsonify({'ok': False}), 404
     ex = Exam.query.filter_by(grade=s.grade, active=True).order_by(Exam.id.desc()).all()
-    results = ExamResult.query.filter_by(student_phone=s.phone).all()
-    done_ids = [r.exam_id for r in results]
-    return jsonify({
-        'exams': [e.to_dict() for e in ex],
-        'done': done_ids
-    })
+    done = [r.exam_id for r in ExamResult.query.filter_by(student_id=s.id).all()]
+    return jsonify({'exams': [x.to_dict() for x in ex], 'done': done})
 
 
 @app.route('/api/exam/<int:id>')
@@ -291,13 +319,16 @@ def api_exam_get(id):
         return jsonify({'ok': False}), 401
     e = Exam.query.get(id)
     if not e:
-        return jsonify({'ok': False, 'msg': 'الامتحان مش موجود'}), 404
-    import json
+        return jsonify({'ok': False}), 404
+    s = Student.query.get(session['student_id'])
+    if s.grade != e.grade:
+        return jsonify({'ok': False}), 403
+    if ExamResult.query.filter_by(exam_id=id, student_id=s.id).first():
+        return jsonify({'ok': False, 'msg': 'امتحنت قبل كده'}), 400
     return jsonify({
         'ok': True,
         'exam': {
             'id': e.id, 'title': e.title, 'duration': e.duration,
-            'total_marks': e.total_marks,
             'questions': json.loads(e.questions or '[]')
         }
     })
@@ -311,22 +342,17 @@ def api_exam_submit(id):
     if not e:
         return jsonify({'ok': False}), 404
     s = Student.query.get(session['student_id'])
-    if not s:
-        return jsonify({'ok': False}), 404
-    if ExamResult.query.filter_by(exam_id=id, student_phone=s.phone).first():
+    if ExamResult.query.filter_by(exam_id=id, student_id=s.id).first():
         return jsonify({'ok': False, 'msg': 'امتحنت قبل كده'}), 400
-
-    import json
-    data = request.get_json() or {}
-    answers = data.get('answers', [])
+    d = request.get_json() or {}
+    answers = d.get('answers', [])
     questions = json.loads(e.questions or '[]')
     score = 0
     for i, q in enumerate(questions):
         if i < len(answers) and answers[i] == q.get('correct'):
             score += 1
-    db.session.add(ExamResult(exam_id=id, student_phone=s.phone,
-                              student_name=s.name, score=score,
-                              total=len(questions)))
+    db.session.add(ExamResult(exam_id=id, student_id=s.id, student_name=s.name,
+                              score=score, total=len(questions)))
     db.session.commit()
     return jsonify({'ok': True, 'score': score, 'total': len(questions)})
 
@@ -335,52 +361,36 @@ def api_exam_submit(id):
 def api_my_results():
     if 'student_id' not in session:
         return jsonify({'ok': False}), 401
-    s = Student.query.get(session['student_id'])
-    if not s:
-        return jsonify({'ok': False}), 404
-    rs = ExamResult.query.filter_by(student_phone=s.phone).order_by(ExamResult.id.desc()).all()
+    rs = ExamResult.query.filter_by(student_id=session['student_id']).order_by(ExamResult.id.desc()).all()
     return jsonify([r.to_dict() for r in rs])
 
 
 # ===== Admin APIs =====
-@app.route('/api/admin/enrollments')
-def adm_enrollments():
+@app.route('/api/admin/codes', methods=['GET', 'POST'])
+def adm_codes():
     if not session.get('admin'): return jsonify({'ok': False}), 401
-    return jsonify([e.to_dict() for e in Enrollment.query.order_by(Enrollment.id.desc()).all()])
+    if request.method == 'POST':
+        d = request.get_json() or {}
+        grade = d.get('grade', 'first')
+        count = int(d.get('count', 1))
+        generated = []
+        for _ in range(count):
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+            while ActivationCode.query.filter_by(code=code).first():
+                code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+            db.session.add(ActivationCode(code=code, grade=grade))
+            generated.append(code)
+        db.session.commit()
+        return jsonify({'ok': True, 'codes': generated})
+    return jsonify([c.to_dict() for c in ActivationCode.query.order_by(ActivationCode.id.desc()).all()])
 
 
-@app.route('/api/admin/enrollment/<int:id>/approve', methods=['POST'])
-def adm_approve_enrollment(id):
+@app.route('/api/admin/code/<int:id>', methods=['DELETE'])
+def adm_del_code(id):
     if not session.get('admin'): return jsonify({'ok': False}), 401
-    d = request.get_json() or {}
-    code = d.get('code', '').strip()
-    if not code:
-        return jsonify({'ok': False, 'msg': 'اكتب كود التفعيل'}), 400
-    e = Enrollment.query.get(id)
-    if not e:
-        return jsonify({'ok': False}), 404
-    if Student.query.filter_by(code=code).first():
-        return jsonify({'ok': False, 'msg': 'الكود مستخدم'}), 400
-    s = Student.query.filter_by(phone=e.phone).first()
-    if s:
-        s.code = code
-        s.activated = True
-        s.name = e.student_name
-        s.grade = e.grade
-    else:
-        db.session.add(Student(name=e.student_name, phone=e.phone,
-                                grade=e.grade, code=code, activated=True))
-    e.status = 'approved'
-    db.session.commit()
-    return jsonify({'ok': True})
-
-
-@app.route('/api/admin/enrollment/<int:id>/reject', methods=['POST'])
-def adm_reject_enrollment(id):
-    if not session.get('admin'): return jsonify({'ok': False}), 401
-    e = Enrollment.query.get(id)
-    if e:
-        e.status = 'rejected'
+    c = ActivationCode.query.get(id)
+    if c:
+        db.session.delete(c)
         db.session.commit()
     return jsonify({'ok': True})
 
@@ -449,14 +459,12 @@ def adm_del_homework(id):
 def adm_exams():
     if not session.get('admin'): return jsonify({'ok': False}), 401
     if request.method == 'POST':
-        import json
         d = request.get_json() or {}
         db.session.add(Exam(
             title=d.get('title'), grade=d.get('grade'),
             questions=json.dumps(d.get('questions', [])),
             duration=int(d.get('duration', 30)),
-            total_marks=len(d.get('questions', [])),
-            active=d.get('active', False)
+            active=True
         ))
         db.session.commit()
         return jsonify({'ok': True})
@@ -487,6 +495,22 @@ def adm_del_exam(id):
 def adm_results():
     if not session.get('admin'): return jsonify({'ok': False}), 401
     return jsonify([r.to_dict() for r in ExamResult.query.order_by(ExamResult.id.desc()).all()])
+
+
+@app.route('/api/admin/stats')
+def adm_stats():
+    if not session.get('admin'): return jsonify({'ok': False}), 401
+    return jsonify({
+        'students': Student.query.count(),
+        'active_students': Student.query.filter_by(active=True).count(),
+        'first': Student.query.filter_by(grade='first').count(),
+        'second': Student.query.filter_by(grade='second').count(),
+        'codes_total': ActivationCode.query.count(),
+        'codes_used': ActivationCode.query.filter_by(used=True).count(),
+        'videos': Video.query.count(),
+        'exams': Exam.query.count(),
+        'results': ExamResult.query.count()
+    })
 
 
 @app.route('/uploads/<filename>')
