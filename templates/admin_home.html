@@ -8,52 +8,52 @@
 <style>
 *{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif;margin:0;padding:0}
 body{background:#020617;color:#fff;min-height:100vh;padding-bottom:40px}
-header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
+header{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
 header h1{margin:0;font-size:15px;font-weight:900}
 header .info{font-size:11px;color:#ffd200;margin-top:3px;font-weight:600}
-.logout{color:#ef9a9a;text-decoration:none;font-size:12px;background:rgba(229,57,53,0.15);padding:8px 14px;border-radius:12px;border:1px solid rgba(229,57,53,0.3);font-weight:700}
-.tabs{display:flex;gap:6px;padding:12px;overflow-x:auto;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05)}
-.tab{padding:10px 16px;background:rgba(255,255,255,0.05);border-radius:12px;cursor:pointer;font-size:12px;font-weight:800;white-space:nowrap;color:#94a3b8;border:1px solid transparent;text-decoration:none;display:inline-block}
-.tab.active{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e}
+.logout{color:#ef9a9a;text-decoration:none;font-size:12px;background:rgba(229,57,53,0.15);padding:9px 14px;border-radius:12px;border:1.5px solid rgba(229,57,53,0.3);font-weight:800}
+.tabs{display:flex;gap:6px;padding:12px;overflow-x:auto;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:11px 16px;background:rgba(255,255,255,0.05);border-radius:14px;font-size:12px;font-weight:800;white-space:nowrap;color:#94a3b8;text-decoration:none;border:1.5px solid transparent;display:inline-block;transition:.25s}
+.tab.active{background:linear-gradient(135deg,#f7971e,#ffd200);color:#0a0f1e;box-shadow:0 8px 20px rgba(255,210,0,0.3)}
+.tab.pending-badge{background:rgba(255,152,0,0.15);color:#ffb74d;border-color:rgba(255,152,0,0.3)}
 .container{padding:16px;max-width:820px;margin:0 auto}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;text-align:center}
-.stat .num{font-size:32px;font-weight:900;color:#ffd200;margin-bottom:6px}
+.stat{background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;text-align:center;position:relative;overflow:hidden;transition:.3s}
+.stat:active{transform:scale(0.98)}
+.stat::before{content:'';position:absolute;top:-50%;right:-50%;width:150%;height:150%;background:radial-gradient(circle,rgba(255,210,0,0.1),transparent 50%);opacity:0;transition:.3s}
+.stat:hover::before{opacity:1}
+.stat .em{font-size:32px;display:block;margin-bottom:10px}
+.stat .num{font-size:32px;font-weight:900;background:linear-gradient(135deg,#ffd200,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
 .stat .lbl{font-size:12px;color:#94a3b8;font-weight:700}
-.pending-tab{background:rgba(255,152,0,0.15) !important;color:#ffb74d !important;border-color:rgba(255,152,0,0.3) !important}
 </style>
 </head>
 <body>
-
 <header>
-<div>
-<h1>👑 لوحة الأستاذ {{ teacher }}</h1>
-<div class="info">{{ subject }} — إدارة كاملة</div>
-</div>
+<div><h1>👑 لوحة الأستاذ {{ teacher }}</h1><div class="info">{{ subject }} — إدارة كاملة</div></div>
 <a href="/admin/logout" class="logout">خروج</a>
 </header>
-
 <div class="tabs">
 <a href="/admin" class="tab active">📊 الرئيسية</a>
-<a href="/admin/pending" class="tab {% if stats.pending > 0 %}pending-tab{% endif %}">
-🔔 الطلبات {% if stats.pending > 0 %}({{ stats.pending }}){% endif %}
-</a>
+<a href="/admin/pending" class="tab {% if stats.pending > 0 %}pending-badge{% endif %}">🔔 الطلبات {% if stats.pending > 0 %}({{ stats.pending }}){% endif %}</a>
 <a href="/admin/students" class="tab">👥 الطلاب</a>
 <a href="/admin/videos" class="tab">🎬 الفيديوهات</a>
 <a href="/admin/homework" class="tab">📝 الواجبات</a>
+<a href="/admin/submissions" class="tab">📥 التسليمات</a>
+<a href="/admin/exams" class="tab">📊 الامتحانات</a>
+<a href="/admin/results" class="tab">🏆 النتائج</a>
 </div>
-
 <div class="container">
-
 <div class="grid">
-<div class="stat"><div class="num">{{ stats.pending }}</div><div class="lbl">⏳ في الانتظار</div></div>
-<div class="stat"><div class="num">{{ stats.approved }}</div><div class="lbl">✅ معتمدين</div></div>
-<div class="stat"><div class="num">{{ stats.first }}</div><div class="lbl">📖 أول ثانوي</div></div>
-<div class="stat"><div class="num">{{ stats.second }}</div><div class="lbl">📚 تانية ثانوي</div></div>
-<div class="stat"><div class="num">{{ stats.videos }}</div><div class="lbl">🎬 فيديوهات</div></div>
-<div class="stat"><div class="num">{{ stats.homework }}</div><div class="lbl">📝 واجبات</div></div>
+<div class="stat"><span class="em">⏳</span><div class="num">{{ stats.pending }}</div><div class="lbl">في الانتظار</div></div>
+<div class="stat"><span class="em">✅</span><div class="num">{{ stats.approved }}</div><div class="lbl">طلاب معتمدين</div></div>
+<div class="stat"><span class="em">📖</span><div class="num">{{ stats.first }}</div><div class="lbl">أول ثانوي</div></div>
+<div class="stat"><span class="em">📚</span><div class="num">{{ stats.second }}</div><div class="lbl">تانية ثانوي</div></div>
+<div class="stat"><span class="em">🎬</span><div class="num">{{ stats.videos }}</div><div class="lbl">فيديوهات</div></div>
+<div class="stat"><span class="em">📝</span><div class="num">{{ stats.homework }}</div><div class="lbl">واجبات</div></div>
+<div class="stat"><span class="em">📊</span><div class="num">{{ stats.exams }}</div><div class="lbl">امتحانات</div></div>
+<div class="stat"><span class="em">📥</span><div class="num">{{ stats.submissions }}</div><div class="lbl">تسليمات</div></div>
 </div>
-
 </div>
 </body>
 </html>
