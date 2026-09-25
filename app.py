@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from datetime import datetime
-import os, json, random, string
+import os, random, string
 
 app = Flask(__name__)
-app.secret_key = "ahmed-edu-2027-x"
+app.secret_key = "ahmed-edu-2027"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///edu.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -30,26 +30,11 @@ class Student(db.Model):
     phone = db.Column(db.String(20), unique=True)
     parent_phone = db.Column(db.String(20))
     grade = db.Column(db.String(20))
-    code = db.Column(db.String(50), unique=True)
+    code = db.Column(db.String(50))
     payment_phone = db.Column(db.String(20))
     screenshot = db.Column(db.String(255))
-    status = db.Column(db.String(20), default='pending')  # pending / approved / rejected
+    status = db.Column(db.String(20), default='pending')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    approved_at = db.Column(db.DateTime)
-
-    def to_dict(self):
-        return {
-            'id': self.id, 'name': self.name, 'phone': self.phone,
-            'parent_phone': self.parent_phone or '',
-            'grade': self.grade,
-            'grade_name': 'أول ثانوي' if self.grade == 'first' else 'تانية ثانوي',
-            'code': self.code or '',
-            'payment_phone': self.payment_phone or '',
-            'screenshot': self.screenshot,
-            'status': self.status,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M') if self.created_at else '',
-            'approved_at': self.approved_at.strftime('%Y-%m-%d %H:%M') if self.approved_at else ''
-        }
 
 
 class Video(db.Model):
@@ -58,12 +43,7 @@ class Video(db.Model):
     title = db.Column(db.String(200))
     url = db.Column(db.String(300))
     grade = db.Column(db.String(20))
-    lesson = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    def to_dict(self):
-        return {'id': self.id, 'title': self.title, 'url': self.url,
-                'grade': self.grade, 'lesson': self.lesson or '',
-                'created_at': self.created_at.strftime('%Y-%m-%d') if self.created_at else ''}
 
 
 class Homework(db.Model):
@@ -74,341 +54,231 @@ class Homework(db.Model):
     grade = db.Column(db.String(20))
     due_date = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    def to_dict(self):
-        return {'id': self.id, 'title': self.title, 'description': self.description or '',
-                'grade': self.grade, 'due_date': self.due_date or '',
-                'created_at': self.created_at.strftime('%Y-%m-%d') if self.created_at else ''}
 
 
-class Exam(db.Model):
-    __tablename__ = 'exams'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200))
-    grade = db.Column(db.String(20))
-    questions = db.Column(db.Text)
-    duration = db.Column(db.Integer)
-    active = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    def to_dict(self):
-        return {'id': self.id, 'title': self.title, 'grade': self.grade,
-                'duration': self.duration, 'total': len(json.loads(self.questions or '[]')),
-                'active': self.active,
-                'created_at': self.created_at.strftime('%Y-%m-%d') if self.created_at else ''}
-
-
-class ExamResult(db.Model):
-    __tablename__ = 'results'
-    id = db.Column(db.Integer, primary_key=True)
-    exam_id = db.Column(db.Integer)
-    student_id = db.Column(db.Integer)
-    student_name = db.Column(db.String(100))
-    score = db.Column(db.Integer)
-    total = db.Column(db.Integer)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    def to_dict(self):
-        return {'id': self.id, 'exam_id': self.exam_id, 'student_id': self.student_id,
-                'student_name': self.student_name, 'score': self.score, 'total': self.total,
-                'created_at': self.created_at.strftime('%Y-%m-%d %H:%M') if self.created_at else ''}
-
-
+# ===== صفحات العميل =====
 @app.route('/')
 def home():
-    return render_template('index.html', teacher=TEACHER, subject=SUBJECT, price=PRICE, vodafone=VODAFONE)
+    return render_template('index.html', teacher=TEACHER, subject=SUBJECT, price=PRICE)
 
-@app.route('/register')
+
+@app.route('/register', methods=['GET', 'POST'])
 def register_page():
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        phone = request.form.get('phone', '').strip()
+        parent = request.form.get('parent_phone', '').strip()
+        grade = request.form.get('grade', '').strip()
+        pay_phone = request.form.get('payment_phone', '').strip()
+
+        if not all([name, phone, parent, grade, pay_phone]):
+            return render_template('register.html', teacher=TEACHER, subject=SUBJECT, price=PRICE,
+                                   vodafone=VODAFONE, error='اكمل كل البيانات')
+
+        if Student.query.filter_by(phone=phone).first():
+            return render_template('register.html', teacher=TEACHER, subject=SUBJECT, price=PRICE,
+                                   vodafone=VODAFONE, error='الرقم ده مسجل بالفعل')
+
+        fn = None
+        if 'screenshot' in request.files:
+            f = request.files['screenshot']
+            if f and f.filename:
+                ext = f.filename.rsplit('.', 1)[-1].lower()
+                if ext in ('png', 'jpg', 'jpeg', 'gif', 'webp'):
+                    fn = secure_filename(phone + "_" + str(int(datetime.now().timestamp())) + "." + ext)
+                    f.save(os.path.join(app.config['UPLOAD_FOLDER'], fn))
+
+        db.session.add(Student(name=name, phone=phone, parent_phone=parent,
+                                grade=grade, payment_phone=pay_phone, screenshot=fn))
+        db.session.commit()
+        return redirect(url_for('register_success'))
+
     return render_template('register.html', teacher=TEACHER, subject=SUBJECT, price=PRICE, vodafone=VODAFONE)
 
-@app.route('/login')
+
+@app.route('/register/success')
+def register_success():
+    return render_template('success.html', teacher=TEACHER, subject=SUBJECT)
+
+
+@app.route('/login', methods=['GET', 'POST'])
 def login_page():
+    if request.method == 'POST':
+        phone = request.form.get('phone', '').strip()
+        code = request.form.get('code', '').strip().upper()
+
+        if not phone or not code:
+            return render_template('login.html', teacher=TEACHER, subject=SUBJECT, error='اكمل البيانات')
+
+        s = Student.query.filter_by(phone=phone).first()
+        if not s:
+            return render_template('login.html', teacher=TEACHER, subject=SUBJECT, error='الرقم غير مسجل')
+        if s.status == 'pending':
+            return render_template('login.html', teacher=TEACHER, subject=SUBJECT, error='طلبك في انتظار الموافقة')
+        if s.status == 'rejected':
+            return render_template('login.html', teacher=TEACHER, subject=SUBJECT, error='تم رفض طلبك')
+        if s.code != code:
+            return render_template('login.html', teacher=TEACHER, subject=SUBJECT, error='الكود غلط')
+
+        session['student_id'] = s.id
+        return redirect(url_for('student_page'))
+
     return render_template('login.html', teacher=TEACHER, subject=SUBJECT)
+
 
 @app.route('/student')
 def student_page():
     if 'student_id' not in session:
         return redirect(url_for('login_page'))
-    return render_template('student.html', teacher=TEACHER, subject=SUBJECT)
+    s = Student.query.get(session['student_id'])
+    if not s:
+        return redirect(url_for('login_page'))
+    videos = Video.query.filter_by(grade=s.grade).order_by(Video.id.desc()).all()
+    hws = Homework.query.filter_by(grade=s.grade).order_by(Homework.id.desc()).all()
+    return render_template('student.html', student=s, videos=videos, homeworks=hws, subject=SUBJECT)
 
+
+@app.route('/student/logout')
+def student_logout():
+    session.pop('student_id', None)
+    return redirect(url_for('home'))
+
+
+# ===== صفحات الأدمن =====
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         u = request.form.get('username', '').strip()
-        p = request.form.get('password', '')
+        p = request.form.get('password', '').strip()
         if u == ADMIN_USER and p == ADMIN_PASS:
             session['admin'] = True
-            return redirect(url_for('admin_panel'))
+            return redirect(url_for('admin_home'))
         return render_template('admin_login.html', error='بيانات غلط')
     return render_template('admin_login.html')
+
 
 @app.route('/admin/logout')
 def admin_logout():
     session.pop('admin', None)
     return redirect(url_for('admin_login'))
 
+
+def require_admin():
+    return session.get('admin')
+
+
 @app.route('/admin')
-def admin_panel():
-    if not session.get('admin'):
-        return redirect(url_for('admin_login'))
-    return render_template('admin.html', teacher=TEACHER, subject=SUBJECT)
-
-
-# ========== APIs ==========
-@app.route('/api/register', methods=['POST'])
-def api_register():
-    name = request.form.get('name', '').strip()
-    phone = request.form.get('phone', '').strip()
-    parent_phone = request.form.get('parent_phone', '').strip()
-    grade = request.form.get('grade', '').strip()
-    payment_phone = request.form.get('payment_phone', '').strip()
-
-    if not all([name, phone, parent_phone, grade, payment_phone]):
-        return jsonify({'ok': False, 'msg': 'اكمل كل البيانات'}), 400
-    if Student.query.filter_by(phone=phone).first():
-        return jsonify({'ok': False, 'msg': 'الرقم ده مسجل بالفعل'}), 400
-
-    fn = None
-    if 'screenshot' in request.files:
-        f = request.files['screenshot']
-        if f and f.filename:
-            ext = f.filename.rsplit('.', 1)[-1].lower()
-            if ext in ('png', 'jpg', 'jpeg', 'gif', 'webp'):
-                fn = secure_filename(phone + "_" + str(int(datetime.now().timestamp())) + "." + ext)
-                f.save(os.path.join(app.config['UPLOAD_FOLDER'], fn))
-
-    db.session.add(Student(name=name, phone=phone, parent_phone=parent_phone,
-                            grade=grade, payment_phone=payment_phone,
-                            screenshot=fn, status='pending'))
-    db.session.commit()
-    return jsonify({'ok': True, 'msg': 'تم استلام طلبك'})
-
-
-@app.route('/api/login', methods=['POST'])
-def api_login():
-    d = request.get_json() or {}
-    phone = d.get('phone', '').strip()
-    code = d.get('code', '').strip().upper()
-    if not phone or not code:
-        return jsonify({'ok': False, 'msg': 'اكمل البيانات'}), 400
-    s = Student.query.filter_by(phone=phone).first()
-    if not s:
-        return jsonify({'ok': False, 'msg': 'الرقم غير مسجل'}), 404
-    if s.status == 'pending':
-        return jsonify({'ok': False, 'msg': 'طلبك في انتظار الموافقة'}), 403
-    if s.status == 'rejected':
-        return jsonify({'ok': False, 'msg': 'تم رفض طلبك — كلم الأستاذ'}), 403
-    if not s.code or s.code != code:
-        return jsonify({'ok': False, 'msg': 'الكود غلط'}), 403
-    session['student_id'] = s.id
-    return jsonify({'ok': True})
-
-
-@app.route('/api/logout')
-def api_logout():
-    session.pop('student_id', None)
-    return jsonify({'ok': True})
-
-
-@app.route('/api/me')
-def api_me():
-    if 'student_id' not in session:
-        return jsonify({'ok': False}), 401
-    s = Student.query.get(session['student_id'])
-    if not s:
-        return jsonify({'ok': False}), 404
-    return jsonify({'ok': True, 'student': s.to_dict()})
-
-
-@app.route('/api/videos')
-def api_videos():
-    if 'student_id' not in session: return jsonify({'ok': False}), 401
-    s = Student.query.get(session['student_id'])
-    if not s: return jsonify({'ok': False}), 404
-    return jsonify([v.to_dict() for v in Video.query.filter_by(grade=s.grade).order_by(Video.id.desc()).all()])
-
-
-@app.route('/api/homework')
-def api_homework():
-    if 'student_id' not in session: return jsonify({'ok': False}), 401
-    s = Student.query.get(session['student_id'])
-    if not s: return jsonify({'ok': False}), 404
-    return jsonify([h.to_dict() for h in Homework.query.filter_by(grade=s.grade).order_by(Homework.id.desc()).all()])
-
-
-@app.route('/api/exams')
-def api_exams():
-    if 'student_id' not in session: return jsonify({'ok': False}), 401
-    s = Student.query.get(session['student_id'])
-    if not s: return jsonify({'ok': False}), 404
-    ex = Exam.query.filter_by(grade=s.grade, active=True).order_by(Exam.id.desc()).all()
-    done = [r.exam_id for r in ExamResult.query.filter_by(student_id=s.id).all()]
-    return jsonify({'exams': [x.to_dict() for x in ex], 'done': done})
-
-
-@app.route('/api/exam/<int:id>')
-def api_exam_get(id):
-    if 'student_id' not in session: return jsonify({'ok': False}), 401
-    e = Exam.query.get(id)
-    if not e: return jsonify({'ok': False}), 404
-    s = Student.query.get(session['student_id'])
-    if s.grade != e.grade: return jsonify({'ok': False}), 403
-    if ExamResult.query.filter_by(exam_id=id, student_id=s.id).first():
-        return jsonify({'ok': False, 'msg': 'امتحنت قبل كده'}), 400
-    return jsonify({'ok': True, 'exam': {'id': e.id, 'title': e.title,
-                      'duration': e.duration, 'questions': json.loads(e.questions or '[]')}})
-
-
-@app.route('/api/exam/<int:id>/submit', methods=['POST'])
-def api_exam_submit(id):
-    if 'student_id' not in session: return jsonify({'ok': False}), 401
-    e = Exam.query.get(id)
-    if not e: return jsonify({'ok': False}), 404
-    s = Student.query.get(session['student_id'])
-    if ExamResult.query.filter_by(exam_id=id, student_id=s.id).first():
-        return jsonify({'ok': False, 'msg': 'امتحنت قبل كده'}), 400
-    d = request.get_json() or {}
-    answers = d.get('answers', [])
-    questions = json.loads(e.questions or '[]')
-    score = sum(1 for i, q in enumerate(questions) if i < len(answers) and answers[i] == q.get('correct'))
-    db.session.add(ExamResult(exam_id=id, student_id=s.id, student_name=s.name, score=score, total=len(questions)))
-    db.session.commit()
-    return jsonify({'ok': True, 'score': score, 'total': len(questions)})
-
-
-@app.route('/api/my-results')
-def api_my_results():
-    if 'student_id' not in session: return jsonify({'ok': False}), 401
-    return jsonify([r.to_dict() for r in ExamResult.query.filter_by(student_id=session['student_id']).order_by(ExamResult.id.desc()).all()])
-
-
-# ========== Admin APIs ==========
-@app.route('/api/admin/stats')
-def adm_stats():
-    if not session.get('admin'): return jsonify({'ok': False}), 401
-    return jsonify({
-        'students': Student.query.count(),
+def admin_home():
+    if not require_admin(): return redirect(url_for('admin_login'))
+    stats = {
         'pending': Student.query.filter_by(status='pending').count(),
         'approved': Student.query.filter_by(status='approved').count(),
         'first': Student.query.filter_by(grade='first', status='approved').count(),
         'second': Student.query.filter_by(grade='second', status='approved').count(),
         'videos': Video.query.count(),
-        'exams': Exam.query.count(),
-        'results': ExamResult.query.count()
-    })
+        'homework': Homework.query.count()
+    }
+    return render_template('admin_home.html', stats=stats, teacher=TEACHER, subject=SUBJECT)
 
 
-@app.route('/api/admin/students')
-def adm_students():
-    if not session.get('admin'): return jsonify({'ok': False}), 401
-    return jsonify([s.to_dict() for s in Student.query.order_by(Student.id.desc()).all()])
+@app.route('/admin/pending')
+def admin_pending():
+    if not require_admin(): return redirect(url_for('admin_login'))
+    students = Student.query.filter_by(status='pending').order_by(Student.id.desc()).all()
+    return render_template('admin_pending.html', students=students, teacher=TEACHER)
 
 
-@app.route('/api/admin/approve/<int:id>', methods=['POST'])
-def adm_approve(id):
-    if not session.get('admin'): return jsonify({'ok': False}), 401
+@app.route('/admin/students')
+def admin_students():
+    if not require_admin(): return redirect(url_for('admin_login'))
+    students = Student.query.order_by(Student.id.desc()).all()
+    return render_template('admin_students.html', students=students, teacher=TEACHER)
+
+
+@app.route('/admin/approve/<int:id>')
+def admin_approve(id):
+    if not require_admin(): return redirect(url_for('admin_login'))
     s = Student.query.get(id)
-    if not s: return jsonify({'ok': False}), 404
-    if s.status == 'approved': return jsonify({'ok': False, 'msg': 'معتمد بالفعل'}), 400
-    code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    while Student.query.filter_by(code=code).first():
+    if s and s.status != 'approved':
         code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    s.code = code
-    s.status = 'approved'
-    s.approved_at = datetime.utcnow()
-    db.session.commit()
-    return jsonify({'ok': True, 'code': code})
+        while Student.query.filter_by(code=code).first():
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        s.code = code
+        s.status = 'approved'
+        db.session.commit()
+        return render_template('admin_approved.html', student=s, code=code, teacher=TEACHER)
+    return redirect(url_for('admin_pending'))
 
 
-@app.route('/api/admin/reject/<int:id>', methods=['POST'])
-def adm_reject(id):
-    if not session.get('admin'): return jsonify({'ok': False}), 401
+@app.route('/admin/reject/<int:id>')
+def admin_reject(id):
+    if not require_admin(): return redirect(url_for('admin_login'))
     s = Student.query.get(id)
     if s:
         s.status = 'rejected'
         db.session.commit()
-    return jsonify({'ok': True})
+    return redirect(url_for('admin_pending'))
 
 
-@app.route('/api/admin/del_student/<int:id>', methods=['DELETE'])
-def adm_del_student(id):
-    if not session.get('admin'): return jsonify({'ok': False}), 401
+@app.route('/admin/del/<int:id>')
+def admin_del(id):
+    if not require_admin(): return redirect(url_for('admin_login'))
     s = Student.query.get(id)
-    if s: db.session.delete(s); db.session.commit()
-    return jsonify({'ok': True})
-
-
-@app.route('/api/admin/videos', methods=['GET', 'POST'])
-def adm_videos():
-    if not session.get('admin'): return jsonify({'ok': False}), 401
-    if request.method == 'POST':
-        d = request.get_json() or {}
-        db.session.add(Video(title=d.get('title'), url=d.get('url'),
-                              grade=d.get('grade'), lesson=d.get('lesson', '')))
+    if s:
+        db.session.delete(s)
         db.session.commit()
-        return jsonify({'ok': True})
-    return jsonify([v.to_dict() for v in Video.query.order_by(Video.id.desc()).all()])
+    return redirect(request.referrer or url_for('admin_students'))
 
 
-@app.route('/api/admin/video/<int:id>', methods=['DELETE'])
-def adm_del_video(id):
-    if not session.get('admin'): return jsonify({'ok': False}), 401
+@app.route('/admin/videos', methods=['GET', 'POST'])
+def admin_videos():
+    if not require_admin(): return redirect(url_for('admin_login'))
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        url = request.form.get('url', '').strip()
+        grade = request.form.get('grade', 'first')
+        if title and url:
+            db.session.add(Video(title=title, url=url, grade=grade))
+            db.session.commit()
+        return redirect(url_for('admin_videos'))
+    videos = Video.query.order_by(Video.id.desc()).all()
+    return render_template('admin_videos.html', videos=videos, teacher=TEACHER)
+
+
+@app.route('/admin/video/del/<int:id>')
+def admin_del_video(id):
+    if not require_admin(): return redirect(url_for('admin_login'))
     v = Video.query.get(id)
-    if v: db.session.delete(v); db.session.commit()
-    return jsonify({'ok': True})
-
-
-@app.route('/api/admin/homework', methods=['GET', 'POST'])
-def adm_homework():
-    if not session.get('admin'): return jsonify({'ok': False}), 401
-    if request.method == 'POST':
-        d = request.get_json() or {}
-        db.session.add(Homework(title=d.get('title'), description=d.get('description'),
-                                 grade=d.get('grade'), due_date=d.get('due_date', '')))
+    if v:
+        db.session.delete(v)
         db.session.commit()
-        return jsonify({'ok': True})
-    return jsonify([h.to_dict() for h in Homework.query.order_by(Homework.id.desc()).all()])
+    return redirect(url_for('admin_videos'))
 
 
-@app.route('/api/admin/homework/<int:id>', methods=['DELETE'])
-def adm_del_homework(id):
-    if not session.get('admin'): return jsonify({'ok': False}), 401
+@app.route('/admin/homework', methods=['GET', 'POST'])
+def admin_homework():
+    if not require_admin(): return redirect(url_for('admin_login'))
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        desc = request.form.get('description', '').strip()
+        grade = request.form.get('grade', 'first')
+        due = request.form.get('due_date', '').strip()
+        if title:
+            db.session.add(Homework(title=title, description=desc, grade=grade, due_date=due))
+            db.session.commit()
+        return redirect(url_for('admin_homework'))
+    hws = Homework.query.order_by(Homework.id.desc()).all()
+    return render_template('admin_homework.html', homeworks=hws, teacher=TEACHER)
+
+
+@app.route('/admin/homework/del/<int:id>')
+def admin_del_homework(id):
+    if not require_admin(): return redirect(url_for('admin_login'))
     h = Homework.query.get(id)
-    if h: db.session.delete(h); db.session.commit()
-    return jsonify({'ok': True})
-
-
-@app.route('/api/admin/exams', methods=['GET', 'POST'])
-def adm_exams():
-    if not session.get('admin'): return jsonify({'ok': False}), 401
-    if request.method == 'POST':
-        d = request.get_json() or {}
-        db.session.add(Exam(title=d.get('title'), grade=d.get('grade'),
-                             questions=json.dumps(d.get('questions', [])),
-                             duration=int(d.get('duration', 30)), active=True))
+    if h:
+        db.session.delete(h)
         db.session.commit()
-        return jsonify({'ok': True})
-    return jsonify([e.to_dict() for e in Exam.query.order_by(Exam.id.desc()).all()])
-
-
-@app.route('/api/admin/exam/<int:id>/toggle', methods=['POST'])
-def adm_toggle_exam(id):
-    if not session.get('admin'): return jsonify({'ok': False}), 401
-    e = Exam.query.get(id)
-    if e: e.active = not e.active; db.session.commit()
-    return jsonify({'ok': True})
-
-
-@app.route('/api/admin/exam/<int:id>', methods=['DELETE'])
-def adm_del_exam(id):
-    if not session.get('admin'): return jsonify({'ok': False}), 401
-    e = Exam.query.get(id)
-    if e: db.session.delete(e); db.session.commit()
-    return jsonify({'ok': True})
-
-
-@app.route('/api/admin/results')
-def adm_results():
-    if not session.get('admin'): return jsonify({'ok': False}), 401
-    return jsonify([r.to_dict() for r in ExamResult.query.order_by(ExamResult.id.desc()).all()])
+    return redirect(url_for('admin_homework'))
 
 
 @app.route('/uploads/<filename>')
